@@ -1,0 +1,126 @@
+.cardLoc,
+.cardTitle {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  font-family: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardTitle {
+  align-self: stretch;
+  font-weight: 600;
+  display: -webkit-inline-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.cardLoc {
+  flex: 1;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cardInfo,
+.cardLocWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cardLocWrap {
+  overflow: hidden;
+  padding: 5px 0;
+  box-sizing: border-box;
+  max-width: 100px;
+}
+
+.cardInfo {
+  align-self: stretch;
+  gap: 5px;
+  font-size: 14px;
+  color: var(--color-secondary-50);
+  font-family: var(--font-inter);
+}
+
+.cardHead {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 5px;
+  gap: 10px;
+}
+
+.cardLabelText {
+  flex: 1;
+  position: relative;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardLabel {
+  border-radius: 0 5px 0 0;
+  background-color: var(--color-primary);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  max-width: 95px;
+}
+
+.cardImage,
+.newsSummaryCard {
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+}
+
+.cardImage {
+  width: 100px;
+  border-radius: 5px;
+  height: 100px;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-secondlight);
+  font-family: var(--font-inter);
+}
+
+.newsSummaryCard {
+  align-self: stretch;
+  cursor: pointer;
+  border-radius: 0;
+  border-bottom: 1px solid var(--color-secondary-20);
+  background-color: transparent;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px;
+  gap: 10px;
+  text-align: left;
+  font-size: 16px;
+  color: var(--color-secondary);
+  font-family: var(--font-jakarta);
+  transition: var(--transit);
+}
+
+.newsSummaryCard:hover {
+  border-radius: 15px;
+  border-bottom: 1px solid transparent;
+  background-color: var(--color-secondary-5);
+  color: var(--color-primary);
+}

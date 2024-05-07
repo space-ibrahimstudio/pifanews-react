@@ -1,0 +1,115 @@
+.cardTitle {
+  margin: 0;
+  position: relative;
+  font-size: inherit;
+  font-weight: 700;
+  font-family: inherit;
+  display: -webkit-inline-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cardHead,
+.cardShort,
+.cardTitle {
+  align-self: stretch;
+  overflow: hidden;
+}
+
+.cardShort {
+  margin: 0;
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: var(--font-inter);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardHead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: 25px;
+  font-family: var(--font-jakarta);
+}
+
+.cardLoc {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: inherit;
+  font-weight: 500;
+  font-family: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardInfo,
+.cardLocWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cardLocWrap {
+  overflow: hidden;
+  padding: 5px 0;
+  box-sizing: border-box;
+  max-width: 100px;
+}
+
+.cardInfo {
+  align-self: stretch;
+  gap: 5px;
+  color: var(--color-secondlight-50);
+}
+
+.cardContent {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 5px 10px;
+  gap: 5px;
+  z-index: 2;
+}
+
+.newsDisplayCard {
+  cursor: pointer;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: left;
+  font-size: 14px;
+  color: var(--color-secondlight);
+  font-family: var(--font-inter);
+}
+
+.newsDisplayCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.85));
+  z-index: 1;
+}

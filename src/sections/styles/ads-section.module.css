@@ -1,0 +1,18 @@
+.adsContent,
+.adsSection {
+  align-self: stretch;
+  overflow: hidden;
+}
+.adsContent {
+  border-radius: 20px;
+  background-color: #c8c8c8;
+  height: 250px;
+  flex-shrink: 0;
+}
+.adsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 70px;
+}

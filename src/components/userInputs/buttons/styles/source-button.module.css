@@ -1,0 +1,34 @@
+.groupCta {
+  cursor: pointer;
+  border: 0;
+  padding: 10px;
+  background-color: transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0.5;
+  transition: var(--transit);
+}
+
+.groupCta:hover {
+  opacity: 1;
+}
+
+.groupCtaText {
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: var(--font-inter);
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.groupCtaIcon {
+  width: 16.1px;
+  position: relative;
+  height: 15px;
+}

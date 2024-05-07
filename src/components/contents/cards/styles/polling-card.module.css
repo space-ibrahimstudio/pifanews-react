@@ -1,0 +1,104 @@
+.cardImage {
+  align-self: stretch;
+  border-radius: 10px;
+  height: 200px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 10px;
+  box-sizing: border-box;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.cardTitle {
+  align-self: stretch;
+  position: relative;
+  margin: 0;
+  font-size: inherit;
+  font-weight: 700;
+  font-family: inherit;
+  display: -webkit-inline-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.cardVoters {
+  margin: 0;
+  flex: 1;
+  position: relative;
+  font-size: inherit;
+  font-weight: 500;
+  font-family: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardInfo,
+.cardVotersWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cardVotersWrap {
+  overflow: hidden;
+  padding: 5px 0;
+  box-sizing: border-box;
+  max-width: 100px;
+}
+
+.cardInfo {
+  align-self: stretch;
+  gap: 5px;
+  font-size: 14px;
+  color: var(--color-secondary-50);
+  font-family: var(--font-inter);
+}
+
+.cardContent,
+.pollingCard {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardContent {
+  align-self: stretch;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.pollingCard {
+  border-radius: 20px;
+  cursor: pointer;
+  background-color: var(--color-secondlight);
+  height: 400px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  gap: 10px;
+  min-width: 300px;
+  max-width: 400px;
+  text-align: left;
+  font-size: 18px;
+  color: var(--color-secondary);
+  font-family: var(--font-jakarta);
+  transition: var(--transit);
+}
+
+.pollingCard:hover {
+  color: var(--color-primary);
+}

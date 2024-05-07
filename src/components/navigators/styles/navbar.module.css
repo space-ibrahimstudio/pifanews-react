@@ -1,0 +1,99 @@
+.navLogoIcon {
+  width: 74.5px;
+  position: relative;
+  height: 40px;
+  object-fit: cover;
+}
+
+.navOption {
+  overflow: hidden;
+  justify-content: center;
+  gap: 10px;
+}
+
+.navMenu,
+.navMenuHscroll,
+.navOption,
+.navTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.navTop {
+  align-self: stretch;
+  height: 70px;
+  overflow: hidden;
+  flex-shrink: 0;
+  justify-content: space-between;
+}
+
+.navMenu,
+.navMenuHscroll {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.navMenuHscroll {
+  overflow-x: auto;
+  max-width: 600px;
+}
+
+.navMenuHscroll::-webkit-scrollbar {
+  height: 0;
+}
+
+.navMenuHscroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.navMenuHscroll::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+.navMenu {
+  margin: 0;
+  overflow: hidden;
+}
+
+.navBottom,
+.navSearch,
+.navbar {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.navSearch {
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  max-width: 300px;
+}
+
+.navBottom {
+  align-self: stretch;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background-color: var(--color-secondlight);
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 50px;
+  transform: translateY(0);
+  transition: var(--transit);
+}
+
+.navbar.scroll {
+  transform: translateY(-70px);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.05);
+}

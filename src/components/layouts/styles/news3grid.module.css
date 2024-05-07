@@ -1,0 +1,31 @@
+.news3grid,
+.news3grid200,
+.news3gridSmall {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.news3grid200 {
+  flex: 1;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.news3grid,
+.news3gridSmall {
+  overflow: hidden;
+  gap: 10px;
+}
+
+.news3gridSmall {
+  align-self: stretch;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.news3grid {
+  flex: 1;
+  flex-direction: column;
+  min-width: 300px;
+}

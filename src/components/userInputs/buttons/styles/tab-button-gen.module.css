@@ -1,0 +1,34 @@
+.tabButtonText {
+  position: relative;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: var(--font-inter);
+  color: inherit;
+  text-align: center;
+}
+
+.tabButtonGen {
+  cursor: pointer;
+  border: 0;
+  padding: 0 15px;
+  background-color: transparent;
+  height: 70px;
+  overflow: hidden;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  color: var(--color-secondary);
+  justify-content: center;
+  box-sizing: border-box;
+  transition: var(--transit);
+}
+
+.tabButtonGen:hover {
+  color: var(--color-primary);
+}
+
+.tabButtonGen.active {
+  color: var(--color-primary);
+  box-shadow: inset 0 -5px 0 0 var(--color-primary);
+}
