@@ -7,7 +7,7 @@ export const Div300 = ({ children }) => {
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "center",
-    minWidth: "300px",
+    minWidth: "var(--pixel-300)",
   };
 
   return <div style={divstyle}>{children}</div>;

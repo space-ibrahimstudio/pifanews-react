@@ -18,21 +18,21 @@
 .catCard {
   cursor: pointer;
   position: relative;
-  border-radius: 10px;
-  height: 75px;
+  border-radius: var(--pixel-10);
+  height: var(--pixel-75);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
+  padding: var(--pixel-10) var(--pixel-20);
   box-sizing: border-box;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  min-width: 250px;
-  max-width: 250px;
+  min-width: var(--pixel-250);
+  max-width: var(--pixel-250);
   text-align: left;
-  font-size: 25px;
+  font-size: var(--font-md);
   color: var(--color-secondlight);
   font-family: var(--font-jakarta);
 }

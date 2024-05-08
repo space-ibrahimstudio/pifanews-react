@@ -1,15 +1,6 @@
 import React from "react";
+import styles from "./styles/aside.module.css";
 
 export const Aside = ({ children }) => {
-  const layoutstyle = {
-    flex: "1",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: "300px",
-    maxWidth: "400px",
-  };
-
-  return <div style={layoutstyle}>{children}</div>;
+  return <div className={styles.aside}>{children}</div>;
 };

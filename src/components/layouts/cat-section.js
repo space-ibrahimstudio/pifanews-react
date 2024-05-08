@@ -4,12 +4,13 @@ import { CatCard } from "../contents/cards/cat-card";
 import styles from "./styles/cat-section.module.css";
 
 export const CatSection = ({ id, cats }) => {
+  const compid = `category-${id}`;
   const slicedcats = cats.slice(0, 8);
 
   return (
-    <section id={`category-${id}`} className={styles.newsSection}>
+    <section id={compid} className={styles.newsSection}>
       <SectionHead
-        id={`category-${id}`}
+        id={compid}
         title="Kategori Berita"
         prior="Lokal"
         to="/lokal"
@@ -18,7 +19,7 @@ export const CatSection = ({ id, cats }) => {
         {slicedcats.map((category, index) => (
           <CatCard
             key={index}
-            id={`category-${id}-${index}`}
+            id={`${compid}-${index}`}
             catname={category.name}
             image={category.image}
           />

@@ -1,14 +1,14 @@
 .navLogoIcon {
-  width: 74.5px;
+  width: auto;
   position: relative;
-  height: 40px;
+  height: var(--pixel-40);
   object-fit: cover;
 }
 
 .navOption {
   overflow: hidden;
   justify-content: center;
-  gap: 10px;
+  gap: var(--pixel-10);
 }
 
 .navMenu,
@@ -22,7 +22,7 @@
 
 .navTop {
   align-self: stretch;
-  height: 70px;
+  height: var(--pixel-70);
   overflow: hidden;
   flex-shrink: 0;
   justify-content: space-between;
@@ -49,7 +49,7 @@
 
 .navMenuHscroll::-webkit-scrollbar-thumb {
   background-color: #ccc;
-  border-radius: 5px;
+  border-radius: var(--pixel-5);
 }
 
 .navMenu {
@@ -69,14 +69,14 @@
   flex: 1;
   flex-direction: row;
   justify-content: center;
-  max-width: 300px;
+  max-width: var(--pixel-300);
 }
 
 .navBottom {
   align-self: stretch;
   flex-direction: row;
   justify-content: center;
-  gap: 10px;
+  gap: var(--pixel-10);
 }
 
 .navbar {
@@ -88,12 +88,24 @@
   background-color: var(--color-secondlight);
   flex-direction: column;
   justify-content: flex-start;
-  padding: 0 50px;
+  padding: 0 var(--pixel-50);
   transform: translateY(0);
   transition: var(--transit);
 }
 
 .navbar.scroll {
-  transform: translateY(-70px);
+  transform: translateY(var(--pixel-min-70));
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 910px) {
+  .navbar {
+    padding: 0 var(--pixel-30);
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    padding: 0 var(--pixel-20);
+  }
 }

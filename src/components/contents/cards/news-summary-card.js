@@ -10,6 +10,7 @@ export const NewsSummaryCard = ({
   date,
   onClick,
 }) => {
+  const compid = `summary-card-${id}`;
   const cardstyle = {
     backgroundImage: image
       ? image !== ""
@@ -19,11 +20,7 @@ export const NewsSummaryCard = ({
   };
 
   return (
-    <section
-      id={`summary-card-${id}`}
-      className={styles.newsSummaryCard}
-      onClick={onClick}
-    >
+    <section id={compid} className={styles.newsSummaryCard} onClick={onClick}>
       <div className={styles.cardHead}>
         <h1 className={styles.cardTitle}>{title}</h1>
         <div className={styles.cardInfo}>

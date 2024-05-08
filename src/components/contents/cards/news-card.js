@@ -12,6 +12,7 @@ export const NewsCard = ({
   date,
   onClick,
 }) => {
+  const compid = `news-card-${id}`;
   const cardstyle = {
     backgroundImage: image
       ? image !== ""
@@ -21,13 +22,9 @@ export const NewsCard = ({
   };
 
   return (
-    <section
-      id={`news-card-${id}`}
-      className={styles.newsCard}
-      onClick={onClick}
-    >
+    <section id={compid} className={styles.newsCard} onClick={onClick}>
       <div className={styles.cardImage} style={cardstyle}>
-        <NewsTag id={`news-card-${id}`} name={tag} />
+        <NewsTag id={compid} name={tag} />
       </div>
       <div className={styles.cardContent}>
         <div className={styles.cardHead}>

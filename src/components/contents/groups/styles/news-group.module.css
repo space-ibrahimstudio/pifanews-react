@@ -24,21 +24,21 @@
 
 .groupTitlewrap {
   flex: 1;
-  padding: 5px 10px;
+  padding: var(--pixel-5) var(--pixel-10);
 }
 
 .groupHeadwrap {
   align-self: stretch;
   border-bottom: 1px solid var(--color-primary-20);
-  padding: 10px 0;
+  padding: var(--pixel-10) 0;
 }
 
 .groupHead {
   align-self: stretch;
   justify-content: center;
-  padding: 0 10px;
+  padding: 0 var(--pixel-10);
   text-align: left;
-  font-size: 18px;
+  font-size: var(--font-sm);
   color: var(--color-secondary);
   font-family: var(--font-jakarta);
 }
@@ -68,11 +68,11 @@
   align-self: stretch;
   overflow-y: auto;
   justify-content: flex-start;
-  padding: 10px;
+  padding: var(--pixel-10);
 }
 
 .groupBodyVscroll::-webkit-scrollbar {
-  width: 5px;
+  width: var(--pixel-5);
 }
 
 .groupBodyVscroll::-webkit-scrollbar-track {
@@ -81,7 +81,7 @@
 
 .groupBodyVscroll::-webkit-scrollbar-thumb {
   background-color: #ccc;
-  border-radius: 5px;
+  border-radius: var(--pixel-5);
 }
 
 .groupBodyVscroll:hover::-webkit-scrollbar-thumb {
@@ -89,10 +89,10 @@
 }
 
 .newsGroup {
-  border-radius: 20px;
+  border-radius: var(--pixel-20);
   background-color: var(--color-secondlight);
-  height: 450px;
+  height: var(--pixel-450);
   overflow: hidden;
   justify-content: center;
-  min-width: 300px;
+  min-width: var(--pixel-300);
 }

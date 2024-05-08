@@ -1,11 +1,12 @@
 import React from "react";
 import { Navbar } from "../navigators/navbar";
+import { Footer } from "../navigators/footer";
 
 export const PageLayout = ({ pageid, children }) => {
   const styles = {
     width: "100%",
     position: "relative",
-    paddingTop: "140px",
+    paddingTop: "var(--pixel-140)",
     backgroundColor: "var(--color-foreground)",
     overflow: "hidden",
     display: "flex",
@@ -18,6 +19,7 @@ export const PageLayout = ({ pageid, children }) => {
     <main id={pageid} style={styles}>
       <Navbar id={pageid} />
       {children}
+      <Footer id={pageid} />
     </main>
   );
 };

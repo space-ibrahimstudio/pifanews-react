@@ -10,6 +10,7 @@ export const TabButtonGen = ({
   endContent,
   onClick,
 }) => {
+  const compid = `tab-general-${id}`;
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(null);
 
@@ -19,7 +20,7 @@ export const TabButtonGen = ({
 
   return (
     <button
-      id={`tab-general-${id}`}
+      id={compid}
       className={`${styles.tabButtonGen} ${
         activeTab === path ? styles.active : ""
       }`}

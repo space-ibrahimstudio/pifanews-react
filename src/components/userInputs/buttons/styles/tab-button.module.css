@@ -1,7 +1,7 @@
 .tabButtonText {
   flex: 1;
   position: relative;
-  font-size: 16px;
+  font-size: var(--font-xsm);
   font-weight: 500;
   font-family: var(--font-inter);
   color: inherit;
@@ -14,19 +14,19 @@
 .tabButton {
   cursor: pointer;
   border: 0;
-  padding: 0 15px;
+  padding: 0 var(--pixel-15);
   background-color: transparent;
-  height: 70px;
+  height: var(--pixel-70);
   overflow: hidden;
   flex-shrink: 0;
   display: flex;
-  gap: 10px;
+  gap: var(--pixel-10);
   flex-direction: row;
   align-items: center;
   color: var(--color-secondary);
   justify-content: center;
   box-sizing: border-box;
-  max-width: 120px;
+  max-width: var(--pixel-120);
   transition: var(--transit);
 }
 
@@ -36,5 +36,5 @@
 
 .tabButton.active {
   color: var(--color-primary);
-  box-shadow: inset 0 -5px 0 0 var(--color-primary);
+  box-shadow: inset 0 var(--pixel-min-5) 0 0 var(--color-primary);
 }

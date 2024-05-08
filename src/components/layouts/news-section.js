@@ -6,40 +6,43 @@ import { NewsGroup } from "../contents/groups/news-group";
 import styles from "./styles/news-section.module.css";
 
 export const NewsSection = ({ id, title, prior, to, posts }) => {
+  const compid = `news-${id}`;
+  const filteredposts = posts.filter((post) => post.tag === prior);
+
   return (
-    <section id={`news-${id}`} className={styles.newsSection}>
-      <SectionHead id={`news-${id}`} title={title} prior={prior} to={to} />
+    <section id={compid} className={styles.newsSection}>
+      <SectionHead id={compid} title={title} prior={prior} to={to} />
       <div className={styles.sectionBody}>
-        {posts.length > 0 && (
+        {filteredposts.length > 0 && (
           <Fragment>
             <Div300>
               <NewsDisplayCard
-                id={`3-grid-${id}-${posts[0].id}`}
-                title={posts[0].title}
-                short={posts[0].short}
-                tag={posts[0].tag}
-                image={posts[0].image}
-                loc={posts[0].location}
-                date={posts[0].date}
+                id={`${compid}-${filteredposts[0].id}`}
+                title={filteredposts[0].title}
+                short={filteredposts[0].short}
+                tag={filteredposts[0].tag}
+                image={filteredposts[0].image}
+                loc={filteredposts[0].location}
+                date={filteredposts[0].date}
                 align="unset"
-                height="450px"
+                height="var(--pixel-450)"
                 flex="1"
               />
             </Div300>
             <Div300>
               <NewsGroup
-                id={`news-${id}-trending`}
+                id={`${compid}-trending`}
                 title="Trending"
                 scope={prior}
-                posts={posts.slice(1)}
+                posts={filteredposts.slice(1, 10)}
               />
             </Div300>
             <Div300>
               <NewsGroup
-                id={`news-${id}-newest`}
+                id={`${compid}-newest`}
                 title="Terbaru"
                 scope={prior}
-                posts={posts.slice(1)}
+                posts={filteredposts.slice(0, 10)}
               />
             </Div300>
           </Fragment>

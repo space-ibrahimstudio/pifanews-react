@@ -8,6 +8,7 @@ import { HomeIcon, BellIcon, SearchIcon } from "../contents/markers/icons";
 import styles from "./styles/navbar.module.css";
 
 export const Navbar = ({ id }) => {
+  const compid = `top-navigation-${id}`;
   const [scrolled, setScrolled] = useState(false);
   const [staticMenus, setStaticMenus] = useState([]);
   const [query, setQuery] = useState("");
@@ -40,27 +41,29 @@ export const Navbar = ({ id }) => {
 
   return (
     <header
-      id={`top-navigation-${id}`}
+      id={compid}
       className={`${styles.navbar} ${scrolled ? styles.scroll : ""}`}
     >
       <section className={styles.navTop}>
         <img className={styles.navLogoIcon} alt="" src="/png/pifa-logo.png" />
         <div className={styles.navOption}>
           <Button
-            id={`top-navigation-${id}-notification`}
+            id={`${compid}-notification`}
             size="sm"
             variant="hollow"
             subVariant="icon"
             color="var(--color-primary)"
-            iconContent={<BellIcon width="100%" height="25px" />}
+            iconContent={
+              <BellIcon
+                width="100%"
+                height="25px"
+                color="var(--color-secondary)"
+              />
+            }
           />
+          <Button id={`${compid}-login`} size="sm" buttonText="Login" />
           <Button
-            id={`top-navigation-${id}-login`}
-            size="sm"
-            buttonText="Login"
-          />
-          <Button
-            id={`top-navigation-${id}-submit`}
+            id={`${compid}-submit`}
             size="sm"
             variant="line"
             color="var(--color-primary)"
@@ -71,7 +74,7 @@ export const Navbar = ({ id }) => {
       <section className={styles.navBottom}>
         <nav className={styles.navMenu}>
           <TabButtonGen
-            id={`top-navigation-${id}-home`}
+            id={`${compid}-beranda`}
             text="Beranda"
             path="/"
             startContent={<HomeIcon width="20px" height="100%" />}
@@ -80,21 +83,17 @@ export const Navbar = ({ id }) => {
             {staticMenus.map((menu, index) => (
               <TabButton
                 key={index}
-                id={`top-navigation-${id}-${menu.path}`}
+                id={`${compid}-${menu.text}`}
                 path={menu.path}
                 text={menu.text}
               />
             ))}
           </div>
-          <TabButtonGen
-            id={`top-navigation-${id}-more`}
-            text="Lainnya"
-            path="/lainnya"
-          />
+          <TabButtonGen id={`${compid}-more`} text="Lainnya" path="/lainnya" />
         </nav>
         <div className={styles.navSearch}>
           <Input
-            id={`top-navigation-${id}-search`}
+            id={`${compid}-search`}
             isLabeled={false}
             type="text"
             name="query"

@@ -1,18 +1,30 @@
-.adsContent,
-.adsSection {
-  align-self: stretch;
-  overflow: hidden;
-}
 .adsContent {
-  border-radius: 20px;
-  background-color: #c8c8c8;
-  height: 250px;
+  overflow: hidden;
+  border-radius: var(--pixel-20);
+  object-fit: cover;
+  width: 100%;
+  height: auto;
   flex-shrink: 0;
 }
+
 .adsSection {
   display: flex;
+  align-self: stretch;
+  overflow: hidden;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px 70px;
+  padding: var(--pixel-20) var(--pixel-70);
+}
+
+@media (max-width: 910px) {
+  .adsSection {
+    padding: var(--pixel-20) var(--pixel-30);
+  }
+}
+
+@media (max-width: 700px) {
+  .adsSection {
+    padding: var(--pixel-20);
+  }
 }

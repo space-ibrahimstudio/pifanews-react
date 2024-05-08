@@ -4,14 +4,16 @@ import { NewsSummaryCard } from "../cards/news-summary-card";
 import styles from "./styles/news-summary-group.module.css";
 
 export const NewsSummaryGroup = ({ id, title, posts, to }) => {
+  const compid = `summary-group-${id}`;
+
   return (
-    <section id={`summary-group-${id}`} className={styles.newsSummaryGroup}>
+    <section id={compid} className={styles.newsSummaryGroup}>
       <header className={styles.groupHead}>
         <div className={styles.groupHeadwrap}>
           <div className={styles.groupTitlewrap}>
             <h1 className={styles.groupTitle}>{title}</h1>
           </div>
-          <SourceButton id={`summary-group-${id}`} to={to} />
+          <SourceButton id={compid} to={to} />
         </div>
       </header>
       <div className={styles.groupBodyVscroll}>
@@ -19,7 +21,7 @@ export const NewsSummaryGroup = ({ id, title, posts, to }) => {
           {posts.map((post, index) => (
             <NewsSummaryCard
               key={index}
-              id={`summary-group-${id}-${index}`}
+              id={`${compid}-${index}`}
               title={post.title}
               tag={post.tag}
               image={post.image}

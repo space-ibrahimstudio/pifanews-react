@@ -11,10 +11,11 @@ export const NewsDisplayCard = ({
   loc,
   date,
   align = "stretch",
-  height = "270px",
+  height = "var(--pixel-270)",
   flex,
   onClick,
 }) => {
+  const compid = `display-card-${id}`;
   const cardstyle = {
     backgroundImage: image
       ? image !== ""
@@ -28,13 +29,13 @@ export const NewsDisplayCard = ({
 
   return (
     <section
-      id={`display-card-${id}`}
+      id={compid}
       className={styles.newsDisplayCard}
       style={cardstyle}
       onClick={onClick}
     >
       <div className={styles.cardContent}>
-        <NewsTag id={`display-card-${id}`} name={tag} />
+        <NewsTag id={compid} name={tag} />
         <div className={styles.cardHead}>
           <h1 className={styles.cardTitle}>{title}</h1>
           <p className={styles.cardShort}>{short}</p>

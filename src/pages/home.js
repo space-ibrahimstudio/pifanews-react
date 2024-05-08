@@ -17,6 +17,7 @@ import { NewsCard } from "../components/contents/cards/news-card";
 import { CatSection } from "../components/layouts/cat-section";
 import { NewsSection } from "../components/layouts/news-section";
 import { PollingCard } from "../components/contents/cards/polling-card";
+import { AdsSection } from "../sections/ads-section";
 
 const HomePage = () => {
   const { short } = useDocument();
@@ -74,12 +75,13 @@ const HomePage = () => {
           <NewsSummaryGroup
             id={id}
             title="Trending"
-            posts={posts.slice(3)}
+            posts={posts.slice(3, 10)}
             to="/trending"
           />
         </Aside>
       </HeroSection>
       <TagsSection id={id} tags={tags} />
+      <AdsSection src="/img/submit-banner.webp" />
       <NewsHscrollSection
         id={`${id}-newest`}
         title="Berita"
@@ -107,6 +109,7 @@ const HomePage = () => {
         to="/lokal"
         posts={posts}
       />
+      <AdsSection src="/img/about-banner.webp" />
       <NewsHscrollSection
         id={`${id}-popular`}
         title="Berita"
@@ -177,6 +180,7 @@ const HomePage = () => {
           />
         ))}
       </NewsHscrollSection>
+      <AdsSection src="/img/report-banner.webp" />
     </PageLayout>
   );
 };

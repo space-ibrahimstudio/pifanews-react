@@ -9,13 +9,13 @@
 .news3grid200 {
   flex: 1;
   flex-direction: column;
-  min-width: 200px;
+  min-width: var(--pixel-200);
 }
 
 .news3grid,
 .news3gridSmall {
   overflow: hidden;
-  gap: 10px;
+  gap: var(--pixel-10);
 }
 
 .news3gridSmall {
@@ -27,5 +27,5 @@
 .news3grid {
   flex: 1;
   flex-direction: column;
-  min-width: 300px;
+  min-width: var(--pixel-300);
 }

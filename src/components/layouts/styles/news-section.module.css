@@ -2,7 +2,7 @@
 .sectionBody {
   align-self: stretch;
   display: flex;
-  gap: 10px;
+  gap: var(--pixel-10);
 }
 
 .sectionBody {
@@ -17,5 +17,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 20px 70px;
+  padding: var(--pixel-20) var(--pixel-70);
+}
+
+@media (max-width: 910px) {
+  .newsSection {
+    padding: var(--pixel-20) var(--pixel-30);
+  }
+}
+
+@media (max-width: 700px) {
+  .newsSection {
+    padding: var(--pixel-20);
+  }
 }

@@ -3,8 +3,10 @@ import { NewsSummaryCard } from "../cards/news-summary-card";
 import styles from "./styles/news-group.module.css";
 
 export const NewsGroup = ({ id, title, scope, posts }) => {
+  const compid = `news-group-${id}`;
+
   return (
-    <section id={`news-group-${id}`} className={styles.newsGroup}>
+    <section id={compid} className={styles.newsGroup}>
       <header className={styles.groupHead}>
         <div className={styles.groupHeadwrap}>
           <div className={styles.groupTitlewrap}>
@@ -20,7 +22,7 @@ export const NewsGroup = ({ id, title, scope, posts }) => {
           {posts.map((post, index) => (
             <NewsSummaryCard
               key={index}
-              id={`news-group-${id}-${index}`}
+              id={`${compid}-${index}`}
               title={post.title}
               tag={post.tag}
               image={post.image}

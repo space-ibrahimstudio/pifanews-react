@@ -12,6 +12,7 @@ export const PollingCard = ({
   image,
   onClick,
 }) => {
+  const compid = `polling-card-${id}`;
   const cardstyle = {
     backgroundImage: image
       ? image !== ""
@@ -21,13 +22,9 @@ export const PollingCard = ({
   };
 
   return (
-    <section
-      id={`polling-card-${id}`}
-      className={styles.pollingCard}
-      onClick={onClick}
-    >
+    <section id={compid} className={styles.pollingCard} onClick={onClick}>
       <div className={styles.cardImage} style={cardstyle}>
-        <NewsTag id={`polling-card-${id}`} name={tag} />
+        <NewsTag id={compid} name={tag} />
       </div>
       <div className={styles.cardContent}>
         <h1 className={styles.cardTitle}>{title}</h1>

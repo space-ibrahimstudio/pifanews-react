@@ -10,6 +10,7 @@ export const TabButton = ({
   endContent,
   onClick,
 }) => {
+  const compid = `tab-${id}`;
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(null);
 
@@ -19,7 +20,7 @@ export const TabButton = ({
 
   return (
     <button
-      id={`tab-${id}`}
+      id={compid}
       className={`${styles.tabButton} ${
         activeTab === path ? styles.active : ""
       }`}

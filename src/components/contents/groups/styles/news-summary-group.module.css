@@ -11,13 +11,13 @@
 
 .groupTitlewrap {
   flex: 1;
-  border-left: 5px solid var(--color-hint);
+  border-left: var(--pixel-5) solid var(--color-hint);
   overflow: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  padding: 5px 10px;
+  padding: var(--pixel-5) var(--pixel-10);
 }
 
 .groupHead,
@@ -32,16 +32,16 @@
   overflow: hidden;
   flex-direction: row;
   justify-content: flex-start;
-  padding: 10px 0;
-  gap: 10px;
+  padding: var(--pixel-10) 0;
+  gap: var(--pixel-10);
 }
 
 .groupHead {
   flex-direction: column;
   justify-content: center;
-  padding: 0 10px;
+  padding: 0 var(--pixel-10);
   text-align: left;
-  font-size: 25px;
+  font-size: var(--font-md);
   color: var(--color-primary);
   font-family: var(--font-jakarta);
 }
@@ -65,12 +65,12 @@
   flex: 1;
   overflow-y: auto;
   justify-content: flex-start;
-  padding: 10px;
+  padding: var(--pixel-10);
   transition: var(--transit);
 }
 
 .groupBodyVscroll::-webkit-scrollbar {
-  width: 5px;
+  width: var(--pixel-5);
 }
 
 .groupBodyVscroll::-webkit-scrollbar-track {
@@ -79,7 +79,7 @@
 
 .groupBodyVscroll::-webkit-scrollbar-thumb {
   background-color: #ccc;
-  border-radius: 5px;
+  border-radius: var(--pixel-5);
 }
 
 .groupBodyVscroll:hover::-webkit-scrollbar-thumb {
@@ -87,9 +87,9 @@
 }
 
 .newsSummaryGroup {
-  border-radius: 20px;
+  border-radius: var(--pixel-20);
   background-color: var(--color-secondlight);
-  height: 550px;
+  height: var(--pixel-550);
   overflow: hidden;
   flex-shrink: 0;
   justify-content: center;

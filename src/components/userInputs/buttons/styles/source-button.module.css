@@ -1,15 +1,15 @@
 .groupCta {
   cursor: pointer;
   border: 0;
-  padding: 10px;
+  padding: var(--pixel-10);
   background-color: transparent;
-  border-radius: 10px;
+  border-radius: var(--pixel-10);
   overflow: hidden;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--pixel-10);
   opacity: 0.5;
   transition: var(--transit);
 }
@@ -20,7 +20,7 @@
 
 .groupCtaText {
   position: relative;
-  font-size: 16px;
+  font-size: var(--font-xsm);
   font-weight: 500;
   font-family: var(--font-inter);
   color: var(--color-primary);
@@ -28,7 +28,7 @@
 }
 
 .groupCtaIcon {
-  width: 16.1px;
+  width: auto;
   position: relative;
-  height: 15px;
+  height: var(--pixel-15);
 }

@@ -3,13 +3,14 @@ import { NewsDisplayCard } from "../contents/cards/news-display-card";
 import styles from "./styles/news3grid.module.css";
 
 export const News3grid = ({ id, posts }) => {
+  const compid = `3-grid-${id}`;
   const slicedposts = posts.slice(0, 3);
 
   return (
-    <div id={`3-grid-${id}`} className={styles.news3grid}>
+    <div id={compid} className={styles.news3grid}>
       {slicedposts.length > 0 && (
         <NewsDisplayCard
-          id={`3-grid-${id}-${slicedposts[0].id}`}
+          id={`${compid}-${slicedposts[0].id}`}
           title={slicedposts[0].title}
           short={slicedposts[0].short}
           tag={slicedposts[0].tag}
@@ -17,7 +18,7 @@ export const News3grid = ({ id, posts }) => {
           loc={slicedposts[0].location}
           date={slicedposts[0].date}
           align="stretch"
-          height="270px"
+          height="var(--pixel-270)"
           flex="unset"
         />
       )}
@@ -25,7 +26,7 @@ export const News3grid = ({ id, posts }) => {
         {slicedposts.slice(1).map((post, index) => (
           <div key={index} className={styles.news3grid200}>
             <NewsDisplayCard
-              id={`3-grid-${id}-${post.id}`}
+              id={`${compid}-${post.id}`}
               title={post.title}
               short={post.short}
               tag={post.tag}
@@ -33,7 +34,7 @@ export const News3grid = ({ id, posts }) => {
               loc={post.location}
               date={post.date}
               align="stretch"
-              height="270px"
+              height="var(--pixel-270)"
               flex="unset"
             />
           </div>

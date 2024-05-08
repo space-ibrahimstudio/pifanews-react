@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./styles/cat-card.module.css";
 
 export const CatCard = ({ id, catname, image, onClick }) => {
+  const compid = `category-card-${id}`;
   const cardstyle = {
     backgroundImage: image
       ? image !== ""
@@ -12,7 +13,7 @@ export const CatCard = ({ id, catname, image, onClick }) => {
 
   return (
     <section
-      id={`category-card-${id}`}
+      id={compid}
       className={styles.catCard}
       style={cardstyle}
       onClick={onClick}

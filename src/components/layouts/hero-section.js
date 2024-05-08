@@ -2,8 +2,10 @@ import React from "react";
 import styles from "./styles/hero-section.module.css";
 
 export const HeroSection = ({ id, children }) => {
+  const compid = `hero-${id}`;
+
   return (
-    <section id={`hero-${id}`} className={styles.heroSection}>
+    <section id={compid} className={styles.heroSection}>
       <div className={styles.heroContent}>{children}</div>
     </section>
   );

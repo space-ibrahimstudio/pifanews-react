@@ -40,8 +40,10 @@
   --font-md: 25px;
   --font-sm: 18px;
   --font-xsm: 16px;
+  --font-tiny: 14px;
 
   --pixel-5: 5px;
+  --pixel-min-5: -5px;
   --pixel-10: 10px;
   --pixel-15: 15px;
   --pixel-20: 20px;
@@ -52,16 +54,23 @@
   --pixel-50: 50px;
   --pixel-65: 65px;
   --pixel-70: 70px;
+  --pixel-min-70: -70px;
+  --pixel-75: 75px;
   --pixel-90: 90px;
+  --pixel-95: 95px;
   --pixel-100: 100px;
+  --pixel-120: 120px;
+  --pixel-140: 140px;
   --pixel-150: 150px;
   --pixel-200: 200px;
   --pixel-250: 250px;
+  --pixel-270: 270px;
   --pixel-300: 300px;
   --pixel-350: 350px;
   --pixel-400: 400px;
   --pixel-450: 450px;
   --pixel-500: 500px;
+  --pixel-550: 550px;
 }
 
 @media (min-width: 701px) and (max-width: 1120px) {
@@ -71,8 +80,10 @@
     --font-md: 21.5px;
     --font-sm: 15.5px;
     --font-xsm: 14px;
+    --font-tiny: 12px;
 
     --pixel-5: 4px;
+    --pixel-min-5: -4px;
     --pixel-10: 8.5px;
     --pixel-15: 13px;
     --pixel-20: 17px;
@@ -83,16 +94,23 @@
     --pixel-50: 43px;
     --pixel-65: 56px;
     --pixel-70: 60px;
+    --pixel-min-70: -60px;
+    --pixel-75: 64px;
     --pixel-90: 77px;
+    --pixel-95: 81.5px;
     --pixel-100: 85px;
+    --pixel-120: 103px;
+    --pixel-140: 120px;
     --pixel-150: 128.5px;
     --pixel-200: 171.5px;
     --pixel-250: 214px;
+    --pixel-270: 231.5px;
     --pixel-300: 257px;
     --pixel-350: 300px;
     --pixel-400: 343px;
     --pixel-450: 386px;
     --pixel-500: 428.5px;
+    --pixel-550: 471.5px;
   }
 }
 
@@ -103,8 +121,10 @@
     --font-md: 18px;
     --font-sm: 13px;
     --font-xsm: 11.5px;
+    --font-tiny: 10px;
 
     --pixel-5: 3.5px;
+    --pixel-min-5: -3.5px;
     --pixel-10: 7px;
     --pixel-15: 11px;
     --pixel-20: 14px;
@@ -115,16 +135,23 @@
     --pixel-50: 36px;
     --pixel-65: 46.5px;
     --pixel-70: 50px;
+    --pixel-min-70: -50px;
+    --pixel-75: 53.5px;
     --pixel-90: 64px;
+    --pixel-95: 68px;
     --pixel-100: 71.5px;
+    --pixel-120: 86px;
+    --pixel-140: 100px;
     --pixel-150: 107px;
     --pixel-200: 143px;
     --pixel-250: 179px;
+    --pixel-270: 193px;
     --pixel-300: 214.5px;
     --pixel-350: 250px;
     --pixel-400: 286px;
     --pixel-450: 321.5px;
     --pixel-500: 357px;
+    --pixel-550: 393px;
   }
 }
 
