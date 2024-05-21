@@ -7,11 +7,13 @@ import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import Container300, { Aside } from "../components/layouts/containers";
 import NewsCard, { NewsDisplayCard } from "../components/contents/cards";
-import { NewsSummaryGroup } from "../components/contents/groups";
+import { NewsSummaryGroup, FeedsGroup } from "../components/contents/groups";
 import { AdsSection } from "../sections/ads-section";
 import { HeroSection } from "../sections/hero-section";
 import { TagsSection } from "../sections/tags-section";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
+import { FeedsSection } from "../sections/feeds-section";
+import { InlineadsSection } from "../sections/inlineads-section";
 
 const CategoryPage = () => {
   const { category } = useParams();
@@ -68,7 +70,7 @@ const CategoryPage = () => {
                 image={filteredposts[0].image}
                 loc={filteredposts[0].location}
                 date={filteredposts[0].date}
-                height="var(--pixel-550)"
+                height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"}
                 flex="1"
               />
             </Container300>
@@ -93,7 +95,7 @@ const CategoryPage = () => {
             />
           ))}
         </NewsHscrollSection>
-        <NewsHscrollSection title="Berita" prior="Terpopuler">
+        <NewsHscrollSection title="Berita" prior="Populer">
           {filteredposts.slice(0, 3).map((post, index) => (
             <NewsCard
               id={id}
@@ -107,6 +109,12 @@ const CategoryPage = () => {
             />
           ))}
         </NewsHscrollSection>
+        <FeedsSection>
+          <FeedsGroup id={id} posts={filteredposts} />
+          <Aside>
+            <InlineadsSection label="" src="/img/inline-ads.webp" />
+          </Aside>
+        </FeedsSection>
         <AdsSection label="" src="/img/report-banner.webp" />
       </PageLayout>
     </Fragment>

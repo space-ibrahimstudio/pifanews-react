@@ -1,0 +1,17 @@
+.inlineadsContent {
+  border-radius: var(--pixel-20);
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.inlineadsSection {
+  align-self: stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}

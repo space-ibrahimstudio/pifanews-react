@@ -90,7 +90,7 @@ const HomePage = () => {
         <CatSection cats={categories} />
         <NewsSection title="Berita" prior="Lokal" posts={posts} />
         <AdsSection label="" src="/img/about-banner.webp" />
-        <NewsHscrollSection title="Berita" prior="Terpopuler">
+        <NewsHscrollSection title="Berita" prior="Populer">
           {posts.slice(0, 3).map((post, index) => (
             <NewsCard
               id={id}

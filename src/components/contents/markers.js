@@ -10,7 +10,7 @@ export const NewsTag = ({ id, name }) => {
 
   return (
     <div id={compid} className={tag.cardLabel}>
-      <div className={tag.cardLabelText}>{name}</div>
+      <p className={tag.cardLabelText}>{name}</p>
     </div>
   );
 };

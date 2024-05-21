@@ -176,6 +176,10 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
 img {
   object-fit: cover;
   object-position: center;

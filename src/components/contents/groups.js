@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useContent } from "@ibrahimstudio/react";
+import { Input } from "@ibrahimstudio/input";
 import { SourceButton } from "../user-inputs/buttons";
-import { NewsSummaryCard } from "./cards";
+import { NewsSummaryCard, NewsFeedCard } from "./cards";
 import styles from "./styles/news-group.module.css";
 import summary from "./styles/news-summary-group.module.css";
+import feed from "./styles/feeds-group.module.css";
 
 const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
   const { toTitleCase, toPathname } = useContent();
@@ -79,6 +81,52 @@ export const NewsSummaryGroup = ({ id, variant, isPortrait, title, posts }) => {
             />
           ))}
         </div>
+      </div>
+    </section>
+  );
+};
+
+export const FeedsGroup = ({ id, filter = "popular", posts }) => {
+  const compid = `${id}-feeds-group`;
+  const [postsFilter, setPostsFilter] = useState(filter);
+
+  const switchFilter = [
+    { label: "Terbaru", value: "update" },
+    { label: "Trending", value: "hot" },
+    { label: "Populer", value: "popular" },
+  ];
+
+  const switchStatus = (value) => setPostsFilter(value);
+
+  return (
+    <section id={compid} className={feed.feedsGroup}>
+      <header className={feed.feedsHead}>
+        <div className={feed.feedsTitlewrap}>
+          <h1 className={feed.feedsTitle}>Feeds</h1>
+        </div>
+        <Input
+          id={`${compid}-switch-filter`}
+          variant="select"
+          isLabeled={false}
+          placeholder="Filter Jenis Berita"
+          value={postsFilter}
+          options={switchFilter}
+          onSelect={switchStatus}
+        />
+      </header>
+      <div className={feed.feedsBody}>
+        {posts.map((post, index) => (
+          <NewsFeedCard
+            key={index}
+            id={`${compid}-${index}`}
+            title={post.title}
+            short={post.short}
+            tag={post.tag}
+            image={post.image}
+            loc={post.location}
+            date={post.date}
+          />
+        ))}
       </div>
     </section>
   );

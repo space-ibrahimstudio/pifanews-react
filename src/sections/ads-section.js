@@ -1,5 +1,6 @@
 import React from "react";
 import { useContent } from "@ibrahimstudio/react";
+import { Image } from "../components/contents/image";
 import styles from "./styles/ads-section.module.css";
 
 export const AdsSection = ({ id, label, src }) => {
@@ -10,7 +11,7 @@ export const AdsSection = ({ id, label, src }) => {
 
   return (
     <section id={compid} className={styles.adsSection}>
-      <img id={`${compid}-content`} className={styles.adsContent} loading="lazy" alt={adslabel} src={src} />
+      <Image className={styles.adsContent} alt={adslabel} src={src} />
     </section>
   );
 };

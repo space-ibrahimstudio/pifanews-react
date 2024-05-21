@@ -5,6 +5,7 @@ import styles from "./styles/news-card.module.css";
 import cat from "./styles/cat-card.module.css";
 import display from "./styles/news-display-card.module.css";
 import summary from "./styles/news-summary-card.module.css";
+import feed from "./styles/news-feed-card.module.css";
 
 const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
@@ -103,7 +104,7 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
       {isPortrait && (
         <div className={`${summary.cardImage} ${summary.portrait}`} style={cardstyle}>
           <div className={summary.cardLabel}>
-            <div className={summary.cardLabelText}>{tag}</div>
+            <p className={summary.cardLabelText}>{tag}</p>
           </div>
         </div>
       )}
@@ -123,6 +124,40 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
           </div>
         </div>
       )}
+    </section>
+  );
+};
+
+export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
+  const { toTitleCase, toPathname, stripContent } = useContent();
+  const { newDate } = useFormat();
+
+  const compid = title && tag ? `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-feed-card`;
+  const cardtitle = title ? toTitleCase(title) : "";
+  const carddesc = short ? stripContent(short) : "";
+  const cardloc = loc ? toTitleCase(loc) : "";
+  const carddate = date ? newDate(date) : "";
+  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
+
+  return (
+    <section id={compid} className={feed.newsFeedCard} onClick={onClick}>
+      <div className={feed.cardContent}>
+        <div className={feed.cardHead}>
+          <h1 className={feed.cardTitle}>{cardtitle}</h1>
+          <p className={feed.cardShort}>{carddesc}</p>
+        </div>
+        <div className={feed.cardInfo}>
+          <div className={feed.cardLocWrap}>
+            <h6 className={feed.cardLoc}>{cardloc}</h6>
+          </div>
+          <h6 className={feed.cardLoc}>{`| ${carddate}`}</h6>
+        </div>
+      </div>
+      <div className={feed.cardImage} style={cardstyle}>
+        <div className={feed.cardLabel}>
+          <p className={feed.cardLabelText}>{tag}</p>
+        </div>
+      </div>
     </section>
   );
 };
