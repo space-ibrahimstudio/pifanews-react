@@ -88,7 +88,7 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
   );
 };
 
-export const NewsSummaryCard = ({ id, title, tag, image, loc, date, onClick }) => {
+export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname } = useContent();
   const { newDate } = useFormat();
 
@@ -99,8 +99,15 @@ export const NewsSummaryCard = ({ id, title, tag, image, loc, date, onClick }) =
   const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
 
   return (
-    <section id={compid} className={summary.newsSummaryCard} onClick={onClick}>
-      <div className={summary.cardHead}>
+    <section id={compid} className={`${summary.newsSummaryCard} ${isPortrait ? summary.portrait : summary.landscape}`} onClick={onClick}>
+      {isPortrait && (
+        <div className={`${summary.cardImage} ${summary.portrait}`} style={cardstyle}>
+          <div className={summary.cardLabel}>
+            <div className={summary.cardLabelText}>{tag}</div>
+          </div>
+        </div>
+      )}
+      <div className={`${summary.cardHead} ${isPortrait ? summary.portrait : summary.landscape}`}>
         <h1 className={summary.cardTitle}>{cardtitle}</h1>
         <div className={summary.cardInfo}>
           <div className={summary.cardLocWrap}>
@@ -109,11 +116,13 @@ export const NewsSummaryCard = ({ id, title, tag, image, loc, date, onClick }) =
           <h6 className={summary.cardLoc}>{`| ${carddate}`}</h6>
         </div>
       </div>
-      <div className={summary.cardImage} style={cardstyle}>
-        <div className={summary.cardLabel}>
-          <div className={summary.cardLabelText}>{tag}</div>
+      {!isPortrait && (
+        <div className={`${summary.cardImage} ${summary.landscape}`} style={cardstyle}>
+          <div className={summary.cardLabel}>
+            <div className={summary.cardLabelText}>{tag}</div>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

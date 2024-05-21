@@ -46,7 +46,6 @@
 }
 
 .cardHead {
-  flex: 1;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -54,6 +53,14 @@
   justify-content: center;
   padding: var(--pixel-5);
   gap: var(--pixel-10);
+}
+
+.cardHead.portrait {
+  align-self: stretch;
+}
+
+.cardHead.landscape {
+  flex: 1;
 }
 
 .cardLabelText {
@@ -86,7 +93,6 @@
 }
 
 .cardImage {
-  width: var(--pixel-100);
   border-radius: var(--pixel-5);
   height: var(--pixel-100);
   flex-shrink: 0;
@@ -101,14 +107,19 @@
   font-family: var(--font-inter);
 }
 
+.cardImage.portrait {
+  align-self: stretch;
+}
+
+.cardImage.landscape {
+  width: var(--pixel-100);
+}
+
 .newsSummaryCard {
   align-self: stretch;
   cursor: pointer;
   border-radius: 0;
-  border-bottom: 1px solid var(--color-secondary-20);
   background-color: transparent;
-  flex-direction: row;
-  justify-content: center;
   padding: var(--pixel-10);
   gap: var(--pixel-10);
   text-align: left;
@@ -116,6 +127,24 @@
   color: var(--color-secondary);
   font-family: var(--font-jakarta);
   transition: var(--transit);
+}
+
+.newsSummaryCard.portrait {
+  flex: 1;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  min-width: var(--pixel-200);
+  max-width: var(--pixel-250);
+}
+
+.newsSummaryCard.landscape {
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  border-bottom: 1px solid var(--color-secondary-20);
 }
 
 .newsSummaryCard:hover {

@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useContent } from "@ibrahimstudio/react";
+import { useContent, useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { getFeaturedPosts, getTrendingTags } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
@@ -16,6 +16,7 @@ import { NewsHscrollSection } from "../sections/news-hscroll-section";
 const CategoryPage = () => {
   const { category } = useParams();
   const { short } = useDocument();
+  const { width } = useWindow();
   const { toPathname, toTitleCase } = useContent();
 
   const id = category ? `${short}-${toPathname(category)}` : `${short}-category`;
@@ -73,7 +74,7 @@ const CategoryPage = () => {
             </Container300>
           )}
           <Aside>
-            <NewsSummaryGroup id={id} title="Trending" posts={filteredposts.slice(1, 10)} />
+            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={filteredposts.slice(1, 10)} />
           </Aside>
         </HeroSection>
         <TagsSection tags={tags} />

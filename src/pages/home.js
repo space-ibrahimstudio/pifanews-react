@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { getFeaturedPosts, getTrendingTags, getLocalCategories } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
@@ -15,6 +16,7 @@ import { CatSection } from "../sections/cat-section";
 import { NewsSection } from "../sections/news-section";
 
 const HomePage = () => {
+  const { width } = useWindow();
   const { short } = useDocument();
   const id = `${short}-home`;
 
@@ -66,7 +68,7 @@ const HomePage = () => {
         <HeroSection>
           <News3Grid id={id} posts={posts} />
           <Aside>
-            <NewsSummaryGroup id={id} variant="primary" title="Trending" posts={posts.slice(3, 10)} />
+            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={posts.slice(3, 10)} />
           </Aside>
         </HeroSection>
         <TagsSection tags={tags} />

@@ -5,7 +5,7 @@ import { NewsSummaryCard } from "./cards";
 import styles from "./styles/news-group.module.css";
 import summary from "./styles/news-summary-group.module.css";
 
-const NewsGroup = ({ id, title, scope, posts }) => {
+const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
   const { toTitleCase, toPathname } = useContent();
 
   const compid = title && scope ? `${id}-news-group-${toPathname(title)}-${toPathname(scope)}` : `${id}-news-group`;
@@ -13,7 +13,7 @@ const NewsGroup = ({ id, title, scope, posts }) => {
   const groupscope = scope ? toTitleCase(scope) : "";
 
   return (
-    <section id={compid} className={styles.newsGroup}>
+    <section id={compid} className={`${styles.newsGroup} ${isPortrait ? "" : styles.landscape}`}>
       <header className={styles.groupHead}>
         <div className={styles.groupHeadwrap}>
           <div className={styles.groupTitlewrap}>
@@ -24,11 +24,12 @@ const NewsGroup = ({ id, title, scope, posts }) => {
           </div>
         </div>
       </header>
-      <div className={styles.groupBodyVscroll}>
-        <div className={styles.groupBody}>
+      <div className={`${styles.groupBodyVscroll} ${isPortrait ? styles.portrait : styles.landscape}`}>
+        <div className={`${styles.groupBody} ${isPortrait ? styles.portrait : styles.landscape}`}>
           {posts.map((post, index) => (
             <NewsSummaryCard
               key={index}
+              isPortrait={isPortrait}
               id={`${compid}-${index}`}
               title={post.title}
               tag={post.tag}
@@ -43,7 +44,7 @@ const NewsGroup = ({ id, title, scope, posts }) => {
   );
 };
 
-export const NewsSummaryGroup = ({ id, variant, title, posts }) => {
+export const NewsSummaryGroup = ({ id, variant, isPortrait, title, posts }) => {
   const { toTitleCase, toPathname } = useContent();
 
   const compid = title ? `${id}-summary-group-${toPathname(title)}` : `${id}-summary-group`;
@@ -51,7 +52,10 @@ export const NewsSummaryGroup = ({ id, variant, title, posts }) => {
   const groupto = title ? `/${toPathname(title)}` : "/";
 
   return (
-    <section id={compid} className={`${summary.newsSummaryGroup} ${variant === "primary" ? summary.primary : ""}`}>
+    <section
+      id={compid}
+      className={`${summary.newsSummaryGroup} ${isPortrait ? "" : summary.landscape} ${variant === "primary" ? summary.primary : ""}`}
+    >
       <header className={summary.groupHead}>
         <div className={summary.groupHeadwrap}>
           <div className={summary.groupTitlewrap}>
@@ -60,11 +64,12 @@ export const NewsSummaryGroup = ({ id, variant, title, posts }) => {
           <SourceButton id={compid} to={groupto} />
         </div>
       </header>
-      <div className={summary.groupBodyVscroll}>
-        <div className={summary.groupBody}>
+      <div className={`${summary.groupBodyVscroll} ${isPortrait ? summary.portrait : summary.landscape}`}>
+        <div className={`${summary.groupBody} ${isPortrait ? summary.portrait : summary.landscape}`}>
           {posts.map((post, index) => (
             <NewsSummaryCard
               key={index}
+              isPortrait={isPortrait}
               id={`${compid}-${index}`}
               title={post.title}
               tag={post.tag}

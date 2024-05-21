@@ -43,8 +43,6 @@
   font-family: var(--font-jakarta);
 }
 
-.groupBody,
-.groupBodyVscroll,
 .groupHead,
 .newsGroup {
   display: flex;
@@ -53,9 +51,22 @@
 }
 
 .groupBody {
+  display: flex;
+  align-items: center;
   align-self: stretch;
-  overflow: hidden;
+}
+
+.groupBody.portrait {
+  flex: 1;
+  overflow-x: auto;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.groupBody.landscape {
   flex-shrink: 0;
+  overflow: hidden;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -65,34 +76,48 @@
 }
 
 .groupBodyVscroll {
+  display: flex;
+  align-items: center;
   align-self: stretch;
-  overflow-y: auto;
   justify-content: flex-start;
   padding: var(--pixel-10);
 }
 
-.groupBodyVscroll::-webkit-scrollbar {
+.groupBodyVscroll.portrait {
+  overflow: hidden;
+  flex-direction: row;
+}
+
+.groupBodyVscroll.landscape {
+  overflow-y: auto;
+  flex-direction: column;
+}
+
+.groupBodyVscroll.landscape::-webkit-scrollbar {
   width: var(--pixel-5);
 }
 
-.groupBodyVscroll::-webkit-scrollbar-track {
+.groupBodyVscroll.landscape::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.groupBodyVscroll::-webkit-scrollbar-thumb {
+.groupBodyVscroll.landscape::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: var(--pixel-5);
 }
 
-.groupBodyVscroll:hover::-webkit-scrollbar-thumb {
+.groupBodyVscroll.landscape:hover::-webkit-scrollbar-thumb {
   background-color: var(--color-primary);
 }
 
 .newsGroup {
   border-radius: var(--pixel-20);
   background-color: var(--color-secondlight);
-  height: var(--pixel-450);
   overflow: hidden;
   justify-content: center;
   min-width: var(--pixel-300);
+}
+
+.newsGroup.landscape {
+  height: var(--pixel-450);
 }

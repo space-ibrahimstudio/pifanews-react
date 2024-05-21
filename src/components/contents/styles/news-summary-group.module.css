@@ -47,62 +47,86 @@
 }
 
 .groupBody {
-  overflow: hidden;
-  flex-shrink: 0;
-  justify-content: center;
-}
-
-.groupBody,
-.groupBodyVscroll,
-.newsSummaryGroup {
   align-self: stretch;
   display: flex;
-  flex-direction: column;
   align-items: center;
 }
 
-.groupBodyVscroll {
+.groupBody.portrait {
   flex: 1;
-  overflow-y: auto;
+  overflow-x: auto;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.groupBody.landscape {
+  overflow: hidden;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.groupBodyVscroll {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
   padding: var(--pixel-10);
   transition: var(--transit);
 }
 
-.groupBodyVscroll::-webkit-scrollbar {
+.groupBodyVscroll.portrait {
+  overflow: hidden;
+  flex-direction: row;
+}
+
+.groupBodyVscroll.landscape {
+  overflow-y: auto;
+  flex: 1;
+  flex-direction: column;
+}
+
+.groupBodyVscroll.landscape::-webkit-scrollbar {
   width: var(--pixel-5);
 }
 
-.groupBodyVscroll::-webkit-scrollbar-track {
+.groupBodyVscroll.landscape::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.groupBodyVscroll::-webkit-scrollbar-thumb {
+.groupBodyVscroll.landscape::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: var(--pixel-5);
 }
 
-.groupBodyVscroll:hover::-webkit-scrollbar-thumb {
+.groupBodyVscroll.landscape:hover::-webkit-scrollbar-thumb {
   background-color: var(--color-primary);
 }
 
 .newsSummaryGroup {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-radius: var(--pixel-20);
   background-color: var(--color-secondlight);
-  height: var(--pixel-550);
   overflow: hidden;
   flex-shrink: 0;
   justify-content: center;
 }
 
+.newsSummaryGroup.landscape {
+  height: var(--pixel-550);
+}
+
 @media (min-width: 701px) and (max-width: 754px) {
-  .newsSummaryGroup.primary {
+  .newsSummaryGroup.landscape.primary {
     height: var(--pixel-830);
   }
 }
 
 @media (min-width: 464px) and (max-width: 613px) {
-  .newsSummaryGroup.primary {
+  .newsSummaryGroup.landscape.primary {
     height: var(--pixel-830);
   }
 }
