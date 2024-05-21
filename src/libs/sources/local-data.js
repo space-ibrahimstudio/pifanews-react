@@ -2,187 +2,111 @@ export async function getStaticMenus() {
   const menus = [
     { path: "/lokal", text: "Lokal" },
     { path: "/pifabiz", text: "PifaBiz" },
+    { path: "/lifestyle", text: "Lifestyle" },
+    { path: "/nasional", text: "Nasional" },
+    { path: "/internasional", text: "Internasional" },
+    { path: "/sports", text: "Sports" },
     { path: "/teknologi", text: "Teknologi" },
     { path: "/bisnis", text: "Bisnis" },
-    { path: "/lifestyle", text: "Lifestyle" },
-    { path: "/olahraga", text: "Olahraga" },
     { path: "/politik", text: "Politik" },
   ];
 
   return menus;
 }
 
+export async function getContactInfo() {
+  const contacts = [
+    {
+      id: "1",
+      label: "(+62) 811 5737 688",
+      value: "(+62) 811 5737 688",
+      icon: "/svg/phone.svg",
+    },
+    {
+      id: "2",
+      label: "nettacodeindonesia@gmail.com",
+      value: "nettacodeindonesia@gmail.com",
+      icon: "/svg/email.svg",
+    },
+  ];
+
+  return contacts;
+}
+
+export async function getSocialInfo() {
+  const socials = [
+    {
+      id: "1",
+      label: "PIFA on Instagram",
+      value: "https://instagram.com/pifa.co.id",
+      icon: "/svg/instagram.svg",
+    },
+    {
+      id: "2",
+      label: "PIFA on Facebook",
+      value: "https://www.facebook.com/Pifa-175960317881224",
+      icon: "/svg/facebook.svg",
+    },
+    {
+      id: "3",
+      label: "PIFA on YouTube",
+      value: "https://www.youtube.com/channel/UChd3pp48NwGI0afTn3dgm7g",
+      icon: "/svg/youtube.svg",
+    },
+  ];
+
+  return socials;
+}
+
+export async function getStaticPages() {
+  const pages = [
+    {
+      id: "1",
+      title: "Navigasi",
+      items: [
+        { itemid: "1", name: "Syarat & Ketentuan", path: "/syarat-ketentuan" },
+        { itemid: "2", name: "Tentang PIFA", path: "/tentang-pifa" },
+        { itemid: "3", name: "Kebijakan Privasi", path: "/kebijakan-privasi" },
+        { itemid: "4", name: "Bantuan (FAQ)", path: "/faq" },
+      ],
+    },
+    {
+      id: "2",
+      title: "Panduan",
+      items: [
+        {
+          itemid: "1",
+          name: "Kode Etik Jurnalistik",
+          path: "/kode-etik-jurnalistik",
+        },
+        { itemid: "2", name: "Beriklan", path: "/pasang-iklan" },
+        {
+          itemid: "3",
+          name: "Pedoman Media Siber",
+          path: "/pedoman-media-siber",
+        },
+      ],
+    },
+  ];
+
+  return pages;
+}
+
 export async function getFeaturedPosts() {
   const posts = [
     {
       id: "1",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
-      short:
-        "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
       tag: "Lokal",
       image: "/img/img-01.jpg",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "2",
-      title:
-        "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
-      short:
-        "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
-      tag: "Lokal",
-      image: "/img/img-02.jpg",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "3",
-      title:
-        "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
-      short:
-        "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
-      tag: "Lokal",
-      image: "/img/img-03.jpg",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "4",
-      title:
-        "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
-      short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "5",
-      title:
-        "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
-      short:
-        "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "6",
-      title:
-        "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
-      short:
-        "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "7",
-      title:
-        "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
-      short:
-        "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "8",
-      title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
-      short:
-        "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "9",
-      title:
-        "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
-      short:
-        "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "10",
-      title:
-        "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
-      short:
-        "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "11",
-      title:
-        "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
-      short:
-        "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "12",
-      title:
-        "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
-      short:
-        "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "13",
-      title:
-        "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
-      short:
-        "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "14",
-      title:
-        "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
-      short:
-        "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
-      tag: "Lokal",
-      image: "",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
-      id: "15",
-      title:
-        "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
-      short:
-        "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
-      tag: "Lokal",
-      image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "1",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
-      short:
-        "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
       tag: "PifaBiz",
       image: "/img/img-01.jpg",
       location: "Indonesia",
@@ -190,10 +114,152 @@ export async function getFeaturedPosts() {
     },
     {
       id: "2",
-      title:
-        "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
-      short:
-        "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      tag: "Bisnis",
+      image: "/img/img-02.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "2",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      tag: "Lokal",
+      image: "/img/img-02.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "3",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      tag: "Lokal",
+      image: "/img/img-03.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "3",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      tag: "Teknologi",
+      image: "/img/img-03.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "4",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "5",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "6",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "7",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "8",
+      title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "9",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "10",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "11",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "12",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "13",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "14",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "15",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      tag: "Lokal",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "2",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
       tag: "PifaBiz",
       image: "/img/img-02.jpg",
       location: "Indonesia",
@@ -201,10 +267,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "3",
-      title:
-        "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
-      short:
-        "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
       tag: "PifaBiz",
       image: "/img/img-03.jpg",
       location: "Indonesia",
@@ -212,8 +276,7 @@ export async function getFeaturedPosts() {
     },
     {
       id: "4",
-      title:
-        "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
       short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
       tag: "PifaBiz",
       image: "",
@@ -222,10 +285,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "5",
-      title:
-        "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
-      short:
-        "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -233,10 +294,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "6",
-      title:
-        "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
-      short:
-        "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -244,10 +303,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "7",
-      title:
-        "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
-      short:
-        "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -256,8 +313,7 @@ export async function getFeaturedPosts() {
     {
       id: "8",
       title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
-      short:
-        "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -265,10 +321,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "9",
-      title:
-        "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
-      short:
-        "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -276,10 +330,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "10",
-      title:
-        "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
-      short:
-        "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -287,10 +339,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "11",
-      title:
-        "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
-      short:
-        "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -298,10 +348,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "12",
-      title:
-        "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
-      short:
-        "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -309,10 +357,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "13",
-      title:
-        "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
-      short:
-        "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -320,10 +366,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "14",
-      title:
-        "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
-      short:
-        "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -331,10 +375,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "15",
-      title:
-        "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
-      short:
-        "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
       tag: "PifaBiz",
       image: "",
       location: "Indonesia",
@@ -342,10 +384,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "1",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
-      short:
-        "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
       tag: "Teknologi",
       image: "/img/img-01.jpg",
       location: "Indonesia",
@@ -353,30 +393,16 @@ export async function getFeaturedPosts() {
     },
     {
       id: "2",
-      title:
-        "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
-      short:
-        "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
       tag: "Teknologi",
       image: "/img/img-02.jpg",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
-      id: "3",
-      title:
-        "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
-      short:
-        "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
-      tag: "Teknologi",
-      image: "/img/img-03.jpg",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
       id: "4",
-      title:
-        "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
       short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
       tag: "Teknologi",
       image: "",
@@ -385,10 +411,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "5",
-      title:
-        "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
-      short:
-        "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -396,10 +420,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "6",
-      title:
-        "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
-      short:
-        "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -407,10 +429,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "7",
-      title:
-        "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
-      short:
-        "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -419,8 +439,7 @@ export async function getFeaturedPosts() {
     {
       id: "8",
       title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
-      short:
-        "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -428,10 +447,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "9",
-      title:
-        "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
-      short:
-        "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -439,10 +456,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "10",
-      title:
-        "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
-      short:
-        "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -450,10 +465,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "11",
-      title:
-        "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
-      short:
-        "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -461,10 +474,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "12",
-      title:
-        "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
-      short:
-        "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -472,10 +483,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "13",
-      title:
-        "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
-      short:
-        "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -483,10 +492,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "14",
-      title:
-        "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
-      short:
-        "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -494,10 +501,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "15",
-      title:
-        "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
-      short:
-        "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
       tag: "Teknologi",
       image: "",
       location: "Indonesia",
@@ -505,32 +510,17 @@ export async function getFeaturedPosts() {
     },
     {
       id: "1",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
-      short:
-        "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
       tag: "Bisnis",
       image: "/img/img-01.jpg",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
-      id: "2",
-      title:
-        "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
-      short:
-        "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
-      tag: "Bisnis",
-      image: "/img/img-02.jpg",
-      location: "Indonesia",
-      date: "20 Jan 2024",
-    },
-    {
       id: "3",
-      title:
-        "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
-      short:
-        "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
       tag: "Bisnis",
       image: "/img/img-03.jpg",
       location: "Indonesia",
@@ -538,8 +528,7 @@ export async function getFeaturedPosts() {
     },
     {
       id: "4",
-      title:
-        "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
       short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
       tag: "Bisnis",
       image: "",
@@ -548,10 +537,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "5",
-      title:
-        "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
-      short:
-        "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -559,10 +546,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "6",
-      title:
-        "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
-      short:
-        "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -570,10 +555,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "7",
-      title:
-        "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
-      short:
-        "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -582,8 +565,7 @@ export async function getFeaturedPosts() {
     {
       id: "8",
       title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
-      short:
-        "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -591,10 +573,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "9",
-      title:
-        "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
-      short:
-        "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -602,10 +582,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "10",
-      title:
-        "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
-      short:
-        "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -613,10 +591,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "11",
-      title:
-        "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
-      short:
-        "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -624,10 +600,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "12",
-      title:
-        "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
-      short:
-        "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -635,10 +609,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "13",
-      title:
-        "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
-      short:
-        "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -646,10 +618,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "14",
-      title:
-        "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
-      short:
-        "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -657,10 +627,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "15",
-      title:
-        "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
-      short:
-        "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
       tag: "Bisnis",
       image: "",
       location: "Indonesia",
@@ -668,10 +636,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "1",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
-      short:
-        "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
       tag: "Lifestyle",
       image: "/img/img-01.jpg",
       location: "Indonesia",
@@ -679,10 +645,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "2",
-      title:
-        "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
-      short:
-        "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
       tag: "Lifestyle",
       image: "/img/img-02.jpg",
       location: "Indonesia",
@@ -690,10 +654,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "3",
-      title:
-        "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
-      short:
-        "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
       tag: "Lifestyle",
       image: "/img/img-03.jpg",
       location: "Indonesia",
@@ -701,8 +663,7 @@ export async function getFeaturedPosts() {
     },
     {
       id: "4",
-      title:
-        "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
       short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
       tag: "Lifestyle",
       image: "",
@@ -711,10 +672,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "5",
-      title:
-        "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
-      short:
-        "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -722,10 +681,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "6",
-      title:
-        "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
-      short:
-        "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -733,10 +690,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "7",
-      title:
-        "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
-      short:
-        "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -745,8 +700,7 @@ export async function getFeaturedPosts() {
     {
       id: "8",
       title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
-      short:
-        "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -754,10 +708,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "9",
-      title:
-        "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
-      short:
-        "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -765,10 +717,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "10",
-      title:
-        "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
-      short:
-        "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -776,10 +726,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "11",
-      title:
-        "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
-      short:
-        "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -787,10 +735,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "12",
-      title:
-        "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
-      short:
-        "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -798,10 +744,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "13",
-      title:
-        "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
-      short:
-        "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -809,10 +753,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "14",
-      title:
-        "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
-      short:
-        "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -820,10 +762,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "15",
-      title:
-        "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
-      short:
-        "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
       tag: "Lifestyle",
       image: "",
       location: "Indonesia",
@@ -831,76 +771,63 @@ export async function getFeaturedPosts() {
     },
     {
       id: "1",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
-      short:
-        "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
-      tag: "Olahraga",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      tag: "Sports",
       image: "/img/img-01.jpg",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "2",
-      title:
-        "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
-      short:
-        "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
-      tag: "Olahraga",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      tag: "Sports",
       image: "/img/img-02.jpg",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "3",
-      title:
-        "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
-      short:
-        "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
-      tag: "Olahraga",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      tag: "Sports",
       image: "/img/img-03.jpg",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "4",
-      title:
-        "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
       short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
-      tag: "Olahraga",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "5",
-      title:
-        "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
-      short:
-        "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
-      tag: "Olahraga",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "6",
-      title:
-        "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
-      short:
-        "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
-      tag: "Olahraga",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "7",
-      title:
-        "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
-      short:
-        "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
-      tag: "Olahraga",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
@@ -908,96 +835,79 @@ export async function getFeaturedPosts() {
     {
       id: "8",
       title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
-      short:
-        "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
-      tag: "Olahraga",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "9",
-      title:
-        "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
-      short:
-        "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
-      tag: "Olahraga",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "10",
-      title:
-        "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
-      short:
-        "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
-      tag: "Olahraga",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "11",
-      title:
-        "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
-      short:
-        "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
-      tag: "Olahraga",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "12",
-      title:
-        "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
-      short:
-        "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
-      tag: "Olahraga",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "13",
-      title:
-        "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
-      short:
-        "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
-      tag: "Olahraga",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "14",
-      title:
-        "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
-      short:
-        "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
-      tag: "Olahraga",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "15",
-      title:
-        "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
-      short:
-        "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
-      tag: "Olahraga",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      tag: "Sports",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",
     },
     {
       id: "1",
-      title:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
-      short:
-        "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
       tag: "Politik",
       image: "/img/img-01.jpg",
       location: "Indonesia",
@@ -1005,10 +915,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "2",
-      title:
-        "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
-      short:
-        "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
       tag: "Politik",
       image: "/img/img-02.jpg",
       location: "Indonesia",
@@ -1016,10 +924,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "3",
-      title:
-        "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
-      short:
-        "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
       tag: "Politik",
       image: "/img/img-03.jpg",
       location: "Indonesia",
@@ -1027,8 +933,7 @@ export async function getFeaturedPosts() {
     },
     {
       id: "4",
-      title:
-        "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
       short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
       tag: "Politik",
       image: "",
@@ -1037,10 +942,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "5",
-      title:
-        "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
-      short:
-        "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1048,10 +951,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "6",
-      title:
-        "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
-      short:
-        "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1059,10 +960,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "7",
-      title:
-        "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
-      short:
-        "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1071,8 +970,7 @@ export async function getFeaturedPosts() {
     {
       id: "8",
       title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
-      short:
-        "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1080,10 +978,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "9",
-      title:
-        "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
-      short:
-        "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1091,10 +987,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "10",
-      title:
-        "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
-      short:
-        "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1102,10 +996,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "11",
-      title:
-        "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
-      short:
-        "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1113,10 +1005,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "12",
-      title:
-        "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
-      short:
-        "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1124,10 +1014,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "13",
-      title:
-        "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
-      short:
-        "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1135,10 +1023,8 @@ export async function getFeaturedPosts() {
     },
     {
       id: "14",
-      title:
-        "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
-      short:
-        "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
       tag: "Politik",
       image: "",
       location: "Indonesia",
@@ -1146,11 +1032,279 @@ export async function getFeaturedPosts() {
     },
     {
       id: "15",
-      title:
-        "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
-      short:
-        "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
       tag: "Politik",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "1",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      tag: "Nasional",
+      image: "/img/img-01.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "2",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      tag: "Nasional",
+      image: "/img/img-02.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "3",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      tag: "Nasional",
+      image: "/img/img-03.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "4",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "5",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "6",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "7",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "8",
+      title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "9",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "10",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "11",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "12",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "13",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "14",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "15",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      tag: "Nasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "1",
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+      short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+      tag: "Internasional",
+      image: "/img/img-01.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "2",
+      title: "Duis venenatis fermentum lacinia. Quisque in porta dui, vel dictum odio.",
+      short: "Phasellus ac tellus non neque pellentesque laoreet. Aenean sit amet",
+      tag: "Internasional",
+      image: "/img/img-02.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "3",
+      title: "elit sit amet sem ornare blandit. Quisque in augue id ligula auctor",
+      short: "mattis at at diam. Sed at rutrum nisl. Quisque tempus, arcu vel molestie",
+      tag: "Internasional",
+      image: "/img/img-03.jpg",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "4",
+      title: "aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      short: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium ",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "5",
+      title: "egestas. Pellentesque a luctus mi, sit amet ornare erat. Etiam commodo",
+      short: "pharetra accumsan. Nunc cursus massa leo, et tempus massa feugiat eu.",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "6",
+      title: "Fusce nunc quam, posuere in ornare nec, eleifend in lectus. Donec euismod orci",
+      short: "neque. In maximus dictum pellentesque. Fusce vulputate pulvinar enim vel ",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "7",
+      title: "volutpat. Phasellus eget mauris nec nibh consequat congue nec quis dolor.",
+      short: "Nulla ante felis, rutrum id dignissim in, aliquam a tortor. Cras elementum",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "8",
+      title: "neque sed orci egestas viverra. In dictum at lacus sed faucibus.",
+      short: "Suspendisse ligula lectus, tempor nec semper et, blandit id dolor. Donec vel",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "9",
+      title: "velit sem. Quisque in condimentum risus. Sed at consequat nisl. Aliquam ",
+      short: "sit amet turpis nec mauris tempus maximus. Morbi turpis ipsum, commodo et",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "10",
+      title: "dolor vel, molestie malesuada tortor. Morbi libero purus, facilisis et diam",
+      short: "vel, pellentesque facilisis massa. Aliquam erat volutpat. Maecenas ",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "11",
+      title: "placerat lorem eget purus semper maximus. Quisque placerat faucibus",
+      short: "dapibus. In ac justo sed ipsum elementum dictum. Etiam mattis, massa",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "12",
+      title: "sit amet molestie porta, ex sapien sollicitudin ex, pulvinar vestibulum",
+      short: "diam dui et lectus. Morbi id ornare nibh. Nunc viverra quam vel nisi",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "13",
+      title: "ultricies, id mollis massa mollis. Suspendisse pellentesque, magna eu",
+      short: "consequat ultricies, leo nulla maximus diam, ut sodales justo dolor ut nunc.",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "14",
+      title: "Proin tempus condimentum blandit. In dictum rutrum turpis sed ultrices.",
+      short: "Pellentesque rutrum tortor sed felis imperdiet imperdiet. Nulla id fringilla",
+      tag: "Internasional",
+      image: "",
+      location: "Indonesia",
+      date: "20 Jan 2024",
+    },
+    {
+      id: "15",
+      title: "odio, tempus tincidunt massa. Nullam hendrerit cursus dui, vel egestas ante",
+      short: "fermentum at. Sed sit amet porttitor nisi, ut porta massa. Nunc a magna",
+      tag: "Internasional",
       image: "",
       location: "Indonesia",
       date: "20 Jan 2024",

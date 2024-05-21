@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
-import { TabButtonGen } from "../userInputs/buttons/tab-button-gen";
-import { TabButton } from "../userInputs/buttons/tab-button";
+import { useContent } from "@ibrahimstudio/react";
+import { ISHome, ISBell, ISSearch } from "@ibrahimstudio/icons";
 import { getStaticMenus } from "../../libs/sources/local-data";
-import { HomeIcon, BellIcon, SearchIcon } from "../contents/markers/icons";
+import { TabButton, TabButtonGen } from "../user-inputs/buttons";
 import styles from "./styles/navbar.module.css";
 
 export const Navbar = ({ id }) => {
-  const compid = `top-navigation-${id}`;
+  const { toPathname } = useContent();
+  const compid = `${id}-top-navigation`;
   const [scrolled, setScrolled] = useState(false);
   const [staticMenus, setStaticMenus] = useState([]);
   const [query, setQuery] = useState("");
@@ -40,10 +41,7 @@ export const Navbar = ({ id }) => {
   }, []);
 
   return (
-    <header
-      id={compid}
-      className={`${styles.navbar} ${scrolled ? styles.scroll : ""}`}
-    >
+    <header id={compid} className={`${styles.navbar} ${scrolled ? styles.scroll : ""}`}>
       <section className={styles.navTop}>
         <img className={styles.navLogoIcon} alt="" src="/png/pifa-logo.png" />
         <div className={styles.navOption}>
@@ -53,43 +51,20 @@ export const Navbar = ({ id }) => {
             variant="hollow"
             subVariant="icon"
             color="var(--color-primary)"
-            iconContent={
-              <BellIcon
-                width="100%"
-                height="25px"
-                color="var(--color-secondary)"
-              />
-            }
+            iconContent={<ISBell size="var(--pixel-30)" />}
           />
           <Button id={`${compid}-login`} size="sm" buttonText="Login" />
-          <Button
-            id={`${compid}-submit`}
-            size="sm"
-            variant="line"
-            color="var(--color-primary)"
-            buttonText="Buat Berita"
-          />
+          <Button id={`${compid}-submit`} size="sm" variant="line" color="var(--color-primary)" buttonText="Posting Berita" />
         </div>
       </section>
       <section className={styles.navBottom}>
         <nav className={styles.navMenu}>
-          <TabButtonGen
-            id={`${compid}-beranda`}
-            text="Beranda"
-            path="/"
-            startContent={<HomeIcon width="20px" height="100%" />}
-          />
+          <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
           <div className={styles.navMenuHscroll}>
             {staticMenus.map((menu, index) => (
-              <TabButton
-                key={index}
-                id={`${compid}-${menu.text}`}
-                path={menu.path}
-                text={menu.text}
-              />
+              <TabButton key={index} id={`${compid}-${menu.text}`} path={`/${toPathname(menu.text)}`} text={menu.text} />
             ))}
           </div>
-          <TabButtonGen id={`${compid}-more`} text="Lainnya" path="/lainnya" />
         </nav>
         <div className={styles.navSearch}>
           <Input
@@ -100,7 +75,7 @@ export const Navbar = ({ id }) => {
             value={query}
             placeholder="Cari Berita Terkini"
             onChange={(e) => setQuery(e.target.value)}
-            endContent={<SearchIcon width="100%" height="20px" />}
+            endContent={<ISSearch />}
           />
         </div>
       </section>

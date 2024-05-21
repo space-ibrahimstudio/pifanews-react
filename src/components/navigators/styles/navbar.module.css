@@ -36,7 +36,6 @@
 
 .navMenuHscroll {
   overflow-x: auto;
-  max-width: 600px;
 }
 
 .navMenuHscroll::-webkit-scrollbar {
@@ -76,7 +75,7 @@
   align-self: stretch;
   flex-direction: row;
   justify-content: center;
-  gap: var(--pixel-10);
+  gap: var(--pixel-15);
 }
 
 .navbar {

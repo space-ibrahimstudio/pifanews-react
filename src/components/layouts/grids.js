@@ -1,9 +1,9 @@
 import React from "react";
-import { NewsDisplayCard } from "../contents/cards/news-display-card";
+import { NewsDisplayCard } from "../contents/cards";
 import styles from "./styles/news3grid.module.css";
 
-export const News3grid = ({ id, posts }) => {
-  const compid = `3-grid-${id}`;
+export const News3Grid = ({ id, posts }) => {
+  const compid = `${id}-3-grid`;
   const slicedposts = posts.slice(0, 3);
 
   return (
@@ -19,7 +19,6 @@ export const News3grid = ({ id, posts }) => {
           date={slicedposts[0].date}
           align="stretch"
           height="var(--pixel-270)"
-          flex="unset"
         />
       )}
       <div className={styles.news3gridSmall}>
@@ -35,7 +34,6 @@ export const News3grid = ({ id, posts }) => {
               date={post.date}
               align="stretch"
               height="var(--pixel-270)"
-              flex="unset"
             />
           </div>
         ))}

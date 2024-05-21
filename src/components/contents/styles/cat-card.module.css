@@ -52,3 +52,9 @@
   z-index: 1;
   transition: var(--transit);
 }
+
+@media (max-width: 392px) {
+  .catCard {
+    min-width: var(--pixel-200);
+  }
+}

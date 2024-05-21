@@ -11,7 +11,7 @@ export function SEO({ title, description, route, thumbSrc }) {
   const thumbnail = thumbSrc ? thumbSrc : "/img/img-01.jpg";
   const strippedDesc = description
     ? stripContent(description).substring(0, 160)
-    : "";
+    : "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market";
 
   return (
     <Helmet>

@@ -71,6 +71,7 @@
   --pixel-450: 450px;
   --pixel-500: 500px;
   --pixel-550: 550px;
+  --pixel-830: 830px;
 }
 
 @media (min-width: 701px) and (max-width: 1120px) {
@@ -111,6 +112,7 @@
     --pixel-450: 386px;
     --pixel-500: 428.5px;
     --pixel-550: 471.5px;
+    --pixel-830: 711.5px;
   }
 }
 
@@ -152,6 +154,7 @@
     --pixel-450: 321.5px;
     --pixel-500: 357px;
     --pixel-550: 393px;
+    --pixel-830: 593px;
   }
 }
 

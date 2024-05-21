@@ -1,6 +1,7 @@
 import React from "react";
+import aside from "./styles/aside.module.css";
 
-export const Div300 = ({ children }) => {
+const Container300 = ({ children }) => {
   const divstyle = {
     flex: "1",
     display: "flex",
@@ -12,3 +13,9 @@ export const Div300 = ({ children }) => {
 
   return <div style={divstyle}>{children}</div>;
 };
+
+export const Aside = ({ children }) => {
+  return <div className={aside.aside}>{children}</div>;
+};
+
+export default Container300;

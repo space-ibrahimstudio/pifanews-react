@@ -94,3 +94,15 @@
   flex-shrink: 0;
   justify-content: center;
 }
+
+@media (min-width: 701px) and (max-width: 754px) {
+  .newsSummaryGroup.primary {
+    height: var(--pixel-830);
+  }
+}
+
+@media (min-width: 464px) and (max-width: 613px) {
+  .newsSummaryGroup.primary {
+    height: var(--pixel-830);
+  }
+}

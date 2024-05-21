@@ -26,7 +26,7 @@
   color: var(--color-secondary);
   justify-content: center;
   box-sizing: border-box;
-  max-width: var(--pixel-120);
+  max-width: var(--pixel-200);
   transition: var(--transit);
 }
 

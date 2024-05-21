@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getContactInfo, getStaticPages, getSocialInfo } from "../../libs/sources/local-data";
+import { Image } from "../contents/image";
 import styles from "./styles/footer.module.css";
 
 const FooterMenu = ({ title, children }) => {
@@ -10,58 +13,96 @@ const FooterMenu = ({ title, children }) => {
   );
 };
 
-const FooterMenuLi = ({ children, onClick }) => {
+const FooterMenuLi = ({ children, to }) => {
+  const navigate = useNavigate();
+
   return (
-    <b className={styles.menuLi} onClick={onClick}>
+    <b className={styles.menuLi} onClick={() => navigate(to)}>
       {children}
     </b>
   );
 };
 
 export const Footer = ({ id }) => {
-  const compid = `bottom-navigation-${id}`;
+  const compid = `${id}-bottom-navigation`;
+  const [contacts, setContacts] = useState([]);
+  const [staticPage, setStaticPage] = useState([]);
+  const [socials, setSocials] = useState([]);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const info = await getContactInfo();
+        setContacts(info);
+      } catch (error) {
+        console.error("error getting contact info:", error);
+      }
+    };
+    fetchContacts();
+  }, []);
+
+  useEffect(() => {
+    const fetchPages = async () => {
+      try {
+        const pages = await getStaticPages();
+        setStaticPage(pages);
+      } catch (error) {
+        console.error("error getting static pages:", error);
+      }
+    };
+    fetchPages();
+  }, []);
+
+  useEffect(() => {
+    const fetchSocials = async () => {
+      try {
+        const info = await getSocialInfo();
+        setSocials(info);
+      } catch (error) {
+        console.error("error getting social info:", error);
+      }
+    };
+    fetchSocials();
+  }, []);
 
   return (
     <footer id={compid} className={styles.footer}>
       <div className={styles.footerTop}>
         <div className={styles.footerInfo}>
-          <img className={styles.infoLogo} alt="" src="/png/pifa-logo.png" />
-          <h6 className={styles.infoTitle}>
-            Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen,
-            dan Digital Market
-          </h6>
-          <div className={styles.infoContact}>
-            <img className={styles.contactIcon} alt="" src="/svg/phone.svg" />
-            <h6 className={styles.contactText}>(+62) 811 5737 688</h6>
-          </div>
-          <div className={styles.infoContact}>
-            <img className={styles.contactIcon} alt="" src="/svg/email.svg" />
-            <h6 className={styles.contactText}>nettacodeindonesia@gmail.com</h6>
-          </div>
+          <Image className={styles.infoLogo} alt="PIFA Logo Footer" src="/png/pifa-logo.png" />
+          <h6 className={styles.infoTitle}>Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market</h6>
+          {contacts.map((contact) => (
+            <div key={contact.id} className={styles.infoContact}>
+              <Image className={styles.contactIcon} alt={contact.label} src={contact.icon} />
+              <h6 className={styles.contactText}>{contact.label}</h6>
+            </div>
+          ))}
         </div>
-        <FooterMenu title="Navigasi">
-          <FooterMenuLi>Syarat & Ketentuan</FooterMenuLi>
-          <FooterMenuLi>Tentang PIFA</FooterMenuLi>
-          <FooterMenuLi>Kebijakan Privasi</FooterMenuLi>
-          <FooterMenuLi>Bantuan (FAQ)</FooterMenuLi>
-        </FooterMenu>
-        <FooterMenu title="Panduan">
-          <FooterMenuLi>Kode Etik Jurnalistik</FooterMenuLi>
-          <FooterMenuLi>Beriklan</FooterMenuLi>
-          <FooterMenuLi>Pedoman Media Siber</FooterMenuLi>
-        </FooterMenu>
+        {staticPage.map((menu, index) => (
+          <FooterMenu key={index} title={menu.title}>
+            {menu.items.map((page, pageidx) => (
+              <FooterMenuLi key={pageidx} to={page.path}>
+                {page.name}
+              </FooterMenuLi>
+            ))}
+          </FooterMenu>
+        ))}
         <div className={styles.footerSocial}>
           <h6 className={styles.socialTitle}>Ikuti Kami</h6>
           <div className={styles.socialUl}>
-            <img className={styles.socialIcon} src="/svg/instagram.svg" />
-            <img className={styles.socialIcon} src="/svg/facebook.svg" />
-            <img className={styles.socialIcon} src="/svg/youtube.svg" />
+            {socials.map((social) => (
+              <Image
+                key={social.id}
+                className={styles.socialIcon}
+                alt={social.label}
+                src={social.icon}
+                onClick={() => window.open(social.value, "_blank")}
+              />
+            ))}
           </div>
         </div>
       </div>
-      <span className={styles.crText}>
-        © 2013-2024 PIFA. All rights reserved.
-      </span>
+      <span className={styles.crText}>© 2013-2024 PIFA. All rights reserved.</span>
     </footer>
   );
 };
