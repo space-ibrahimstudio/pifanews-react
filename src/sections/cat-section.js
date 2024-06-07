@@ -9,7 +9,7 @@ export const CatSection = ({ id, cats }) => {
 
   return (
     <section id={compid} className={styles.newsSection}>
-      <SectionHead id={compid} title="Kategori Berita" prior="Lokal" noSource={true} />
+      <SectionHead id={compid} title="Kategori Berita" prior="Kabar Daerah" noSource={true} />
       <div className={styles.sectionBody}>
         {slicedcats.map((category, index) => (
           <CatCard id={compid} key={index} catname={category.name} image={category.image} />

@@ -65,13 +65,13 @@ const HomePage = () => {
       <SEO title="Beranda" route="/" />
       <PageLayout pageid={id}>
         <AdsSection label="" src="/img/top-ads.jpg" />
+        <TagsSection tags={tags} />
         <HeroSection>
           <News3Grid id={id} posts={posts} />
           <Aside>
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={posts.slice(3, 10)} />
           </Aside>
         </HeroSection>
-        <TagsSection tags={tags} />
         <AdsSection label="" src="/img/submit-banner.webp" />
         <NewsHscrollSection title="Berita" prior="Terbaru">
           {posts.slice(0, 3).map((post, index) => (
@@ -88,7 +88,9 @@ const HomePage = () => {
           ))}
         </NewsHscrollSection>
         <CatSection cats={categories} />
-        <NewsSection title="Berita" prior="Lokal" posts={posts} />
+        <NewsSection title="Berita" prior="Internasional" posts={posts} />
+        <NewsSection title="Berita" prior="Nasional" posts={posts} />
+        <NewsSection title="Berita" prior="Kabar Daerah" posts={posts} />
         <AdsSection label="" src="/img/about-banner.webp" />
         <NewsHscrollSection title="Berita" prior="Populer">
           {posts.slice(0, 3).map((post, index) => (
@@ -105,8 +107,14 @@ const HomePage = () => {
           ))}
         </NewsHscrollSection>
         <NewsSection title="Berita" prior="PifaBiz" posts={posts} />
+        <NewsSection title="Berita" prior="Politik" posts={posts} />
+        <NewsSection title="Berita" prior="Bola dan Sports" posts={posts} />
+        <AdsSection label="" src="/img/about-banner.webp" />
         <NewsSection title="Berita" prior="Bisnis" posts={posts} />
+        <NewsSection title="Berita" prior="Teknologi" posts={posts} />
+        <NewsSection title="Berita" prior="Food dan Travel" posts={posts} />
         <AdsSection label="" src="/img/report-banner.webp" />
+        <NewsSection title="Berita" prior="Lifestyle" posts={posts} />
       </PageLayout>
     </Fragment>
   );

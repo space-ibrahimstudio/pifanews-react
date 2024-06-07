@@ -54,7 +54,6 @@ export const Navbar = ({ id }) => {
             iconContent={<ISBell size="var(--pixel-30)" />}
           />
           <Button id={`${compid}-login`} size="sm" buttonText="Login" />
-          <Button id={`${compid}-submit`} size="sm" variant="line" color="var(--color-primary)" buttonText="Posting Berita" />
         </div>
       </section>
       <section className={styles.navBottom}>

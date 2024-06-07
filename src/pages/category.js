@@ -59,6 +59,7 @@ const CategoryPage = () => {
       <SEO title={pagetitle} description="" route={pagepath} />
       <PageLayout pageid={id}>
         <AdsSection label="" src="/img/top-ads.jpg" />
+        <TagsSection tags={tags} />
         <HeroSection>
           {filteredposts.length > 0 && (
             <Container300>
@@ -79,7 +80,6 @@ const CategoryPage = () => {
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={filteredposts.slice(1, 10)} />
           </Aside>
         </HeroSection>
-        <TagsSection tags={tags} />
         <AdsSection label="" src="/img/submit-banner.webp" />
         <NewsHscrollSection title="Berita" prior="Terbaru">
           {filteredposts.slice(0, 3).map((post, index) => (
@@ -115,6 +115,20 @@ const CategoryPage = () => {
             <InlineadsSection label="" src="/img/inline-ads.webp" />
           </Aside>
         </FeedsSection>
+        <NewsHscrollSection title="Berita" prior="Rekomendasi">
+          {filteredposts.slice(0, 3).map((post, index) => (
+            <NewsCard
+              id={id}
+              key={index}
+              title={post.title}
+              short={post.short}
+              tag={post.tag}
+              image={post.image}
+              loc={post.location}
+              date={post.date}
+            />
+          ))}
+        </NewsHscrollSection>
         <AdsSection label="" src="/img/report-banner.webp" />
       </PageLayout>
     </Fragment>

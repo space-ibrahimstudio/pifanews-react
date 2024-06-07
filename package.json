@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ibrahimstudio/button": "^1.2.0",
+    "@ibrahimstudio/button": "^1.2.1",
     "@ibrahimstudio/icons": "^1.0.7",
     "@ibrahimstudio/input": "^1.3.7",
     "@ibrahimstudio/react": "^1.0.2",

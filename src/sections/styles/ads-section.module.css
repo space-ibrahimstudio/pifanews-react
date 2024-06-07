@@ -4,6 +4,7 @@
   object-fit: cover;
   width: 100%;
   height: auto;
+  max-height: var(--pixel-200);
   flex-shrink: 0;
 }
 
@@ -26,5 +27,9 @@
 @media (max-width: 700px) {
   .adsSection {
     padding: var(--pixel-20);
+  }
+
+  .adsContent {
+    max-height: var(--pixel-150);
   }
 }
