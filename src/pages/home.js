@@ -12,6 +12,7 @@ import { AdsSection } from "../sections/ads-section";
 import { HeroSection } from "../sections/hero-section";
 import { TagsSection } from "../sections/tags-section";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
+import { NewsSliderSection } from "../sections/news-slider-section";
 import { CatSection } from "../sections/cat-section";
 import { NewsSection } from "../sections/news-section";
 
@@ -23,6 +24,10 @@ const HomePage = () => {
   const [posts, setPosts] = useState([]);
   const [tags, setTags] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  const renderNewsCard = (item) => (
+    <NewsCard title={item.title} short={item.short} tag={item.tag} image={item.image} loc={item.location} date={item.date} />
+  );
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -87,6 +92,7 @@ const HomePage = () => {
             />
           ))}
         </NewsHscrollSection>
+        <NewsSliderSection content={posts.slice(0, 5)} renderContent={renderNewsCard} />
         <CatSection cats={categories} />
         <NewsSection title="Berita" prior="Internasional" posts={posts} />
         <NewsSection title="Berita" prior="Nasional" posts={posts} />

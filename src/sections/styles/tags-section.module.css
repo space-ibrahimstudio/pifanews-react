@@ -29,6 +29,6 @@
 
 @media (max-width: 700px) {
   .tagsSection {
-    padding: var(--pixel-20);
+    padding: 0 var(--pixel-20);
   }
 }
