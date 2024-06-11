@@ -1,0 +1,9 @@
+.adsContent {
+  overflow: hidden;
+  border-radius: var(--pixel-20);
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  max-height: var(--pixel-200);
+  flex-shrink: 0;
+}

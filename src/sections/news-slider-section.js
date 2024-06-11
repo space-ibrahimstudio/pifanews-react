@@ -1,9 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useContent } from "@ibrahimstudio/react";
+import { SectionHead } from "../components/contents/markers";
 import styles from "./styles/news-slider-section.module.css";
 
-export const NewsSliderSection = ({ content, renderContent, swipeThreshold = 50, slideInterval = 3000 }) => {
+export const NewsSliderSection = ({
+  id,
+  title,
+  prior,
+  content,
+  renderContent,
+  swipeThreshold = 50,
+  slideInterval = 3000,
+  noHead = false,
+  noSource = false,
+  contentStyle,
+}) => {
   const ref = useRef(null);
   const contentRef = useRef([]);
+  const { toPathname } = useContent();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [contentGap, setContentGap] = useState(0);
@@ -11,6 +26,7 @@ export const NewsSliderSection = ({ content, renderContent, swipeThreshold = 50,
   const [hover, setHover] = useState(false);
   const [startX, setStartX] = useState(null);
 
+  const compid = title && prior ? `${id}-slider-news-section-${toPathname(title)}-${toPathname(prior)}` : `${id}-slider-news-section`;
   const totalContent = content.length;
   const mockedContent = [...content, ...content, ...content];
 
@@ -93,19 +109,23 @@ export const NewsSliderSection = ({ content, renderContent, swipeThreshold = 50,
   }, [currentIndex, totalContent, contentWidth, contentGap]);
 
   return (
-    <section className={styles.sliderContainer}>
-      <div className={styles.sliderContent} ref={ref}>
-        {mockedContent.map((item, index) => (
-          <div
-            key={index}
-            ref={(el) => (contentRef.current[index] = el)}
-            className={styles.cardWrapper}
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-          >
-            {renderContent(item)}
-          </div>
-        ))}
+    <section id={compid} className={styles.newsSliderSection}>
+      {!noHead && <SectionHead id={compid} title={title} prior={prior} noSource={noSource} />}
+      <div className={styles.sectionBody}>
+        <div className={styles.sectionSlider} ref={ref}>
+          {mockedContent.map((item, index) => (
+            <div
+              key={index}
+              ref={(el) => (contentRef.current[index] = el)}
+              className={styles.contentWrapper}
+              style={contentStyle}
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+            >
+              {renderContent(item)}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

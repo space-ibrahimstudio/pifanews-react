@@ -19,7 +19,7 @@
   cursor: pointer;
   position: relative;
   border-radius: var(--pixel-10);
-  height: var(--pixel-75);
+  height: var(--pixel-300);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -29,7 +29,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  min-width: var(--pixel-250);
+  min-width: var(--pixel-200);
   max-width: var(--pixel-250);
   text-align: left;
   font-size: var(--font-md);

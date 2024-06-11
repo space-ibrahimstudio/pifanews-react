@@ -1482,3 +1482,58 @@ export async function getLocalCategories() {
 
   return cats;
 }
+
+export async function getInfographicPosts() {
+  const posts = [
+    {
+      title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.",
+      image: "/img/graphic/art-1.jpg",
+      count: "4",
+      status: "BARU",
+    },
+    {
+      title: "In sodales imperdiet nisl vel scelerisque. Duis venenatis fermentum lacinia.",
+      image: "/img/graphic/art-2.jpg",
+      count: "7",
+      status: "UPDATE",
+    },
+    {
+      title: "Quisque in porta dui, vel dictum odio. Phasellus ac tellus non neque pellentesque laoreet.",
+      image: "/img/graphic/art-3.jpg",
+      count: "1",
+      status: "BARU",
+    },
+    { title: "Aenean sit amet elit sit amet sem ornare blandit.", image: "/img/graphic/art-4.jpg", count: "12", status: "" },
+    {
+      title: "Quisque in augue id ligula auctor mattis at at diam. Sed at rutrum nisl.",
+      image: "/img/graphic/art-5.jpg",
+      count: "2",
+      status: "UPDATE",
+    },
+    {
+      title: "Quisque tempus, arcu vel molestie aliquam, augue enim tempor odio, eu malesuada tortor lacus quis nisi.",
+      image: "/img/graphic/art-6.jpg",
+      count: "8",
+      status: "",
+    },
+    {
+      title: "Integer ut mollis sapien. Duis pellentesque leo pretium pretium egestas.",
+      image: "/img/graphic/art-7.jpg",
+      count: "23",
+      status: "",
+    },
+  ];
+
+  return posts;
+}
+
+export async function getAdDatas() {
+  const ads = [
+    { label: "", image: "/img/top-ads.jpg" },
+    { label: "", image: "/img/about-banner.webp" },
+    { label: "", image: "/img/report-banner.webp" },
+    { label: "", image: "/img/submit-banner.webp" },
+  ];
+
+  return ads;
+}

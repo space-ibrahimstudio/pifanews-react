@@ -1,11 +1,13 @@
 import React from "react";
 import { useContent, useFormat } from "@ibrahimstudio/react";
 import { NewsTag } from "./markers";
+import { Image } from "./image";
 import styles from "./styles/news-card.module.css";
 import cat from "./styles/cat-card.module.css";
 import display from "./styles/news-display-card.module.css";
 import summary from "./styles/news-summary-card.module.css";
 import feed from "./styles/news-feed-card.module.css";
+import graph from "./styles/infographic-card.module.css";
 
 const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
@@ -157,6 +159,24 @@ export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick 
         <div className={feed.cardLabel}>
           <p className={feed.cardLabelText}>{tag}</p>
         </div>
+      </div>
+    </section>
+  );
+};
+
+export const InfographicCard = ({ id, title, image, count = "0", status, onClick }) => {
+  const { toTitleCase, toPathname } = useContent();
+  const compid = title ? `${id}-infographic-card-${toPathname(title)}` : `${id}-infographic-card`;
+  const cardtitle = title ? toTitleCase(title) : "";
+  const cardimage = image ? image : "/img/fallback.jpg";
+
+  return (
+    <section id={compid} className={graph.infographicCard} onClick={onClick}>
+      <Image className={graph.cardImageIcon} alt={cardtitle} src={cardimage} />
+      <div className={graph.cardContent}>
+        {status && <span className={graph.cardLabel}>{status}</span>}
+        <h1 className={graph.cardTitle}>{cardtitle}</h1>
+        <p className={graph.cardInfo}>{`${count} Konten`}</p>
       </div>
     </section>
   );

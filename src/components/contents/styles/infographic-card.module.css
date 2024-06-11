@@ -1,0 +1,76 @@
+.cardImageIcon {
+  align-self: stretch;
+  border-radius: var(--pixel-10);
+  max-width: 100%;
+  overflow: hidden;
+  height: var(--pixel-250);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.cardInfo,
+.cardLabel,
+.cardTitle {
+  align-self: stretch;
+  position: relative;
+}
+
+.cardLabel {
+  font-weight: 600;
+  font-family: var(--font-inter);
+}
+
+.cardInfo,
+.cardTitle {
+  margin: 0;
+}
+
+.cardTitle {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--color-secondary);
+  display: -webkit-inline-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  transition: var(--transit);
+}
+
+.cardInfo {
+  font-weight: 500;
+  color: var(--color-secondary-50);
+}
+
+.cardContent,
+.infographicCard {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardContent {
+  align-self: stretch;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--pixel-10) var(--pixel-5);
+  gap: var(--pixel-5);
+}
+
+.infographicCard {
+  flex: 1;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--pixel-200);
+  max-width: var(--pixel-250);
+  text-align: left;
+  font-size: var(--font-xsm);
+  color: var(--color-primary);
+  font-family: var(--font-jakarta);
+}
+
+.infographicCard:hover .cardTitle {
+  color: var(--color-primary);
+}
