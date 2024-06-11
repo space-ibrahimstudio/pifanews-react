@@ -1529,10 +1529,14 @@ export async function getInfographicPosts() {
 
 export async function getAdDatas() {
   const ads = [
-    { label: "", image: "/img/top-ads.jpg" },
-    { label: "", image: "/img/about-banner.webp" },
-    { label: "", image: "/img/report-banner.webp" },
-    { label: "", image: "/img/submit-banner.webp" },
+    { label: "", image: "/img/ad/1696303634.webp" },
+    { label: "", image: "/img/ad/1654149291.webp" },
+    { label: "", image: "/img/ad/1654149341.webp" },
+    { label: "", image: "/img/ad/1654149110.webp" },
+    { label: "", image: "/img/ad/1696303634.webp" },
+    { label: "", image: "/img/ad/1654149291.webp" },
+    { label: "", image: "/img/ad/1654149341.webp" },
+    { label: "", image: "/img/ad/1654149110.webp" },
   ];
 
   return ads;

@@ -1,6 +1,6 @@
 .adsContent {
   overflow: hidden;
-  border-radius: var(--pixel-20);
+  border-radius: var(--pixel-5);
   object-fit: cover;
   width: 100%;
   height: auto;
