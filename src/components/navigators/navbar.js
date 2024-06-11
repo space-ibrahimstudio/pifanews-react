@@ -60,6 +60,7 @@ export const Navbar = ({ id }) => {
         <nav className={styles.navMenu}>
           <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
           <div className={styles.navMenuHscroll}>
+            <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-hscroll-news-section-berita-terbaru" />
             {staticMenus.map((menu, index) => (
               <TabButton key={index} id={`${compid}-${menu.text}`} path={`/${toPathname(menu.text)}`} text={menu.text} />
             ))}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { useContent } from "@ibrahimstudio/react";
+import { useContent, useEvent } from "@ibrahimstudio/react";
 import tab from "./styles/tab-button.module.css";
 import tabg from "./styles/tab-button-gen.module.css";
 import source from "./styles/source-button.module.css";
@@ -26,20 +26,29 @@ export const TabButton = ({ id, text, path, startContent, endContent }) => {
   );
 };
 
-export const TabButtonGen = ({ id, text, path, startContent, endContent }) => {
+export const TabButtonGen = ({ id, text, type = "route", path, targetId, startContent, endContent }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toPathname } = useContent();
+  const { scroll } = useEvent();
 
   const compid = text ? `${id}-tab-general-${toPathname(text)}` : `${id}-tab-general`;
   const [activeTab, setActiveTab] = useState(null);
+
+  const handleClick = () => {
+    if (type === "scroll") {
+      scroll(targetId, -70);
+    } else {
+      navigate(path);
+    }
+  };
 
   useEffect(() => {
     setActiveTab(location.pathname);
   }, [location]);
 
   return (
-    <button id={compid} className={`${tabg.tabButtonGen} ${activeTab === path ? tabg.active : ""}`} onClick={() => navigate(path)}>
+    <button id={compid} className={`${tabg.tabButtonGen} ${activeTab === path ? tabg.active : ""}`} onClick={handleClick}>
       {startContent}
       <b className={tabg.tabButtonText}>{text}</b>
       {endContent}

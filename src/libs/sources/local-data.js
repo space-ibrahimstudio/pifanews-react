@@ -1,6 +1,5 @@
 export async function getStaticMenus() {
   const menus = [
-    { path: "/infografis", text: "Infografis" },
     { path: "/internasional", text: "Internasional" },
     { path: "/nasional", text: "Nasional" },
     { path: "/kabar-daerah", text: "Kabar Daerah" },
