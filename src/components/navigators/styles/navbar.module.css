@@ -76,6 +76,7 @@
   flex-direction: row;
   justify-content: center;
   gap: var(--pixel-15);
+  height: var(--pixel-70);
 }
 
 .navbar {
