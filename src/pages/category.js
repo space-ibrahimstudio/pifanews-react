@@ -78,17 +78,7 @@ const CategoryPage = () => {
         <HeroSection>
           {filteredposts.length > 0 && (
             <Container300>
-              <NewsDisplayCard
-                id={`${id}-${filteredposts[0].id}`}
-                title={filteredposts[0].title}
-                short={filteredposts[0].short}
-                tag={filteredposts[0].tag}
-                image={filteredposts[0].image}
-                loc={filteredposts[0].location}
-                date={filteredposts[0].date}
-                height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"}
-                flex="1"
-              />
+              <NewsDisplayCard id={`${id}-${filteredposts[0].id}`} title={filteredposts[0].title} short={filteredposts[0].short} tag={filteredposts[0].tag} image={filteredposts[0].image} loc={filteredposts[0].location} date={filteredposts[0].date} height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"} flex="1" />
             </Container300>
           )}
           <Aside>
@@ -98,30 +88,12 @@ const CategoryPage = () => {
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Terbaru">
           {filteredposts.slice(0, 3).map((post, index) => (
-            <NewsCard
-              id={id}
-              key={index}
-              title={post.title}
-              short={post.short}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-            />
+            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
           ))}
         </NewsHscrollSection>
         <NewsHscrollSection title="Berita" prior="Populer">
           {filteredposts.slice(0, 3).map((post, index) => (
-            <NewsCard
-              id={id}
-              key={index}
-              title={post.title}
-              short={post.short}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-            />
+            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
           ))}
         </NewsHscrollSection>
         <FeedsSection>
@@ -132,16 +104,7 @@ const CategoryPage = () => {
         </FeedsSection>
         <NewsHscrollSection title="Berita" prior="Rekomendasi">
           {filteredposts.slice(0, 3).map((post, index) => (
-            <NewsCard
-              id={id}
-              key={index}
-              title={post.title}
-              short={post.short}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-            />
+            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
           ))}
         </NewsHscrollSection>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />

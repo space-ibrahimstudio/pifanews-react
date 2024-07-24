@@ -3,29 +3,16 @@ import { useContent } from "@ibrahimstudio/react";
 import { SectionHead } from "../components/contents/markers";
 import styles from "./styles/news-slider-section.module.css";
 
-export const NewsSliderSection = ({
-  id,
-  title,
-  prior,
-  content,
-  renderContent,
-  swipeThreshold = 50,
-  slideInterval = 3000,
-  noHead = false,
-  noSource = false,
-  contentStyle,
-}) => {
+export const NewsSliderSection = ({ id, title, prior, content, renderContent, swipeThreshold = 50, slideInterval = 3000, noHead = false, noSource = false, contentStyle }) => {
   const ref = useRef(null);
   const contentRef = useRef([]);
   const { toPathname } = useContent();
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [contentGap, setContentGap] = useState(0);
   const [visible, setVisible] = useState(false);
   const [hover, setHover] = useState(false);
   const [startX, setStartX] = useState(null);
-
   const compid = title && prior ? `${id}-slider-news-section-${toPathname(title)}-${toPathname(prior)}` : `${id}-slider-news-section`;
   const totalContent = content.length;
   const mockedContent = [...content, ...content, ...content];
@@ -114,14 +101,7 @@ export const NewsSliderSection = ({
       <div className={styles.sectionBody}>
         <div className={styles.sectionSlider} ref={ref}>
           {mockedContent.map((item, index) => (
-            <div
-              key={index}
-              ref={(el) => (contentRef.current[index] = el)}
-              className={styles.contentWrapper}
-              style={contentStyle}
-              onMouseEnter={() => setHover(true)}
-              onMouseLeave={() => setHover(false)}
-            >
+            <div key={index} ref={(el) => (contentRef.current[index] = el)} className={styles.contentWrapper} style={contentStyle} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
               {renderContent(item)}
             </div>
           ))}

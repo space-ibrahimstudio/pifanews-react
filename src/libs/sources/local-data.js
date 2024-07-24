@@ -94,6 +94,34 @@ export async function getStaticPages() {
   return pages;
 }
 
+const posts = [
+  {
+    post_id: "1",
+    post_title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui.",
+    post_short: "Nullam vulputate commodo euismod. In sodales imperdiet nisl vel scelerisque.",
+    post_thumbnail: "/img/img-01.jpg",
+    post_category: "Kabar Daerah",
+    post_content: "",
+    post_location: "Indonesia",
+    post_tags: [
+      { tag_label: "Pontianak", tag_value: "pontianak" },
+      { tag_label: "Pilpres 2024", tag_value: "pilpres-2024" },
+      { tag_label: "Indonesia U23", tag_value: "indonesia-u23" },
+    ],
+    post_view: "88",
+    datetimecreate: "20 Jan 2024",
+    datetimeupdate: "20 Jan 2024",
+  },
+];
+
+const tags = [
+  {
+    tag_id: "1",
+    tag_label: "Pilpres 2024",
+    tag_value: "pilpres-2024",
+  },
+];
+
 export async function getFeaturedPosts() {
   const posts = [
     {

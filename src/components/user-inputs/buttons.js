@@ -9,7 +9,6 @@ import tag from "./styles/tags-button.module.css";
 export const TabButton = ({ id, text, path, startContent, endContent }) => {
   const location = useLocation();
   const { toPathname } = useContent();
-
   const compid = text ? `${id}-tab-${toPathname(text)}` : `${id}-tab`;
   const [activeTab, setActiveTab] = useState(null);
 
@@ -31,7 +30,6 @@ export const TabButtonGen = ({ id, text, type = "route", path, targetId, startCo
   const navigate = useNavigate();
   const { toPathname } = useContent();
   const { scroll } = useEvent();
-
   const compid = text ? `${id}-tab-general-${toPathname(text)}` : `${id}-tab-general`;
   const [activeTab, setActiveTab] = useState(null);
 

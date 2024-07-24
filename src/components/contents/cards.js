@@ -12,7 +12,6 @@ import graph from "./styles/infographic-card.module.css";
 const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
   const { newDate } = useFormat();
-
   const compid = title && tag ? `${id}-news-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-news-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const carddesc = short ? stripContent(short) : "";
@@ -45,9 +44,7 @@ export const CatCard = ({ id, catname, image, onClick }) => {
   const { toTitleCase, toPathname } = useContent();
   const compid = catname ? `${id}-category-card-${toPathname(catname)}` : `${id}-category-card`;
   const cardtitle = catname ? toTitleCase(catname) : "";
-  const cardstyle = {
-    backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)",
-  };
+  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
 
   return (
     <section id={compid} className={cat.catCard} style={cardstyle} onClick={onClick}>
@@ -59,18 +56,12 @@ export const CatCard = ({ id, catname, image, onClick }) => {
 export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
   const { newDate } = useFormat();
-
   const compid = title && tag ? `${id}-display-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-display-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const carddesc = short ? stripContent(short) : "";
   const cardloc = loc ? toTitleCase(loc) : "";
   const carddate = date ? newDate(date) : "";
-  const cardstyle = {
-    backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)",
-    alignSelf: align ? align : "unset",
-    height: height ? height : "unset",
-    flex: flex ? flex : "unset",
-  };
+  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)", alignSelf: align ? align : "unset", height: height ? height : "unset", flex: flex ? flex : "unset" };
 
   return (
     <section id={compid} className={display.newsDisplayCard} style={cardstyle} onClick={onClick}>
@@ -94,7 +85,6 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
 export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname } = useContent();
   const { newDate } = useFormat();
-
   const compid = title && tag ? `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-summary-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const cardloc = loc ? toTitleCase(loc) : "";
@@ -133,7 +123,6 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
 export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
   const { newDate } = useFormat();
-
   const compid = title && tag ? `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-feed-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const carddesc = short ? stripContent(short) : "";

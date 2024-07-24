@@ -19,7 +19,6 @@ const HomePage = () => {
   const { width } = useWindow();
   const { short } = useDocument();
   const id = `${short}-home`;
-
   const [posts, setPosts] = useState([]);
   const [graphicPosts, setGraphicPosts] = useState([]);
   const [tags, setTags] = useState([]);
@@ -106,16 +105,7 @@ const HomePage = () => {
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Terbaru">
           {posts.slice(0, 3).map((post, index) => (
-            <NewsCard
-              id={id}
-              key={index}
-              title={post.title}
-              short={post.short}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-            />
+            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
           ))}
         </NewsHscrollSection>
         <NewsSection title="Berita" prior="Internasional" posts={posts} />
@@ -124,16 +114,7 @@ const HomePage = () => {
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Populer">
           {posts.slice(0, 3).map((post, index) => (
-            <NewsCard
-              id={id}
-              key={index}
-              title={post.title}
-              short={post.short}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-            />
+            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
           ))}
         </NewsHscrollSection>
         <NewsSection title="Berita" prior="PifaBiz" posts={posts} />

@@ -9,7 +9,6 @@ import feed from "./styles/feeds-group.module.css";
 
 const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
   const { toTitleCase, toPathname } = useContent();
-
   const compid = title && scope ? `${id}-news-group-${toPathname(title)}-${toPathname(scope)}` : `${id}-news-group`;
   const grouptitle = title ? toTitleCase(title) : "";
   const groupscope = scope ? toTitleCase(scope) : "";
@@ -29,16 +28,7 @@ const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
       <div className={`${styles.groupBodyVscroll} ${isPortrait ? styles.portrait : styles.landscape}`}>
         <div className={`${styles.groupBody} ${isPortrait ? styles.portrait : styles.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard
-              key={index}
-              isPortrait={isPortrait}
-              id={`${compid}-${index}`}
-              title={post.title}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-            />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.title} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
           ))}
         </div>
       </div>
@@ -48,16 +38,12 @@ const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
 
 export const NewsSummaryGroup = ({ id, variant, isPortrait, title, posts }) => {
   const { toTitleCase, toPathname } = useContent();
-
   const compid = title ? `${id}-summary-group-${toPathname(title)}` : `${id}-summary-group`;
   const grouptitle = title ? toTitleCase(title) : "";
   const groupto = title ? `/${toPathname(title)}` : "/";
 
   return (
-    <section
-      id={compid}
-      className={`${summary.newsSummaryGroup} ${isPortrait ? "" : summary.landscape} ${variant === "primary" ? summary.primary : ""}`}
-    >
+    <section id={compid} className={`${summary.newsSummaryGroup} ${isPortrait ? "" : summary.landscape} ${variant === "primary" ? summary.primary : ""}`}>
       <header className={summary.groupHead}>
         <div className={summary.groupHeadwrap}>
           <div className={summary.groupTitlewrap}>
@@ -69,16 +55,7 @@ export const NewsSummaryGroup = ({ id, variant, isPortrait, title, posts }) => {
       <div className={`${summary.groupBodyVscroll} ${isPortrait ? summary.portrait : summary.landscape}`}>
         <div className={`${summary.groupBody} ${isPortrait ? summary.portrait : summary.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard
-              key={index}
-              isPortrait={isPortrait}
-              id={`${compid}-${index}`}
-              title={post.title}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-            />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.title} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
           ))}
         </div>
       </div>
@@ -104,28 +81,11 @@ export const FeedsGroup = ({ id, filter = "popular", posts }) => {
         <div className={feed.feedsTitlewrap}>
           <h1 className={feed.feedsTitle}>Feeds</h1>
         </div>
-        <Input
-          id={`${compid}-switch-filter`}
-          variant="select"
-          isLabeled={false}
-          placeholder="Filter Jenis Berita"
-          value={postsFilter}
-          options={switchFilter}
-          onSelect={switchStatus}
-        />
+        <Input id={`${compid}-switch-filter`} variant="select" isLabeled={false} placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
       </header>
       <div className={feed.feedsBody}>
         {posts.map((post, index) => (
-          <NewsFeedCard
-            key={index}
-            id={`${compid}-${index}`}
-            title={post.title}
-            short={post.short}
-            tag={post.tag}
-            image={post.image}
-            loc={post.location}
-            date={post.date}
-          />
+          <NewsFeedCard key={index} id={`${compid}-${index}`} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
         ))}
       </div>
     </section>

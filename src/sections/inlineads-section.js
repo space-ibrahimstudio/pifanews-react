@@ -5,7 +5,6 @@ import styles from "./styles/inlineads-section.module.css";
 
 export const InlineadsSection = ({ id, label, src }) => {
   const { toTitleCase, toPathname } = useContent();
-
   const compid = label ? `${id}-inline-ads-section-${toPathname(label)}` : `${id}-inline-ads-section`;
   const adslabel = label ? toTitleCase(label) : "";
 

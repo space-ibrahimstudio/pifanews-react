@@ -15,7 +15,6 @@ const FooterMenu = ({ title, children }) => {
 
 const FooterMenuLi = ({ children, to }) => {
   const navigate = useNavigate();
-
   return (
     <b className={styles.menuLi} onClick={() => navigate(to)}>
       {children}
@@ -91,13 +90,7 @@ export const Footer = ({ id }) => {
           <h6 className={styles.socialTitle}>Ikuti Kami</h6>
           <div className={styles.socialUl}>
             {socials.map((social) => (
-              <Image
-                key={social.id}
-                className={styles.socialIcon}
-                alt={social.label}
-                src={social.icon}
-                onClick={() => window.open(social.value, "_blank")}
-              />
+              <Image key={social.id} className={styles.socialIcon} alt={social.label} src={social.icon} onClick={() => window.open(social.value, "_blank")} />
             ))}
           </div>
         </div>

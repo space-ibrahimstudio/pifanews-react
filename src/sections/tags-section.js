@@ -4,7 +4,6 @@ import styles from "./styles/tags-section.module.css";
 
 export const TagsSection = ({ id, tags }) => {
   const compid = `${id}-tags-section`;
-
   return (
     <section id={compid} className={styles.tagsSection}>
       <div className={styles.tagsContent}>

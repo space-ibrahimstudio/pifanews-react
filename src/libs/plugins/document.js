@@ -5,7 +5,6 @@ const DocumentContext = createContext();
 export const Document = ({ children }) => {
   const company = "Pifa Net";
   const short = "pifa";
-
   return <DocumentContext.Provider value={{ company, short }}>{children}</DocumentContext.Provider>;
 };
 

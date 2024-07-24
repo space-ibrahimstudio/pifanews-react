@@ -8,10 +8,8 @@ export function SEO({ title, description, route, thumbSrc }) {
   const { stripContent } = useContent();
   const domainurl = process.env.REACT_APP_DOMAIN_URL;
   const markers = process.env.REACT_APP_MARKERS;
-  const thumbnail = thumbSrc ? thumbSrc : "/img/img-01.jpg";
-  const strippedDesc = description
-    ? stripContent(description).substring(0, 160)
-    : "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market";
+  const thumbnail = thumbSrc || "/img/img-01.jpg";
+  const strippedDesc = (description && stripContent(description).substring(0, 160)) || "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market";
 
   return (
     <Helmet>

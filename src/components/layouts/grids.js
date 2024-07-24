@@ -8,33 +8,11 @@ export const News3Grid = ({ id, posts }) => {
 
   return (
     <div id={compid} className={styles.news3grid}>
-      {slicedposts.length > 0 && (
-        <NewsDisplayCard
-          id={`${compid}-${slicedposts[0].id}`}
-          title={slicedposts[0].title}
-          short={slicedposts[0].short}
-          tag={slicedposts[0].tag}
-          image={slicedposts[0].image}
-          loc={slicedposts[0].location}
-          date={slicedposts[0].date}
-          align="stretch"
-          height="var(--pixel-270)"
-        />
-      )}
+      {slicedposts.length > 0 && <NewsDisplayCard id={`${compid}-${slicedposts[0].id}`} title={slicedposts[0].title} short={slicedposts[0].short} tag={slicedposts[0].tag} image={slicedposts[0].image} loc={slicedposts[0].location} date={slicedposts[0].date} align="stretch" height="var(--pixel-270)" />}
       <div className={styles.news3gridSmall}>
         {slicedposts.slice(1).map((post, index) => (
           <div key={index} className={styles.news3grid200}>
-            <NewsDisplayCard
-              id={`${compid}-${post.id}`}
-              title={post.title}
-              short={post.short}
-              tag={post.tag}
-              image={post.image}
-              loc={post.location}
-              date={post.date}
-              align="stretch"
-              height="var(--pixel-270)"
-            />
+            <NewsDisplayCard id={`${compid}-${post.id}`} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} align="stretch" height="var(--pixel-270)" />
           </div>
         ))}
       </div>

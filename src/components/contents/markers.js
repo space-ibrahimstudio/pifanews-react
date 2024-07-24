@@ -17,7 +17,6 @@ export const NewsTag = ({ id, name }) => {
 
 export const SectionHead = ({ id, title, noSource, prior }) => {
   const { toTitleCase, toPathname } = useContent();
-
   const compid = title && prior ? `${id}-section-head-${toPathname(title)}-${toPathname(prior)}` : `${id}-section-head`;
   const headtitle = title ? toTitleCase(title) : "";
   const headprior = prior ? toTitleCase(prior) : "";
