@@ -21,8 +21,8 @@
     "build": "npm run clean && cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "clean": "npm run backup && rimraf build",
     "eject": "react-scripts eject",
-    "deploy": "cross-env GENERATE_SOURCEMAP=false react-scripts build && react-snap",
-    "static": "npm run build && react-snap",
+    "deploy": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "static": "npm run build",
     "backup": "rimraf backup && node src/libs/plugins/backup.js"
   },
   "eslintConfig": {
@@ -46,20 +46,8 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "cross-env": "^7.0.3",
-    "react-snap": "^1.23.0",
+    "puppeteer": "^22.13.1",
     "rimraf": "^5.0.5",
     "shelljs": "^0.8.5"
-  },
-  "reactSnap": {
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
-    ],
-    "crawl": true,
-    "minifyHtml": {
-      "collapseWhitespace": true,
-      "removeComments": true,
-      "removeEmptyAttributes": true
-    }
   }
 }

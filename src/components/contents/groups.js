@@ -28,7 +28,7 @@ const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
       <div className={`${styles.groupBodyVscroll} ${isPortrait ? styles.portrait : styles.landscape}`}>
         <div className={`${styles.groupBody} ${isPortrait ? styles.portrait : styles.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.title} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
           ))}
         </div>
       </div>
@@ -55,7 +55,7 @@ export const NewsSummaryGroup = ({ id, variant, isPortrait, title, posts }) => {
       <div className={`${summary.groupBodyVscroll} ${isPortrait ? summary.portrait : summary.landscape}`}>
         <div className={`${summary.groupBody} ${isPortrait ? summary.portrait : summary.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.title} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
           ))}
         </div>
       </div>
@@ -85,7 +85,7 @@ export const FeedsGroup = ({ id, filter = "popular", posts }) => {
       </header>
       <div className={feed.feedsBody}>
         {posts.map((post, index) => (
-          <NewsFeedCard key={index} id={`${compid}-${index}`} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
+          <NewsFeedCard key={index} id={`${compid}-${index}`} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
         ))}
       </div>
     </section>

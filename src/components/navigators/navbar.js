@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
-import { useContent, useWindow } from "@ibrahimstudio/react";
+import { useWindow } from "@ibrahimstudio/react";
+import { useFetch } from "../../libs/plugins/fetch";
 import { ISHome, ISBell, ISSearch } from "@ibrahimstudio/icons";
+import { useApi } from "../../libs/plugins/api";
 import { Close } from "../contents/icons";
-import { getStaticMenus } from "../../libs/sources/local-data";
 import { TabButton, TabButtonGen } from "../user-inputs/buttons";
 import styles from "./styles/navbar.module.css";
 
 export const Navbar = ({ id }) => {
-  const { toPathname } = useContent();
   const { width } = useWindow();
+  const { apiGet } = useApi();
+  const { categoryData } = useFetch();
   const compid = `${id}-top-navigation`;
   const [scrolled, setScrolled] = useState(false);
-  const [staticMenus, setStaticMenus] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -29,18 +32,6 @@ export const Navbar = ({ id }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
-
-  useEffect(() => {
-    const fetchMenus = async () => {
-      try {
-        const menus = await getStaticMenus();
-        setStaticMenus(menus);
-      } catch (error) {
-        console.error("error getting public menus:", error);
-      }
-    };
-    fetchMenus();
   }, []);
 
   return (
@@ -60,8 +51,8 @@ export const Navbar = ({ id }) => {
             <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
             <div className={styles.navMenuHscroll}>
               <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-hscroll-news-section-berita-terbaru" />
-              {staticMenus.map((menu, index) => (
-                <TabButton key={index} id={`${compid}-${menu.text}`} path={`/${toPathname(menu.text)}`} text={menu.text} />
+              {categoryData.map((menu, index) => (
+                <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/${menu.slug}`} text={menu.nama_kategori_berita} />
               ))}
             </div>
           </nav>

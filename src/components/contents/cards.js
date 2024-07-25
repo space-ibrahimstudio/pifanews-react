@@ -11,12 +11,10 @@ import graph from "./styles/infographic-card.module.css";
 
 const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
-  const { newDate } = useFormat();
   const compid = title && tag ? `${id}-news-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-news-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const carddesc = short ? stripContent(short) : "";
   const cardloc = loc ? toTitleCase(loc) : "";
-  const carddate = date ? newDate(date) : "";
   const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
 
   return (
@@ -33,7 +31,7 @@ const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
           <div className={styles.cardLocWrap}>
             <h6 className={styles.cardLoc}>{cardloc}</h6>
           </div>
-          <h6 className={styles.cardLoc}>{`| ${carddate}`}</h6>
+          <h6 className={styles.cardLoc}>{`| ${date}`}</h6>
         </div>
       </div>
     </section>
@@ -55,12 +53,10 @@ export const CatCard = ({ id, catname, image, onClick }) => {
 
 export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
-  const { newDate } = useFormat();
   const compid = title && tag ? `${id}-display-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-display-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const carddesc = short ? stripContent(short) : "";
   const cardloc = loc ? toTitleCase(loc) : "";
-  const carddate = date ? newDate(date) : "";
   const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)", alignSelf: align ? align : "unset", height: height ? height : "unset", flex: flex ? flex : "unset" };
 
   return (
@@ -75,7 +71,7 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
           <div className={display.cardLocWrap}>
             <h6 className={display.cardLoc}>{cardloc}</h6>
           </div>
-          <h6 className={display.cardLoc}>{`| ${carddate}`}</h6>
+          <h6 className={display.cardLoc}>{`| ${date}`}</h6>
         </div>
       </div>
     </section>
@@ -84,11 +80,9 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
 
 export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname } = useContent();
-  const { newDate } = useFormat();
   const compid = title && tag ? `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-summary-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const cardloc = loc ? toTitleCase(loc) : "";
-  const carddate = date ? newDate(date) : "";
   const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
 
   return (
@@ -106,7 +100,7 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
           <div className={summary.cardLocWrap}>
             <h6 className={summary.cardLoc}>{cardloc}</h6>
           </div>
-          <h6 className={summary.cardLoc}>{`| ${carddate}`}</h6>
+          <h6 className={summary.cardLoc}>{`| ${date}`}</h6>
         </div>
       </div>
       {!isPortrait && (
@@ -122,12 +116,10 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
 
 export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
-  const { newDate } = useFormat();
   const compid = title && tag ? `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-feed-card`;
   const cardtitle = title ? toTitleCase(title) : "";
   const carddesc = short ? stripContent(short) : "";
   const cardloc = loc ? toTitleCase(loc) : "";
-  const carddate = date ? newDate(date) : "";
   const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
 
   return (
@@ -141,7 +133,7 @@ export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick 
           <div className={feed.cardLocWrap}>
             <h6 className={feed.cardLoc}>{cardloc}</h6>
           </div>
-          <h6 className={feed.cardLoc}>{`| ${carddate}`}</h6>
+          <h6 className={feed.cardLoc}>{`| ${date}`}</h6>
         </div>
       </div>
       <div className={feed.cardImage} style={cardstyle}>

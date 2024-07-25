@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useContent, useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
+import { useFetch } from "../libs/plugins/fetch";
+import { useApi } from "../libs/plugins/api";
 import { getFeaturedPosts, getTrendingTags, getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
@@ -20,17 +22,55 @@ const CategoryPage = () => {
   const { category } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
-  const { toPathname, toTitleCase } = useContent();
-
-  const id = category ? `${short}-${toPathname(category)}` : `${short}-category`;
-  const pagetitle = category ? toTitleCase(category) : "";
-  const pagepath = category ? `/${toPathname(category)}` : "/";
-
+  const { apiRead } = useApi();
+  const { toPathname } = useContent();
+  const { categoryData } = useFetch();
+  const formData = new FormData();
   const [posts, setPosts] = useState([]);
+  const [latestPostData, setLatestPostData] = useState([]);
+  const [trendingPostData, setTrendingPostData] = useState([]);
   const [tags, setTags] = useState([]);
   const [ads, setAds] = useState([]);
 
+  const id = category ? `${short}-${category}` : `${short}-category`;
+  const pagepath = category ? `/${category}` : "/";
+
+  const fetchLatestPosts = async () => {
+    const idcat = categoryData.find((cat) => cat.slug === category)?.id;
+    try {
+      formData.append("idcat", idcat);
+      formData.append("limit", "11");
+      formData.append("hal", "0");
+      const postsdata = await apiRead(formData, "main", "categorynew");
+      if (postsdata && postsdata.length > 0) {
+        setLatestPostData(postsdata);
+      } else {
+        setLatestPostData([]);
+      }
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
+  const fetchTrendingPosts = async () => {
+    const idcat = categoryData.find((cat) => cat.slug === category)?.id;
+    try {
+      formData.append("idcat", idcat);
+      formData.append("limit", "10");
+      formData.append("hal", "0");
+      const postsdata = await apiRead(formData, "main", "cattrendingnew");
+      if (postsdata && postsdata.length > 0) {
+        setTrendingPostData(postsdata);
+      } else {
+        setTrendingPostData([]);
+      }
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
   const filteredposts = posts.filter((post) => toPathname(post.tag) === category);
+
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   useEffect(() => {
@@ -69,42 +109,47 @@ const CategoryPage = () => {
     fetchPosts();
   }, []);
 
+  useEffect(() => {
+    fetchLatestPosts();
+    fetchTrendingPosts();
+  }, [category]);
+
   return (
     <Fragment>
-      <SEO title={pagetitle} description="" route={pagepath} />
+      <SEO title={category} description="" route={pagepath} />
       <PageLayout pageid={id}>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={tags} />
         <HeroSection>
-          {filteredposts.length > 0 && (
+          {trendingPostData.length > 0 && (
             <Container300>
-              <NewsDisplayCard id={`${id}-${filteredposts[0].id}`} title={filteredposts[0].title} short={filteredposts[0].short} tag={filteredposts[0].tag} image={filteredposts[0].image} loc={filteredposts[0].location} date={filteredposts[0].date} height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"} flex="1" />
+              <NewsDisplayCard id={`${id}-${trendingPostData[0].id}`} title={trendingPostData[0].judul_berita} short={trendingPostData[0].isi_berita} tag={trendingPostData[0].nama_kategori_berita} image={`https://pifa.co.id/img_berita/${trendingPostData[0].img_berita}`} loc={trendingPostData[0].penulis_berita} date={trendingPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"} flex="1" />
             </Container300>
           )}
           <Aside>
-            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={filteredposts.slice(1, 10)} />
+            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={trendingPostData.slice(1, 10)} />
           </Aside>
         </HeroSection>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Terbaru">
-          {filteredposts.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
+          {latestPostData.slice(0, 3).map((post, index) => (
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
           ))}
         </NewsHscrollSection>
         <NewsHscrollSection title="Berita" prior="Populer">
-          {filteredposts.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
+          {trendingPostData.slice(0, 3).map((post, index) => (
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
           ))}
         </NewsHscrollSection>
         <FeedsSection>
-          <FeedsGroup id={id} posts={filteredposts} />
+          <FeedsGroup id={id} posts={latestPostData} />
           <Aside>
             <InlineadsSection label="" src="/img/inline-ads.webp" />
           </Aside>
         </FeedsSection>
         <NewsHscrollSection title="Berita" prior="Rekomendasi">
-          {filteredposts.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.title} short={post.short} tag={post.tag} image={post.image} loc={post.location} date={post.date} />
+          {trendingPostData.slice(0, 3).map((post, index) => (
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
           ))}
         </NewsHscrollSection>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
