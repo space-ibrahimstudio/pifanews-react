@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useFetch } from "../libs/plugins/fetch";
@@ -19,6 +19,7 @@ import { FeedsSection } from "../sections/feeds-section";
 import { InlineadsSection } from "../sections/inlineads-section";
 
 const CategoryPage = () => {
+  const navigate = useNavigate();
   const { category } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
@@ -107,7 +108,7 @@ const CategoryPage = () => {
         <HeroSection>
           {trendingPostData.length > 0 && (
             <Container300>
-              <NewsDisplayCard id={`${id}-${trendingPostData[0].id}`} title={trendingPostData[0].judul_berita} short={trendingPostData[0].isi_berita} tag={trendingPostData[0].nama_kategori_berita} image={`https://pifa.co.id/img_berita/${trendingPostData[0].img_berita}`} loc={trendingPostData[0].penulis_berita} date={trendingPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"} flex="1" />
+              <NewsDisplayCard id={`${id}-${trendingPostData[0].id}`} title={trendingPostData[0].judul_berita} short={trendingPostData[0].isi_berita} tag={trendingPostData[0].nama_kategori_berita} image={`https://pifa.co.id/img_berita/${trendingPostData[0].img_berita}`} loc={trendingPostData[0].penulis_berita} date={trendingPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"} flex="1" onClick={() => navigate(`/berita/${trendingPostData[0].slug}`)} />
             </Container300>
           )}
           <Aside>
@@ -117,12 +118,12 @@ const CategoryPage = () => {
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Terbaru">
           {latestPostData.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
         <NewsHscrollSection title="Berita" prior="Populer">
           {trendingPostData.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
         <FeedsSection>
@@ -133,7 +134,7 @@ const CategoryPage = () => {
         </FeedsSection>
         <NewsHscrollSection title="Berita" prior="Rekomendasi">
           {trendingPostData.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />

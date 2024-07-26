@@ -1,4 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useContent, useWindow } from "@ibrahimstudio/react";
 import { useApi } from "../libs/plugins/api";
 import { SectionHead } from "../components/contents/markers";
@@ -8,6 +9,7 @@ import NewsGroup from "../components/contents/groups";
 import styles from "./styles/news-section.module.css";
 
 export const NewsSection = ({ id, catId, title, prior }) => {
+  const navigate = useNavigate();
   const { toPathname } = useContent();
   const { width } = useWindow();
   const { apiRead } = useApi();
@@ -58,7 +60,11 @@ export const NewsSection = ({ id, catId, title, prior }) => {
     <section id={compid} className={styles.newsSection}>
       <SectionHead id={compid} title={title} prior={prior} />
       <div className={styles.sectionBody}>
-        <Container300>{latestPostData.length > 0 && <NewsDisplayCard id={`${compid}-${latestPostData[0].id}`} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={`https://pifa.co.id/img_berita/${latestPostData[0].img_berita}`} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" />}</Container300>
+        <Container300>
+          {latestPostData.length > 0 && (
+            <NewsDisplayCard id={`${compid}-${latestPostData[0].id}`} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={`https://pifa.co.id/img_berita/${latestPostData[0].img_berita}`} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" onClick={() => navigate(`/berita/${latestPostData[0].slug}`)} />
+          )}
+        </Container300>
         <Container300>
           <NewsGroup id={`${compid}-newest`} isPortrait={width > 700 && width < 840 ? true : width < 686 ? true : false} title="Terbaru" scope={prior} posts={slicedposts} />
         </Container300>

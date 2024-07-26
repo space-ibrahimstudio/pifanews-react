@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useFetch } from "../libs/plugins/fetch";
@@ -18,6 +18,7 @@ import { NewsSliderSection } from "../sections/news-slider-section";
 import { InlineadsSection } from "../sections/inlineads-section";
 
 const PostPage = () => {
+  const navigate = useNavigate();
   const { slug } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
@@ -94,7 +95,7 @@ const PostPage = () => {
         </PostdetSection>
         <NewsHscrollSection title="Berita" prior="Populer Lainnya">
           {trendingPostData.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
