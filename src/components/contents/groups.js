@@ -10,10 +10,8 @@ import feed from "./styles/feeds-group.module.css";
 
 const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
   const navigate = useNavigate();
-  const { toTitleCase, toPathname } = useContent();
+  const { toPathname } = useContent();
   const compid = title && scope ? `${id}-news-group-${toPathname(title)}-${toPathname(scope)}` : `${id}-news-group`;
-  const grouptitle = title ? toTitleCase(title) : "";
-  const groupscope = scope ? toTitleCase(scope) : "";
 
   return (
     <section id={compid} className={`${styles.newsGroup} ${isPortrait ? "" : styles.landscape}`}>
@@ -21,8 +19,8 @@ const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
         <div className={styles.groupHeadwrap}>
           <div className={styles.groupTitlewrap}>
             <h1 className={styles.groupTitle}>
-              <span>{`${grouptitle} di `}</span>
-              <span className={styles.textHint}>{groupscope}</span>
+              <span>{`${title} di `}</span>
+              <span className={styles.textHint}>{scope}</span>
             </h1>
           </div>
         </div>

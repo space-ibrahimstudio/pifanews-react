@@ -16,18 +16,16 @@ export const NewsTag = ({ id, name }) => {
 };
 
 export const SectionHead = ({ id, title, noSource, prior }) => {
-  const { toTitleCase, toPathname } = useContent();
+  const { toPathname } = useContent();
   const compid = title && prior ? `${id}-section-head-${toPathname(title)}-${toPathname(prior)}` : `${id}-section-head`;
-  const headtitle = title ? toTitleCase(title) : "";
-  const headprior = prior ? toTitleCase(prior) : "";
   const headto = prior ? `/${toPathname(prior)}` : "/";
 
   return (
     <header id={compid} className={head.sectionHead}>
       <div className={head.sectionTitlewrap}>
         <h1 className={head.sectionTitle}>
-          <span>{`${headtitle} `}</span>
-          <span className={head.textHint}>{headprior}</span>
+          <span>{`${title} `}</span>
+          <span className={head.textHint}>{prior}</span>
         </h1>
       </div>
       {!noSource && <SourceButton id={compid} to={headto} />}

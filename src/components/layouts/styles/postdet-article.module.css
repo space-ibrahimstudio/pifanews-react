@@ -121,3 +121,9 @@
   color: var(--color-secondary);
   font-family: var(--font-inter);
 }
+
+@media (min-width: 607px) {
+  .postdetArticle {
+    min-width: unset;
+  }
+}
