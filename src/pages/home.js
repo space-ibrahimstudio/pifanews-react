@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useFetch } from "../libs/plugins/fetch";
-import { getFeaturedPosts, getTrendingTags, getInfographicPosts, getAdDatas } from "../libs/sources/local-data";
+import { getTrendingTags, getInfographicPosts, getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import { News3Grid } from "../components/layouts/grids";
@@ -19,9 +20,9 @@ import { NewsSection } from "../sections/news-section";
 const HomePage = () => {
   const { width } = useWindow();
   const { short } = useDocument();
+  const navigate = useNavigate();
   const { localCatData, trendingPostData, latestPostData } = useFetch();
   const id = `${short}-home`;
-  const [posts, setPosts] = useState([]);
   const [graphicPosts, setGraphicPosts] = useState([]);
   const [tags, setTags] = useState([]);
   const [ads, setAds] = useState([]);
@@ -29,18 +30,6 @@ const HomePage = () => {
   const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
   const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.image} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const post = await getFeaturedPosts();
-        setPosts(post);
-      } catch (error) {
-        console.error("error getting featured posts:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -94,7 +83,7 @@ const HomePage = () => {
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Terbaru">
           {latestPostData.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} />
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
         <NewsSection title="Berita" prior="Internasional" catId="3" />

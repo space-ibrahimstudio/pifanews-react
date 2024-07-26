@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useContent, useWindow } from "@ibrahimstudio/react";
+import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useFetch } from "../libs/plugins/fetch";
 import { useApi } from "../libs/plugins/api";
-import { getFeaturedPosts, getTrendingTags, getAdDatas } from "../libs/sources/local-data";
+import { getTrendingTags, getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import Container300, { Aside } from "../components/layouts/containers";
@@ -23,10 +23,8 @@ const CategoryPage = () => {
   const { short } = useDocument();
   const { width } = useWindow();
   const { apiRead } = useApi();
-  const { toPathname } = useContent();
   const { categoryData } = useFetch();
   const formData = new FormData();
-  const [posts, setPosts] = useState([]);
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [tags, setTags] = useState([]);
@@ -69,21 +67,7 @@ const CategoryPage = () => {
     }
   };
 
-  const filteredposts = posts.filter((post) => toPathname(post.tag) === category);
-
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const post = await getFeaturedPosts();
-        setPosts(post);
-      } catch (error) {
-        console.error("error getting featured posts:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   useEffect(() => {
     const fetchTags = async () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useContent, useFormat } from "@ibrahimstudio/react";
+import { useContent } from "@ibrahimstudio/react";
 import { NewsTag } from "./markers";
 import { Image } from "./image";
 import styles from "./styles/news-card.module.css";
