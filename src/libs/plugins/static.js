@@ -3,8 +3,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const CATEGORY_API_URL = "https://your-api-url.com/categories";
-const POSTS_API_URL = "https://your-api-url.com/posts";
+const API_URL = "https://your-api-url.com/pages";
 
 const MINIFY_OPTIONS = {
   collapseWhitespace: true,
@@ -18,66 +17,40 @@ const minifyHtml = (html) => {
 };
 
 const savePage = async (page, route) => {
-  const filePath = path.join(__dirname, "build", route, "index.html");
+  const isRoot = route === "/";
+  const filePath = path.join(__dirname, "build", isRoot ? "index.html" : `${route}/index.html`);
   const dir = path.dirname(filePath);
-
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
-
   const content = await page.content();
   const minifiedContent = minifyHtml(content);
-
   fs.writeFileSync(filePath, minifiedContent);
   console.log(`Saved: ${filePath}`);
 };
 
-const fetchCategories = async () => {
+const fetchPages = async () => {
   try {
-    const response = await axios.get(CATEGORY_API_URL);
+    const response = await axios.get(API_URL);
     return response.data;
   } catch (error) {
-    console.error("Error fetching categories:", error);
-    return [];
-  }
-};
-
-const fetchPostsForCategory = async (categorySlug) => {
-  try {
-    const response = await axios.get(`${POSTS_API_URL}?category=${categorySlug}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching posts for category ${categorySlug}:`, error);
+    console.error("Error fetching pages:", error);
     return [];
   }
 };
 
 (async () => {
-  const categories = await fetchCategories();
-  if (!categories.length) {
-    console.error("No categories to process");
+  const pages = await fetchPages();
+  if (!pages.length) {
+    console.error("No pages to process");
     return;
   }
-
-  const browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
   const page = await browser.newPage();
-
-  for (const category of categories) {
-    const categorySlug = category.slug;
-    const categoryUrl = `/${categorySlug}`;
-    await page.goto(`http://localhost:3000${categoryUrl}`, { waitUntil: "networkidle2" });
-    await savePage(page, categorySlug);
-
-    const posts = await fetchPostsForCategory(categorySlug);
-    for (const post of posts) {
-      const postSlug = post.slug;
-      const postUrl = `/${categorySlug}/${postSlug}`;
-      await page.goto(`http://localhost:3000${postUrl}`, { waitUntil: "networkidle2" });
-      await savePage(page, `${categorySlug}/${postSlug}`);
-    }
+  for (const route of pages) {
+    const url = `http://localhost:3000${route}`;
+    await page.goto(url, { waitUntil: "networkidle2" });
+    await savePage(page, route);
   }
-
   await browser.close();
 })();

@@ -16,7 +16,7 @@ export const BreadCrumbs = ({ paths = [] }) => {
               <img className={styles.unionIcon} alt="" src="/svg/chevron-right.svg" />
             </Fragment>
           ) : (
-            <Link className={styles.cardTitle} to={path.url}>
+            <Link className={styles.cardTitle} style={{ color: "var(--color-primary)" }} to={path.url}>
               {path.label}
             </Link>
           )}
@@ -24,6 +24,12 @@ export const BreadCrumbs = ({ paths = [] }) => {
       ))}
     </section>
   );
+};
+
+export const PostdetAside = ({ children }) => {
+  const { width } = useWindow();
+  const asidestyle = { width: "100%", overflow: "hidden", display: "flex", flexDirection: width <= 930 >= 600 ? "row" : "column", alignItems: "flex-start", justifyContent: "center", maxWidth: width <= 930 ? "100%" : "var(--pixel-400)", gap: "var(--pixel-10)" };
+  return <div style={asidestyle}>{children}</div>;
 };
 
 export const PostdetArticle = ({ id, title, loc, date, content, paths = [] }) => {
@@ -44,8 +50,9 @@ export const PostdetArticle = ({ id, title, loc, date, content, paths = [] }) =>
 };
 
 export const PostdetContent = ({ id, children }) => {
+  const { width } = useWindow();
   const compid = `${id}-post-detail-content`;
-  const contentstyle = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "center", gap: "var(--pixel-10)", textAlign: "left" };
+  const contentstyle = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: width <= 930 ? "column" : "row", alignItems: "flex-start", justifyContent: "center", gap: "var(--pixel-10)", textAlign: "left" };
   return (
     <section id={compid} style={contentstyle}>
       {children}
@@ -56,7 +63,7 @@ export const PostdetContent = ({ id, children }) => {
 const PostdetSection = ({ id, children }) => {
   const { width } = useWindow();
   const compid = `${id}-post-detail-section`;
-  const sectionstyle = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: width <= 910 > 700 ? "var(--pixel-20) var(--pixel-30)" : width <= 700 ? "var(--pixel-20)" : "var(--pixel-20) var(--pixel-70)", gap: "var(--pixel-10)" };
+  const sectionstyle = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: width <= 910 ? "var(--pixel-20) var(--pixel-30)" : width <= 700 ? "var(--pixel-20)" : "var(--pixel-20) var(--pixel-70)", gap: "var(--pixel-10)" };
   return (
     <section id={compid} style={sectionstyle}>
       {children}

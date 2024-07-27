@@ -72,7 +72,6 @@
   position: relative;
   line-height: 135%;
   font-weight: 500;
-  white-space: pre-wrap;
 }
 
 .postdetBody ul,
@@ -110,7 +109,6 @@
 
 .postdetArticle {
   flex: 1;
-  min-width: var(--pixel-500);
   border-radius: var(--pixel-20);
   background-color: var(--color-secondlight);
   overflow: hidden;
@@ -120,10 +118,4 @@
   font-size: var(--font-sm);
   color: var(--color-secondary);
   font-family: var(--font-inter);
-}
-
-@media (min-width: 607px) {
-  .postdetArticle {
-    min-width: unset;
-  }
 }

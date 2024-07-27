@@ -2,15 +2,17 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
+import { useLoading } from "../components/contents/loader";
 import { useFetch } from "../libs/plugins/fetch";
 import { useApi } from "../libs/plugins/api";
 import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import { Aside } from "../components/layouts/containers";
-import PostdetSection, { PostdetContent, PostdetArticle } from "../components/layouts/postdet";
+import PostdetSection, { PostdetContent, PostdetArticle, PostdetAside } from "../components/layouts/postdet";
 import { AdBanner } from "../components/contents/image";
 import { Image } from "../components/contents/image";
+import { BlurUpImg } from "../components/contents/loader";
 import NewsCard from "../components/contents/cards";
 import { NewsSummaryGroup } from "../components/contents/groups";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
@@ -23,9 +25,9 @@ const PostPage = () => {
   const { short } = useDocument();
   const { width } = useWindow();
   const { apiRead } = useApi();
+  const { setLoading } = useLoading();
   const { trendingPostData, categoryData } = useFetch();
   const formData = new FormData();
-  const [isLoading, setIsLoading] = useState(false);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", scope: "", scopeslug: "" });
   const [postDetailData, setPostDetailData] = useState([]);
   const [ads, setAds] = useState([]);
@@ -33,7 +35,7 @@ const PostPage = () => {
   const id = slug ? `${short}-${slug}` : `${short}-slug`;
 
   const fetchDetailPost = async () => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       formData.append("slug", slug);
       const postdetail = await apiRead(formData, "main", "detailnew");
@@ -47,7 +49,7 @@ const PostPage = () => {
     } catch (error) {
       console.error("error:", error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -75,22 +77,18 @@ const PostPage = () => {
     fetchDetailPost();
   }, [slug]);
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
-
   return (
     <Fragment>
       <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} />
       <PageLayout pageid={id}>
         <PostdetSection>
-          <Image style={{ width: "100%", height: "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)" }} alt={postDetailData.thumnail_berita} src={`https://pifa.co.id/img_berita/${postDetailData.img_berita}`} />
+          <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)" }} alt={postDetailData.thumnail_berita} src={`https://pifa.co.id/img_berita/${postDetailData.img_berita}`} />
           <PostdetContent>
             <PostdetArticle id={id} paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
-            <Aside>
-              <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Rekomendasi" posts={trendingPostData.slice(3, 10)} />
+            <PostdetAside>
+              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 600 ? true : false} title="Rekomendasi" posts={trendingPostData.slice(3, 10)} />
               <InlineadsSection label="" src="/img/inline-ads.webp" />
-            </Aside>
+            </PostdetAside>
           </PostdetContent>
         </PostdetSection>
         <NewsHscrollSection title="Berita" prior="Populer Lainnya">

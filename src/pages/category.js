@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
+import { useLoading } from "../components/contents/loader";
 import { useFetch } from "../libs/plugins/fetch";
 import { useApi } from "../libs/plugins/api";
 import { getTrendingTags, getAdDatas } from "../libs/sources/local-data";
@@ -24,6 +25,7 @@ const CategoryPage = () => {
   const { short } = useDocument();
   const { width } = useWindow();
   const { apiRead } = useApi();
+  const { setLoading } = useLoading();
   const { categoryData } = useFetch();
   const formData = new FormData();
   const [latestPostData, setLatestPostData] = useState([]);
@@ -36,6 +38,7 @@ const CategoryPage = () => {
 
   const fetchLatestPosts = async () => {
     const idcat = categoryData.find((cat) => cat.slug === category)?.id;
+    setLoading(true);
     try {
       formData.append("idcat", idcat);
       formData.append("limit", "11");
@@ -48,11 +51,14 @@ const CategoryPage = () => {
       }
     } catch (error) {
       console.error("error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchTrendingPosts = async () => {
     const idcat = categoryData.find((cat) => cat.slug === category)?.id;
+    setLoading(true);
     try {
       formData.append("idcat", idcat);
       formData.append("limit", "10");
@@ -65,6 +71,8 @@ const CategoryPage = () => {
       }
     } catch (error) {
       console.error("error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,7 +109,7 @@ const CategoryPage = () => {
 
   return (
     <Fragment>
-      <SEO title={category} description="" route={pagepath} />
+      <SEO title={category} route={pagepath} />
       <PageLayout pageid={id}>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={tags} />

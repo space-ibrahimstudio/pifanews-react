@@ -21,7 +21,7 @@ const HomePage = () => {
   const { width } = useWindow();
   const { short } = useDocument();
   const navigate = useNavigate();
-  const { localCatData, trendingPostData, latestPostData } = useFetch();
+  const { categoryData, localCatData, trendingPostData, latestPostData, popularPostData } = useFetch();
   const id = `${short}-home`;
   const [graphicPosts, setGraphicPosts] = useState([]);
   const [tags, setTags] = useState([]);
@@ -30,6 +30,23 @@ const HomePage = () => {
   const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
   const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.image} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+
+  const adSections = [
+    { content: ads, renderContent: renderAds, style: { minWidth: "100%" } },
+    { content: ads, renderContent: renderAds, style: { minWidth: "100%" } },
+    { content: ads, renderContent: renderAds, style: { minWidth: "100%" } },
+  ];
+
+  const combinedSections = [];
+  let adIndex = 0;
+  for (let i = 0; i < categoryData.length; i++) {
+    const section = categoryData[i];
+    combinedSections.push({ type: "news", data: section });
+    if ((i + 1) % 3 === 0 && adIndex < adSections.length) {
+      combinedSections.push({ type: "ad", data: adSections[adIndex] });
+      adIndex++;
+    }
+  }
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -79,31 +96,25 @@ const HomePage = () => {
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3, 10)} />
           </Aside>
         </HeroSection>
-        <NewsSliderSection prior="Infografis" content={graphicPosts} renderContent={renderInfographic} noSource />
+        <NewsSliderSection title="Berita" prior="Infografis" content={graphicPosts} renderContent={renderInfographic} noSource />
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Terbaru">
           {latestPostData.slice(0, 3).map((post, index) => (
             <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
-        <NewsSection title="Berita" prior="Internasional" catId="3" />
-        <NewsSection title="Berita" prior="Nasional" catId="2" />
         <NewsSliderSection title="Berita" prior="Kabar Daerah" content={localCatData} renderContent={renderLocalCat} />
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection title="Berita" prior="Populer">
-          {trendingPostData.slice(0, 3).map((post, index) => (
+          {popularPostData.slice(0, 3).map((post, index) => (
             <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
-        <NewsSection title="Berita" prior="PifaBiz" catId="7" />
-        <NewsSection title="Berita" prior="Politik" catId="8" />
-        <NewsSection title="Berita" prior="Bola dan Sports" catId="6" />
-        <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
-        {/* <NewsSection title="Berita" prior="Bisnis" posts={posts} /> */}
-        <NewsSection title="Berita" prior="Teknologi" catId="4" />
-        {/* <NewsSection title="Berita" prior="Food dan Travel" posts={posts} /> */}
-        <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
-        <NewsSection title="Berita" prior="Lifestyle" catId="5" />
+        <Fragment>
+          {combinedSections.map((section, index) => (
+            <Fragment key={index}>{section.type === "ad" ? <NewsSliderSection content={section.data.content} renderContent={section.data.renderContent} noHead contentStyle={section.data.style} /> : <NewsSection prior={section.data.nama_kategori_berita} catId={section.data.id} slug={section.data.slug} />}</Fragment>
+          ))}
+        </Fragment>
       </PageLayout>
     </Fragment>
   );

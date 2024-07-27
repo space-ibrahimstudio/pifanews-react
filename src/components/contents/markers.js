@@ -15,10 +15,10 @@ export const NewsTag = ({ id, name }) => {
   );
 };
 
-export const SectionHead = ({ id, title, noSource, prior }) => {
+export const SectionHead = ({ id, title, noSource, prior, to }) => {
   const { toPathname } = useContent();
   const compid = title && prior ? `${id}-section-head-${toPathname(title)}-${toPathname(prior)}` : `${id}-section-head`;
-  const headto = prior ? `/${toPathname(prior)}` : "/";
+  const headto = to ? `/${to}` : "/";
 
   return (
     <header id={compid} className={head.sectionHead}>

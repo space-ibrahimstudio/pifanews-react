@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { IbrahimStudioProvider } from "@ibrahimstudio/react";
 import { ApiProvider } from "./libs/plugins/api";
+import { LoadingProvider } from "./components/contents/loader";
 import { FetchProvider } from "./libs/plugins/fetch";
 import { Document } from "./libs/plugins/document";
 import App from "./App";
@@ -18,9 +19,11 @@ root.render(
         <BrowserRouter>
           <Document>
             <ApiProvider>
-              <FetchProvider>
-                <App />
-              </FetchProvider>
+              <LoadingProvider>
+                <FetchProvider>
+                  <App />
+                </FetchProvider>
+              </LoadingProvider>
             </ApiProvider>
           </Document>
         </BrowserRouter>

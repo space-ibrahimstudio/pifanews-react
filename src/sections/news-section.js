@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContent, useWindow } from "@ibrahimstudio/react";
+import { useWindow } from "@ibrahimstudio/react";
 import { useApi } from "../libs/plugins/api";
+import { useLoading } from "../components/contents/loader";
 import { SectionHead } from "../components/contents/markers";
 import Container300 from "../components/layouts/containers";
 import { NewsDisplayCard } from "../components/contents/cards";
 import NewsGroup from "../components/contents/groups";
 import styles from "./styles/news-section.module.css";
 
-export const NewsSection = ({ id, catId, title, prior }) => {
+export const NewsSection = ({ id, catId, prior, slug }) => {
   const navigate = useNavigate();
-  const { toPathname } = useContent();
   const { width } = useWindow();
   const { apiRead } = useApi();
+  const { setLoading } = useLoading();
   const formData = new FormData();
-  const compid = title && prior ? `${id}-news-section-${toPathname(title)}-${toPathname(prior)}` : `${id}-news-section`;
+  const compid = slug ? `${id}-news-section-berita-${slug}` : `${id}-news-section`;
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
-  const slicedposts = latestPostData.slice(1, 10);
 
   const fetchLatestPosts = async () => {
+    setLoading(true);
     try {
       formData.append("idcat", catId);
       formData.append("limit", "11");
@@ -32,10 +33,13 @@ export const NewsSection = ({ id, catId, title, prior }) => {
       }
     } catch (error) {
       console.error("error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchTrendingPosts = async () => {
+    setLoading(true);
     try {
       formData.append("idcat", catId);
       formData.append("limit", "10");
@@ -49,6 +53,7 @@ export const NewsSection = ({ id, catId, title, prior }) => {
     } catch (error) {
       console.error("error:", error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -58,7 +63,7 @@ export const NewsSection = ({ id, catId, title, prior }) => {
 
   return (
     <section id={compid} className={styles.newsSection}>
-      <SectionHead id={compid} title={title} prior={prior} />
+      <SectionHead id={compid} title="Berita" prior={prior} to={slug} />
       <div className={styles.sectionBody}>
         <Container300>
           {latestPostData.length > 0 && (
@@ -66,7 +71,7 @@ export const NewsSection = ({ id, catId, title, prior }) => {
           )}
         </Container300>
         <Container300>
-          <NewsGroup id={`${compid}-newest`} isPortrait={width > 700 && width < 840 ? true : width < 686 ? true : false} title="Terbaru" scope={prior} posts={slicedposts} />
+          <NewsGroup id={`${compid}-newest`} isPortrait={width > 700 && width < 840 ? true : width < 686 ? true : false} title="Terbaru" scope={prior} posts={latestPostData.slice(1, 10)} />
         </Container300>
         <Container300>
           <NewsGroup id={`${compid}-trending`} isPortrait={width < 464 ? true : false} title="Trending" scope={prior} posts={trendingPostData} />

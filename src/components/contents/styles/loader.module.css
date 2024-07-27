@@ -1,0 +1,75 @@
+.loadingCircle {
+  display: block;
+  border-left: var(--pixel-5) solid;
+  border-top-left-radius: 100%;
+  border-top: var(--pixel-5) solid;
+  margin: var(--pixel-5);
+  animation-name: Loader_611;
+  animation-duration: 1500ms;
+  animation-timing-function: linear;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+.sp1 {
+  border-left-color: #2f318b;
+  border-top-color: #2f318b;
+  width: var(--pixel-40);
+  height: var(--pixel-40);
+}
+
+.sp2 {
+  border-left-color: #fff000;
+  border-top-color: #fff000;
+  width: var(--pixel-30);
+  height: var(--pixel-30);
+}
+
+.sp3 {
+  width: var(--pixel-20);
+  height: var(--pixel-20);
+  border-left-color: #e62129;
+  border-top-color: #e62129;
+}
+
+@keyframes Loader_611 {
+  0% {
+    transform: rotate(0deg);
+    transform-origin: right bottom;
+  }
+
+  25% {
+    transform: rotate(90deg);
+    transform-origin: right bottom;
+  }
+
+  50% {
+    transform: rotate(180deg);
+    transform-origin: right bottom;
+  }
+
+  75% {
+    transform: rotate(270deg);
+    transform-origin: right bottom;
+  }
+
+  100% {
+    transform: rotate(360deg);
+    transform-origin: right bottom;
+  }
+}
+
+.loadingScreen {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-secondlight);
+  z-index: 10000;
+}

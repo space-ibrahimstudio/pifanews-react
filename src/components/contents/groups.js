@@ -36,7 +36,7 @@ const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
   );
 };
 
-export const NewsSummaryGroup = ({ id, variant, isPortrait, title, posts }) => {
+export const NewsSummaryGroup = ({ id, style, variant, isPortrait, title, posts }) => {
   const navigate = useNavigate();
   const { toTitleCase, toPathname } = useContent();
   const compid = title ? `${id}-summary-group-${toPathname(title)}` : `${id}-summary-group`;
@@ -44,7 +44,7 @@ export const NewsSummaryGroup = ({ id, variant, isPortrait, title, posts }) => {
   const groupto = title ? `/${toPathname(title)}` : "/";
 
   return (
-    <section id={compid} className={`${summary.newsSummaryGroup} ${isPortrait ? "" : summary.landscape} ${variant === "primary" ? summary.primary : ""}`}>
+    <section id={compid} className={`${summary.newsSummaryGroup} ${isPortrait ? "" : summary.landscape} ${variant === "primary" ? summary.primary : ""}`} style={style}>
       <header className={summary.groupHead}>
         <div className={summary.groupHeadwrap}>
           <div className={summary.groupTitlewrap}>
@@ -83,7 +83,7 @@ export const FeedsGroup = ({ id, filter = "popular", posts }) => {
         <div className={feed.feedsTitlewrap}>
           <h1 className={feed.feedsTitle}>Feeds</h1>
         </div>
-        <Input id={`${compid}-switch-filter`} variant="select" isLabeled={false} placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
+        <Input id={`${compid}-switch-filter`} variant="select" isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
       </header>
       <div className={feed.feedsBody}>
         {posts.map((post, index) => (
