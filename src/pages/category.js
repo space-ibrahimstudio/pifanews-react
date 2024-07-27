@@ -135,7 +135,7 @@ const CategoryPage = () => {
           ))}
         </NewsHscrollSection>
         <FeedsSection>
-          <FeedsGroup id={id} posts={latestPostData} />
+          <FeedsGroup id={id} category={category} />
           <Aside>
             <InlineadsSection label="" src="/img/inline-ads.webp" />
           </Aside>

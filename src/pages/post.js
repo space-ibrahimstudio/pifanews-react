@@ -8,11 +8,9 @@ import { useApi } from "../libs/plugins/api";
 import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
-import { Aside } from "../components/layouts/containers";
 import PostdetSection, { PostdetContent, PostdetArticle, PostdetAside } from "../components/layouts/postdet";
 import { AdBanner } from "../components/contents/image";
 import { Image } from "../components/contents/image";
-import { BlurUpImg } from "../components/contents/loader";
 import NewsCard from "../components/contents/cards";
 import { NewsSummaryGroup } from "../components/contents/groups";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
@@ -26,7 +24,7 @@ const PostPage = () => {
   const { width } = useWindow();
   const { apiRead } = useApi();
   const { setLoading } = useLoading();
-  const { trendingPostData, categoryData } = useFetch();
+  const { categoryData, trendingPostData, relatedPostData } = useFetch();
   const formData = new FormData();
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", scope: "", scopeslug: "" });
   const [postDetailData, setPostDetailData] = useState([]);
@@ -86,13 +84,13 @@ const PostPage = () => {
           <PostdetContent>
             <PostdetArticle id={id} paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
             <PostdetAside>
-              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 600 ? true : false} title="Rekomendasi" posts={trendingPostData.slice(3, 10)} />
+              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" posts={trendingPostData} />
               <InlineadsSection label="" src="/img/inline-ads.webp" />
             </PostdetAside>
           </PostdetContent>
         </PostdetSection>
-        <NewsHscrollSection title="Berita" prior="Populer Lainnya">
-          {trendingPostData.slice(0, 3).map((post, index) => (
+        <NewsHscrollSection title="Berita" prior="Terkait">
+          {relatedPostData.slice(0, 3).map((post, index) => (
             <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>

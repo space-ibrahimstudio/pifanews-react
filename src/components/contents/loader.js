@@ -60,7 +60,7 @@ export const BlurUpImg = ({ className, style, alt, src }) => {
   );
 };
 
-function LoadingScreen() {
+const LoadingScreen = () => {
   return (
     <section className={styles.loadingScreen}>
       <span className={`${styles.loadingCircle} ${styles.sp1}`}>
@@ -70,7 +70,19 @@ function LoadingScreen() {
       </span>
     </section>
   );
-}
+};
+
+export const LoadingContent = () => {
+  return (
+    <div style={{ transform: "scale(0.4)", transformOrigin: "center", transition: "transform 0.2s" }}>
+      <span className={`${styles.loadingCircle} ${styles.sp1}`}>
+        <span className={`${styles.loadingCircle} ${styles.sp2}`}>
+          <span className={`${styles.loadingCircle} ${styles.sp3}`}></span>
+        </span>
+      </span>
+    </div>
+  );
+};
 
 const LoadingContext = createContext();
 export const useLoading = () => useContext(LoadingContext);

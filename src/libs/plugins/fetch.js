@@ -15,6 +15,7 @@ export const FetchProvider = ({ children }) => {
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [latestPostData, setLatestPostData] = useState([]);
   const [popularPostData, setPopularPostData] = useState([]);
+  const [relatedPostData, setRelatedPostData] = useState([]);
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -102,6 +103,24 @@ export const FetchProvider = ({ children }) => {
     }
   };
 
+  const fetchRelatedPosts = async () => {
+    setLoading(true);
+    try {
+      formData.append("limit", "10");
+      formData.append("hal", "0");
+      const postsdata = await apiRead(formData, "main", "relatednew");
+      if (postsdata && postsdata.length > 0) {
+        setRelatedPostData(postsdata);
+      } else {
+        setRelatedPostData([]);
+      }
+    } catch (error) {
+      console.error("error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
     fetchLocalCats();
@@ -111,9 +130,10 @@ export const FetchProvider = ({ children }) => {
     fetchLatestPosts();
     fetchTrendingPosts();
     fetchPopularPosts();
+    fetchRelatedPosts();
   }, [location]);
 
-  return <FetchContext.Provider value={{ categoryData, localCatData, trendingPostData, latestPostData, popularPostData }}>{children}</FetchContext.Provider>;
+  return <FetchContext.Provider value={{ categoryData, localCatData, trendingPostData, latestPostData, popularPostData, relatedPostData }}>{children}</FetchContext.Provider>;
 };
 
 export const useFetch = () => useContext(FetchContext);

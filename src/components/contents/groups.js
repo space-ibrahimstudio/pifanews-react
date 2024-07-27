@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContent } from "@ibrahimstudio/react";
+import { useApi } from "../../libs/plugins/api";
+import { useFetch } from "../../libs/plugins/fetch";
 import { Input } from "@ibrahimstudio/input";
 import { SourceButton } from "../user-inputs/buttons";
 import { NewsSummaryCard, NewsFeedCard } from "./cards";
+import { LoadingContent } from "./loader";
 import styles from "./styles/news-group.module.css";
 import summary from "./styles/news-summary-group.module.css";
 import feed from "./styles/feeds-group.module.css";
@@ -64,10 +67,17 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait, title, posts 
   );
 };
 
-export const FeedsGroup = ({ id, filter = "popular", posts }) => {
+export const FeedsGroup = ({ id, category, filter = "popular" }) => {
   const navigate = useNavigate();
-  const compid = `${id}-feeds-group`;
+  const ref = useRef(null);
+  const { apiRead } = useApi();
+  const { categoryData } = useFetch();
+  const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [limit, setLimit] = useState(10);
   const [postsFilter, setPostsFilter] = useState(filter);
+
+  const compid = `${id}-feeds-group`;
 
   const switchFilter = [
     { label: "Terbaru", value: "update" },
@@ -77,6 +87,50 @@ export const FeedsGroup = ({ id, filter = "popular", posts }) => {
 
   const switchStatus = (value) => setPostsFilter(value);
 
+  const fetchLatestPosts = async (newLimit) => {
+    const idcat = categoryData.find((cat) => cat.slug === category)?.id;
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("idcat", idcat);
+      formData.append("limit", newLimit);
+      formData.append("hal", "0");
+      const postsdata = await apiRead(formData, "main", "categorynew");
+      if (postsdata && postsdata.length > 0) {
+        setPosts(postsdata);
+      } else {
+        setPosts([]);
+      }
+    } catch (error) {
+      console.error("error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleScroll = () => {
+    if (ref.current) {
+      const { scrollTop, scrollHeight, clientHeight } = ref.current;
+      if (scrollTop + clientHeight >= scrollHeight) {
+        setLimit((prevLimit) => prevLimit + 10);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchLatestPosts(limit);
+  }, [limit]);
+
+  useEffect(() => {
+    const feedsBodyEl = ref.current;
+    if (feedsBodyEl) {
+      feedsBodyEl.addEventListener("scroll", handleScroll);
+      return () => {
+        feedsBodyEl.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
+
   return (
     <section id={compid} className={feed.feedsGroup}>
       <header className={feed.feedsHead}>
@@ -85,10 +139,11 @@ export const FeedsGroup = ({ id, filter = "popular", posts }) => {
         </div>
         <Input id={`${compid}-switch-filter`} variant="select" isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
       </header>
-      <div className={feed.feedsBody}>
+      <div ref={ref} className={feed.feedsBody}>
         {posts.map((post, index) => (
           <NewsFeedCard key={index} id={`${compid}-${index}`} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
         ))}
+        {loading && <LoadingContent />}
       </div>
     </section>
   );
