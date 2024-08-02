@@ -9,7 +9,11 @@ async function fetchCatSlug() {
   try {
     const response = await axios.get(`${apiURL}/main/categorynew`);
     const slugdata = response.data;
-    return slugdata.data;
+    if (!slugdata.error) {
+      return slugdata.data;
+    } else {
+      return [];
+    }
   } catch (error) {
     console.error("Error fetching category slugs:", error);
     process.exit(1);
@@ -17,10 +21,18 @@ async function fetchCatSlug() {
 }
 
 async function fetchPostSlug() {
+  const formData = new FormData();
+  formData.append("limit", "200");
+  formData.append("hal", "0");
   try {
-    const response = await axios.get(`${apiURL}/authapi/viewnews`);
+    const url = `${apiURL}/main/latestnew`;
+    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
-    return slugdata.data;
+    if (!slugdata.error) {
+      return slugdata.data;
+    } else {
+      return [];
+    }
   } catch (error) {
     console.error("Error fetching post slugs:", error);
     process.exit(1);
