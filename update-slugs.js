@@ -2,7 +2,7 @@ const fs = require("fs");
 const axios = require("axios");
 const packageJson = require("./package.json");
 
-const apiURL = process.env.REACT_APP_API_URL;
+const apiURL = "https://zulkarna.in/pifa_api";
 
 async function fetchCatSlug() {
   try {
@@ -35,7 +35,7 @@ async function updatePackageJson(catslugs, postslugs) {
 }
 
 function generateSitemap(catslugs, postslugs) {
-  const domain = process.env.REACT_APP_DOMAIN_URL;
+  const domain = "https://pifav2.zulkarna.in";
   if (!domain) {
     console.error("REACT_APP_DOMAIN_URL environment variable is not set");
     process.exit(1);
