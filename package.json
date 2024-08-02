@@ -8,7 +8,6 @@
     "@ibrahimstudio/input": "^1.3.7",
     "@ibrahimstudio/react": "^1.0.2",
     "axios": "^1.6.8",
-    "crypto-js": "^4.2.0",
     "http-proxy-middleware": "^3.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -20,11 +19,12 @@
   "scripts": {
     "test": "react-scripts test",
     "start": "react-scripts start",
+    "prebuild": "node update-snapconfig.js",
     "build": "npm run clean && cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "clean": "npm run backup && rimraf build",
     "eject": "react-scripts eject",
     "deploy": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
-    "static": "npm run build",
+    "static": "npm run build && react-snap",
     "backup": "rimraf backup && node src/libs/plugins/backup.js"
   },
   "eslintConfig": {
@@ -49,7 +49,34 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "cross-env": "^7.0.3",
     "puppeteer": "^22.13.1",
+    "react-snap": "^1.23.0",
     "rimraf": "^5.0.5",
     "shelljs": "^0.8.5"
+  },
+  "reactSnap": {
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ],
+    "crawl": true,
+    "include": [
+      "/",
+      "/lokal",
+      "/nasional",
+      "/internasional",
+      "/teknologi",
+      "/lifestyle",
+      "/sports",
+      "/pifabiz",
+      "/politik"
+    ],
+    "minifyHtml": {
+      "collapseWhitespace": true,
+      "removeComments": true,
+      "removeEmptyAttributes": true
+    },
+    "puppeteer": {
+      "timeout": 60000
+    }
   }
 }

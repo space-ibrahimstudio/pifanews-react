@@ -2,8 +2,10 @@ const puppeteer = require("puppeteer");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const { minify } = require("html-minifier");
 
-const API_URL = "https://your-api-url.com/pages";
+const CATEGORY_API_URL = "https://zulkarna.in/pifa_api/main/categorynew";
+// const NEWS_DETAIL_API_URL = `${apiURL}/authapi/viewnews`;
 
 const MINIFY_OPTIONS = {
   collapseWhitespace: true,
@@ -12,27 +14,34 @@ const MINIFY_OPTIONS = {
 };
 
 const minifyHtml = (html) => {
-  const minify = require("html-minifier").minify;
   return minify(html, MINIFY_OPTIONS);
 };
 
 const savePage = async (page, route) => {
-  const isRoot = route === "/";
-  const filePath = path.join(__dirname, "build", isRoot ? "index.html" : `${route}/index.html`);
+  const filePath = path.join(__dirname, "../../../build", route === "/" ? "index.html" : `${route}.html`);
   const dir = path.dirname(filePath);
+
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
+
   const content = await page.content();
   const minifiedContent = minifyHtml(content);
+
   fs.writeFileSync(filePath, minifiedContent);
   console.log(`Saved: ${filePath}`);
 };
 
 const fetchPages = async () => {
   try {
-    const response = await axios.get(API_URL);
-    return response.data;
+    // const [categoriesResponse, newsDetailsResponse] = await Promise.all([axios.get(CATEGORY_API_URL), axios.get(NEWS_DETAIL_API_URL)]);
+    const categoriesResponse = await axios.get(CATEGORY_API_URL);
+    const categoriesData = categoriesResponse.data;
+    const categoryPaths = categoriesData.data.map((category) => `/${category.slug}`);
+    // const newsDetailPaths = newsDetailsResponse.data.map((news) => `/berita/${news.slug}`);
+
+    return categoryPaths;
+    // return [...categoryPaths, ...newsDetailPaths];
   } catch (error) {
     console.error("Error fetching pages:", error);
     return [];
@@ -40,17 +49,37 @@ const fetchPages = async () => {
 };
 
 (async () => {
-  const pages = await fetchPages();
+  // const pages = await fetchPages();
+  const pages = ["/lokal", "/nasional", "/internasional", "/teknologi"];
   if (!pages.length) {
     console.error("No pages to process");
     return;
   }
-  const browser = await puppeteer.launch({ args: ["--no-sandbox", "--disable-setuid-sandbox"] });
-  const page = await browser.newPage();
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
   for (const route of pages) {
+    const page = await browser.newPage();
     const url = `http://localhost:3000${route}`;
     await page.goto(url, { waitUntil: "networkidle2" });
-    await savePage(page, route);
+
+    const content = await page.evaluate(() => {
+      return new XMLSerializer().serializeToString(document.doctype) + document.documentElement.outerHTML;
+    });
+
+    const minifiedContent = minifyHtml(content);
+    const filePath = path.join(__dirname, "../../../build", route === "/" ? "index.html" : `${route}.html`);
+    const dir = path.dirname(filePath);
+
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, minifiedContent);
+    console.log(`Saved: ${filePath}`);
   }
+
   await browser.close();
 })();

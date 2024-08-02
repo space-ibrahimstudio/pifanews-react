@@ -7,7 +7,6 @@ const FetchContext = createContext();
 
 export const FetchProvider = ({ children }) => {
   const location = useLocation();
-  const formData = new FormData();
   const { apiGet, apiRead } = useApi();
   const { setLoading } = useLoading();
   const [categoryData, setCategoryData] = useState([]);
@@ -17,103 +16,24 @@ export const FetchProvider = ({ children }) => {
   const [popularPostData, setPopularPostData] = useState([]);
   const [relatedPostData, setRelatedPostData] = useState([]);
 
-  const fetchCategories = async () => {
+  const fetchAdditionalData = async () => {
+    const formData = new FormData();
+    formData.append("limit", "10");
+    formData.append("hal", "0");
     setLoading(true);
     try {
       const catdata = await apiGet("main", "categorynew");
-      if (catdata && catdata.length > 0) {
-        setCategoryData(catdata);
-      } else {
-        setCategoryData([]);
-      }
-    } catch (error) {
-      console.error("error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchLocalCats = async () => {
-    setLoading(true);
-    try {
-      const catdata = await apiGet("main", "categoryarea");
-      if (catdata && catdata.length > 0) {
-        setLocalCatData(catdata);
-      } else {
-        setLocalCatData([]);
-      }
-    } catch (error) {
-      console.error("error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTrendingPosts = async () => {
-    setLoading(true);
-    try {
-      formData.append("limit", "10");
-      formData.append("hal", "0");
-      const postsdata = await apiRead(formData, "main", "trendingnew");
-      if (postsdata && postsdata.length > 0) {
-        setTrendingPostData(postsdata);
-      } else {
-        setTrendingPostData([]);
-      }
-    } catch (error) {
-      console.error("error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchLatestPosts = async () => {
-    setLoading(true);
-    try {
-      formData.append("limit", "10");
-      formData.append("hal", "0");
-      const postsdata = await apiRead(formData, "main", "latestnew");
-      if (postsdata && postsdata.length > 0) {
-        setLatestPostData(postsdata);
-      } else {
-        setLatestPostData([]);
-      }
-    } catch (error) {
-      console.error("error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchPopularPosts = async () => {
-    setLoading(true);
-    try {
-      formData.append("limit", "10");
-      formData.append("hal", "0");
-      const postsdata = await apiRead(formData, "main", "popularnew");
-      if (postsdata && postsdata.length > 0) {
-        setPopularPostData(postsdata);
-      } else {
-        setPopularPostData([]);
-      }
-    } catch (error) {
-      console.error("error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchRelatedPosts = async () => {
-    setLoading(true);
-    try {
-      formData.append("limit", "10");
-      formData.append("hal", "0");
-      const postsdata = await apiRead(formData, "main", "relatednew");
-      if (postsdata && postsdata.length > 0) {
-        setRelatedPostData(postsdata);
-      } else {
-        setRelatedPostData([]);
-      }
+      setCategoryData(catdata && catdata.length > 0 ? catdata : []);
+      const catlocaldata = await apiGet("main", "categoryarea");
+      setLocalCatData(catlocaldata && catlocaldata.length > 0 ? catlocaldata : []);
+      const trendingdata = await apiRead(formData, "main", "trendingnew");
+      setTrendingPostData(trendingdata && trendingdata.length > 0 ? trendingdata : []);
+      const latestdata = await apiRead(formData, "main", "latestnew");
+      setLatestPostData(latestdata && latestdata.length > 0 ? latestdata : []);
+      const populardata = await apiRead(formData, "main", "popularnew");
+      setPopularPostData(populardata && populardata.length > 0 ? populardata : []);
+      const relateddata = await apiRead(formData, "main", "relatednew");
+      setRelatedPostData(relateddata && relateddata.length > 0 ? relateddata : []);
     } catch (error) {
       console.error("error:", error);
     } finally {
@@ -122,16 +42,8 @@ export const FetchProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchCategories();
-    fetchLocalCats();
-  }, []);
-
-  useEffect(() => {
-    fetchLatestPosts();
-    fetchTrendingPosts();
-    fetchPopularPosts();
-    fetchRelatedPosts();
-  }, [location]);
+    fetchAdditionalData();
+  }, [location.pathname]);
 
   return <FetchContext.Provider value={{ categoryData, localCatData, trendingPostData, latestPostData, popularPostData, relatedPostData }}>{children}</FetchContext.Provider>;
 };

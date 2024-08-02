@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useLoading } from "../components/contents/loader";
@@ -18,6 +18,7 @@ import { NewsSliderSection } from "../sections/news-slider-section";
 import { InlineadsSection } from "../sections/inlineads-section";
 
 const PostPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { slug } = useParams();
   const { short } = useDocument();
@@ -25,24 +26,33 @@ const PostPage = () => {
   const { apiRead } = useApi();
   const { setLoading } = useLoading();
   const { categoryData, trendingPostData, relatedPostData } = useFetch();
-  const formData = new FormData();
-  const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", scope: "", scopeslug: "" });
+  const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
+  const [catPostData, setCatPostData] = useState(null);
   const [ads, setAds] = useState([]);
 
-  const id = slug ? `${short}-${slug}` : `${short}-slug`;
+  const id = (slug && `${short}-${slug}`) || `${short}-slug`;
 
   const fetchDetailPost = async () => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("slug", slug);
     try {
-      formData.append("slug", slug);
       const postdetail = await apiRead(formData, "main", "detailnew");
       if (postdetail && postdetail.length > 0) {
         setPostDetailData(postdetail[0]);
-        setPageInfo({ title: postdetail[0].judul_berita, desc: postdetail[0].isi_berita, path: `/berita/${postdetail[0].slug}`, scope: categoryData.find((cat) => cat.id === postdetail[0].nama_kategori_berita_id)?.nama_kategori_berita, scopeslug: categoryData.find((cat) => cat.id === postdetail[0].nama_kategori_berita_id)?.slug });
+        setPageInfo({ title: postdetail[0].judul_berita, desc: postdetail[0].isi_berita, path: `/berita/${postdetail[0].slug}`, thumbnail: `https://pifa.co.id/img_berita/${postdetail[0].img_berita}` });
+        if (categoryData && categoryData.length > 0) {
+          const catdetail = categoryData.find((cat) => cat.id === postdetail[0].nama_kategori_berita_id);
+          if (catdetail) {
+            setCatPostData(catdetail);
+          } else {
+            setCatPostData(null);
+          }
+        }
       } else {
         setPostDetailData(null);
-        setPageInfo({ title: "", desc: "", path: "" });
+        setPageInfo({ title: "", desc: "", path: "", thumbnail: "" });
       }
     } catch (error) {
       console.error("error:", error);
@@ -53,7 +63,7 @@ const PostPage = () => {
 
   const paths = [
     { label: "Beranda", url: "/" },
-    { label: pageInfo.scope, url: `/${pageInfo.scopeslug}` },
+    { label: catPostData && catPostData.nama_kategori_berita, url: catPostData && `/${catPostData.slug}` },
     { label: pageInfo.title, url: `/${postDetailData.slug}` },
   ];
 
@@ -73,11 +83,11 @@ const PostPage = () => {
 
   useEffect(() => {
     fetchDetailPost();
-  }, [slug]);
+  }, [slug, categoryData, location.pathname]);
 
   return (
     <Fragment>
-      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} />
+      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} thumbSrc={pageInfo.thumbnail} />
       <PageLayout pageid={id}>
         <PostdetSection>
           <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)" }} alt={postDetailData.thumnail_berita} src={`https://pifa.co.id/img_berita/${postDetailData.img_berita}`} />

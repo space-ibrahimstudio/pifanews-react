@@ -90,11 +90,11 @@ export const FeedsGroup = ({ id, category, filter = "popular" }) => {
   const fetchLatestPosts = async (newLimit) => {
     const idcat = categoryData.find((cat) => cat.slug === category)?.id;
     setLoading(true);
+    const formData = new FormData();
+    formData.append("idcat", idcat);
+    formData.append("limit", newLimit);
+    formData.append("hal", "0");
     try {
-      const formData = new FormData();
-      formData.append("idcat", idcat);
-      formData.append("limit", newLimit);
-      formData.append("hal", "0");
       const postsdata = await apiRead(formData, "main", "categorynew");
       if (postsdata && postsdata.length > 0) {
         setPosts(postsdata);
@@ -119,7 +119,7 @@ export const FeedsGroup = ({ id, category, filter = "popular" }) => {
 
   useEffect(() => {
     fetchLatestPosts(limit);
-  }, [limit]);
+  }, [limit, category]);
 
   useEffect(() => {
     const feedsBodyEl = ref.current;

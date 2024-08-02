@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useLoading } from "../components/contents/loader";
@@ -19,30 +19,39 @@ import { NewsSliderSection } from "../sections/news-slider-section";
 import { FeedsSection } from "../sections/feeds-section";
 import { InlineadsSection } from "../sections/inlineads-section";
 
-const CategoryPage = () => {
+const CategoryPage = ({ category }) => {
   const navigate = useNavigate();
-  const { category } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
   const { apiRead } = useApi();
   const { setLoading } = useLoading();
   const { categoryData } = useFetch();
-  const formData = new FormData();
+  const [pageInfo, setPageInfo] = useState({ id: "", title: "", desc: "", path: "", thumbnail: "" });
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [tags, setTags] = useState([]);
   const [ads, setAds] = useState([]);
 
-  const id = category ? `${short}-${category}` : `${short}-category`;
-  const pagepath = category ? `/${category}` : "/";
+  const id = (category && `${short}-${category}`) || `${short}-category`;
 
-  const fetchLatestPosts = async () => {
-    const idcat = categoryData.find((cat) => cat.slug === category)?.id;
+  const getPageInfo = () => {
+    if (categoryData && categoryData.length > 0) {
+      const pageinfo = categoryData.filter((cat) => cat.slug === category);
+      if (pageinfo && pageinfo.length > 0) {
+        setPageInfo({ id: pageinfo[0].id, title: pageinfo[0].nama_kategori_berita, desc: "", path: `/${pageinfo[0].slug}`, thumbnail: "" });
+      } else {
+        setPageInfo({ id: "", title: "", desc: "", path: "", thumbnail: "" });
+      }
+    }
+  };
+
+  const fetchLatestPosts = async (idcat) => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("idcat", idcat);
+    formData.append("limit", "11");
+    formData.append("hal", "0");
     try {
-      formData.append("idcat", idcat);
-      formData.append("limit", "11");
-      formData.append("hal", "0");
       const postsdata = await apiRead(formData, "main", "categorynew");
       if (postsdata && postsdata.length > 0) {
         setLatestPostData(postsdata);
@@ -56,13 +65,13 @@ const CategoryPage = () => {
     }
   };
 
-  const fetchTrendingPosts = async () => {
-    const idcat = categoryData.find((cat) => cat.slug === category)?.id;
+  const fetchTrendingPosts = async (idcat) => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("idcat", idcat);
+    formData.append("limit", "10");
+    formData.append("hal", "0");
     try {
-      formData.append("idcat", idcat);
-      formData.append("limit", "10");
-      formData.append("hal", "0");
       const postsdata = await apiRead(formData, "main", "cattrendingnew");
       if (postsdata && postsdata.length > 0) {
         setTrendingPostData(postsdata);
@@ -103,13 +112,19 @@ const CategoryPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchLatestPosts();
-    fetchTrendingPosts();
-  }, [category]);
+    getPageInfo();
+  }, [category, categoryData]);
+
+  useEffect(() => {
+    if (pageInfo.id) {
+      fetchLatestPosts(pageInfo.id);
+      fetchTrendingPosts(pageInfo.id);
+    }
+  }, [pageInfo.id]);
 
   return (
     <Fragment>
-      <SEO title={category} route={pagepath} />
+      <SEO title={pageInfo.title} route={pageInfo.path} />
       <PageLayout pageid={id}>
         <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={tags} />

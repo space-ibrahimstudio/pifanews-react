@@ -14,17 +14,17 @@ export const NewsSection = ({ id, catId, prior, slug }) => {
   const { width } = useWindow();
   const { apiRead } = useApi();
   const { setLoading } = useLoading();
-  const formData = new FormData();
   const compid = slug ? `${id}-news-section-berita-${slug}` : `${id}-news-section`;
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
 
   const fetchLatestPosts = async () => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("idcat", catId);
+    formData.append("limit", "11");
+    formData.append("hal", "0");
     try {
-      formData.append("idcat", catId);
-      formData.append("limit", "11");
-      formData.append("hal", "0");
       const postsdata = await apiRead(formData, "main", "categorynew");
       if (postsdata && postsdata.length > 0) {
         setLatestPostData(postsdata);
@@ -40,10 +40,11 @@ export const NewsSection = ({ id, catId, prior, slug }) => {
 
   const fetchTrendingPosts = async () => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("idcat", catId);
+    formData.append("limit", "10");
+    formData.append("hal", "0");
     try {
-      formData.append("idcat", catId);
-      formData.append("limit", "10");
-      formData.append("hal", "0");
       const postsdata = await apiRead(formData, "main", "cattrendingnew");
       if (postsdata && postsdata.length > 0) {
         setTrendingPostData(postsdata);
