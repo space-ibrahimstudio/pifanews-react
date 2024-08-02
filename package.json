@@ -19,7 +19,7 @@
   "scripts": {
     "test": "react-scripts test",
     "start": "react-scripts start",
-    "prebuild": "node update-snapconfig.js",
+    "prebuild": "node update-slugs.js",
     "build": "npm run clean && cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "clean": "npm run backup && rimraf build",
     "eject": "react-scripts eject",
@@ -60,15 +60,7 @@
     ],
     "crawl": true,
     "include": [
-      "/",
-      "/lokal",
-      "/nasional",
-      "/internasional",
-      "/teknologi",
-      "/lifestyle",
-      "/sports",
-      "/pifabiz",
-      "/politik"
+      "/"
     ],
     "minifyHtml": {
       "collapseWhitespace": true,
