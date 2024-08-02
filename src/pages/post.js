@@ -87,7 +87,7 @@ const PostPage = () => {
 
   return (
     <Fragment>
-      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} thumbSrc={pageInfo.thumbnail} />
+      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} />
       <PageLayout pageid={id}>
         <PostdetSection>
           <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)" }} alt={postDetailData.thumnail_berita} src={`https://pifa.co.id/img_berita/${postDetailData.img_berita}`} />
