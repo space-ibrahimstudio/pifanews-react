@@ -41,8 +41,8 @@ const ImageCard = ({ alt, src }) => {
 
   return (
     <Fragment>
-      {!isLoaded && blurDataUrl && <img id={compid} alt={`Foto: ${alt} | Pifa Net`} loading="lazy" src={blurDataUrl} style={{ ...imgcss, filter: "blur(10px)", transition: "opacity 0.5s" }} />}
-      <img id={compid} alt={`Foto: ${alt} | Pifa Net`} loading="lazy" src={src} style={{ ...imgcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
+      {!isLoaded && blurDataUrl && <img id={compid} alt={`Foto: ${alt} | Pifa Net`} src={blurDataUrl} style={{ ...imgcss, filter: "blur(10px)", transition: "opacity 0.5s" }} />}
+      <img id={compid} alt={`Foto: ${alt} | Pifa Net`} src={src} style={{ ...imgcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
     </Fragment>
   );
 };
