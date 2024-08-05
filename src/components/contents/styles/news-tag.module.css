@@ -4,6 +4,7 @@
 }
 
 .cardLabel {
+  z-index: 1;
   border-radius: 9999px;
   background-color: var(--color-primary);
   overflow: hidden;

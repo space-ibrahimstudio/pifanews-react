@@ -1,4 +1,5 @@
 .cardImage {
+  position: relative;
   align-self: stretch;
   border-radius: var(--pixel-10);
   height: var(--pixel-200);
@@ -23,6 +24,7 @@
   font-family: inherit;
   display: -webkit-inline-box;
   text-overflow: ellipsis;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
@@ -43,6 +45,7 @@
   color: var(--color-secondary);
   display: -webkit-inline-box;
   text-overflow: ellipsis;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }

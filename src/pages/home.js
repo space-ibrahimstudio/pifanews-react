@@ -88,7 +88,7 @@ const HomePage = () => {
     <Fragment>
       <SEO title="Beranda" route="/" />
       <PageLayout pageid={id}>
-        <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
+        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={tags} />
         <HeroSection>
           <News3Grid id={id} posts={trendingPostData} />
@@ -96,23 +96,23 @@ const HomePage = () => {
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3, 10)} />
           </Aside>
         </HeroSection>
-        <NewsSliderSection title="Berita" prior="Infografis" content={graphicPosts} renderContent={renderInfographic} noSource />
-        <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
-        <NewsHscrollSection title="Berita" prior="Terbaru">
+        <NewsSliderSection noSource title="Berita" scope="Infografis" content={graphicPosts} renderContent={renderInfographic} />
+        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        <NewsHscrollSection scope="Terbaru">
           {latestPostData.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
-        <NewsSliderSection title="Berita" prior="Kabar Daerah" content={localCatData} renderContent={renderLocalCat} />
-        <NewsSliderSection content={ads} renderContent={renderAds} noHead contentStyle={{ minWidth: "100%" }} />
-        <NewsHscrollSection title="Berita" prior="Populer">
+        <NewsSliderSection title="Berita" scope="Kabar Daerah" content={localCatData} renderContent={renderLocalCat} />
+        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        <NewsHscrollSection scope="Populer">
           {popularPostData.slice(0, 3).map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
         <Fragment>
           {combinedSections.map((section, index) => (
-            <Fragment key={index}>{section.type === "ad" ? <NewsSliderSection content={section.data.content} renderContent={section.data.renderContent} noHead contentStyle={section.data.style} /> : <NewsSection prior={section.data.nama_kategori_berita} catId={section.data.id} slug={section.data.slug} />}</Fragment>
+            <Fragment key={index}>{section.type === "ad" ? <NewsSliderSection noHead content={section.data.content} renderContent={section.data.renderContent} contentStyle={section.data.style} /> : <NewsSection scope={section.data.nama_kategori_berita} catId={section.data.id} slug={section.data.slug} />}</Fragment>
           ))}
         </Fragment>
       </PageLayout>

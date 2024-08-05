@@ -7,59 +7,54 @@ import { Input } from "@ibrahimstudio/input";
 import { SourceButton } from "../user-inputs/buttons";
 import { NewsSummaryCard, NewsFeedCard } from "./cards";
 import { LoadingContent } from "./loader";
-import styles from "./styles/news-group.module.css";
-import summary from "./styles/news-summary-group.module.css";
-import feed from "./styles/feeds-group.module.css";
+import newcss from "./styles/news-group.module.css";
+import sumcss from "./styles/news-summary-group.module.css";
+import feecss from "./styles/feeds-group.module.css";
 
-const NewsGroup = ({ id, isPortrait, title, scope, posts }) => {
+const NewsGroup = ({ id, isPortrait = false, title, posts = [] }) => {
   const navigate = useNavigate();
-  const { toPathname } = useContent();
-  const compid = title && scope ? `${id}-news-group-${toPathname(title)}-${toPathname(scope)}` : `${id}-news-group`;
+  const compid = `${id}-news-group`;
 
   return (
-    <section id={compid} className={`${styles.newsGroup} ${isPortrait ? "" : styles.landscape}`}>
-      <header className={styles.groupHead}>
-        <div className={styles.groupHeadwrap}>
-          <div className={styles.groupTitlewrap}>
-            <h1 className={styles.groupTitle}>
-              <span>{`${title} di `}</span>
-              <span className={styles.textHint}>{scope}</span>
-            </h1>
+    <section id={compid} className={`${newcss.newsGroup} ${isPortrait ? "" : newcss.landscape}`}>
+      <header className={newcss.groupHead}>
+        <div className={newcss.groupHeadwrap}>
+          <div className={newcss.groupTitlewrap}>
+            <h1 className={newcss.groupTitle}>{title}</h1>
           </div>
         </div>
       </header>
-      <div className={`${styles.groupBodyVscroll} ${isPortrait ? styles.portrait : styles.landscape}`}>
-        <div className={`${styles.groupBody} ${isPortrait ? styles.portrait : styles.landscape}`}>
+      <section className={`${newcss.groupBodyVscroll} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
+        <div className={`${newcss.groupBody} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </div>
-      </div>
+      </section>
     </section>
   );
 };
 
-export const NewsSummaryGroup = ({ id, style, variant, isPortrait, title, posts }) => {
+export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title, posts = [] }) => {
   const navigate = useNavigate();
-  const { toTitleCase, toPathname } = useContent();
-  const compid = title ? `${id}-summary-group-${toPathname(title)}` : `${id}-summary-group`;
-  const grouptitle = title ? toTitleCase(title) : "";
-  const groupto = title ? `/${toPathname(title)}` : "/";
+  const { toPathname } = useContent();
+  const compid = (title && `${id}-summary-group-${toPathname(title)}`) || `${id}-summary-group`;
+  const groupto = (title && `/${toPathname(title)}`) || "/";
 
   return (
-    <section id={compid} className={`${summary.newsSummaryGroup} ${isPortrait ? "" : summary.landscape} ${variant === "primary" ? summary.primary : ""}`} style={style}>
-      <header className={summary.groupHead}>
-        <div className={summary.groupHeadwrap}>
-          <div className={summary.groupTitlewrap}>
-            <h1 className={summary.groupTitle}>{grouptitle}</h1>
+    <section id={compid} className={`${sumcss.newsSummaryGroup} ${isPortrait ? "" : sumcss.landscape} ${variant === "primary" ? sumcss.primary : ""}`} style={style}>
+      <header className={sumcss.groupHead}>
+        <div className={sumcss.groupHeadwrap}>
+          <div className={sumcss.groupTitlewrap}>
+            <h1 className={sumcss.groupTitle}>{title}</h1>
           </div>
           <SourceButton id={compid} to={groupto} />
         </div>
       </header>
-      <div className={`${summary.groupBodyVscroll} ${isPortrait ? summary.portrait : summary.landscape}`}>
-        <div className={`${summary.groupBody} ${isPortrait ? summary.portrait : summary.landscape}`}>
+      <div className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+        <div className={`${sumcss.groupBody} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </div>
       </div>
@@ -96,11 +91,7 @@ export const FeedsGroup = ({ id, category, filter = "popular" }) => {
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "categorynew");
-      if (postsdata && postsdata.length > 0) {
-        setPosts(postsdata);
-      } else {
-        setPosts([]);
-      }
+      setPosts(postsdata && postsdata.length > 0 ? postsdata : []);
     } catch (error) {
       console.error("error:", error);
     } finally {
@@ -132,16 +123,16 @@ export const FeedsGroup = ({ id, category, filter = "popular" }) => {
   }, []);
 
   return (
-    <section id={compid} className={feed.feedsGroup}>
-      <header className={feed.feedsHead}>
-        <div className={feed.feedsTitlewrap}>
-          <h1 className={feed.feedsTitle}>Feeds</h1>
+    <section id={compid} className={feecss.feedsGroup}>
+      <header className={feecss.feedsHead}>
+        <div className={feecss.feedsTitlewrap}>
+          <h1 className={feecss.feedsTitle}>Feeds</h1>
         </div>
         <Input id={`${compid}-switch-filter`} variant="select" isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
       </header>
-      <div ref={ref} className={feed.feedsBody}>
+      <div ref={ref} className={feecss.feedsBody}>
         {posts.map((post, index) => (
-          <NewsFeedCard key={index} id={`${compid}-${index}`} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`https://pifa.co.id/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+          <NewsFeedCard key={index} id={`${compid}-${index}`} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
         ))}
         {loading && <LoadingContent />}
       </div>

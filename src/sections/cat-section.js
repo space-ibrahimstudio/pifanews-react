@@ -1,5 +1,5 @@
-import React from "react";
-import { SectionHead } from "../components/contents/markers";
+import React, { Fragment } from "react";
+import { SectionHead, TextHint } from "../components/contents/markers";
 import { CatCard } from "../components/contents/cards";
 import styles from "./styles/cat-section.module.css";
 
@@ -9,7 +9,8 @@ export const CatSection = ({ id, cats }) => {
 
   return (
     <section id={compid} className={styles.newsSection}>
-      <SectionHead id={compid} title="Kategori Berita" prior="Kabar Daerah" noSource={true} />
+      {/* prettier-ignore */}
+      <SectionHead id={compid} noSource title={<Fragment>{`Kategori Berita `}<TextHint>Kabar Daerah</TextHint></Fragment>} />
       <div className={styles.sectionBody}>
         {slicedcats.map((category, index) => (
           <CatCard id={compid} key={index} catname={category.name} image={category.image} />

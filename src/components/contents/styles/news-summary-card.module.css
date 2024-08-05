@@ -12,6 +12,7 @@
   align-self: stretch;
   font-weight: 600;
   display: -webkit-inline-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
@@ -73,6 +74,7 @@
 }
 
 .cardLabel {
+  z-index: 1;
   border-radius: 0 var(--pixel-5) 0 0;
   background-color: var(--color-primary);
   overflow: hidden;
@@ -93,6 +95,7 @@
 }
 
 .cardImage {
+  position: relative;
   border-radius: var(--pixel-5);
   height: var(--pixel-100);
   flex-shrink: 0;

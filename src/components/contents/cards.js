@@ -2,113 +2,93 @@ import React from "react";
 import { useContent } from "@ibrahimstudio/react";
 import { NewsTag } from "./markers";
 import { Image } from "./image";
-import styles from "./styles/news-card.module.css";
-import cat from "./styles/cat-card.module.css";
-import display from "./styles/news-display-card.module.css";
-import summary from "./styles/news-summary-card.module.css";
-import feed from "./styles/news-feed-card.module.css";
-import graph from "./styles/infographic-card.module.css";
+import newcss from "./styles/news-card.module.css";
+import catcss from "./styles/cat-card.module.css";
+import discss from "./styles/news-display-card.module.css";
+import sumcss from "./styles/news-summary-card.module.css";
+import feecss from "./styles/news-feed-card.module.css";
+import gracss from "./styles/infographic-card.module.css";
 
-const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
-  const { toTitleCase, toPathname, stripContent } = useContent();
-  const compid = title && tag ? `${id}-news-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-news-card`;
-  const cardtitle = title ? toTitleCase(title) : "";
-  const carddesc = short ? stripContent(short) : "";
-  const cardloc = loc ? toTitleCase(loc) : "";
-  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
+const imgURL = process.env.REACT_APP_IMAGE_URL;
 
-  return (
-    <section id={compid} className={styles.newsCard} onClick={onClick}>
-      <div className={styles.cardImage} style={cardstyle}>
-        <NewsTag id={compid} name={tag} />
-      </div>
-      <div className={styles.cardContent}>
-        <div className={styles.cardHead}>
-          <h1 className={styles.cardTitle}>{cardtitle}</h1>
-          <p className={styles.cardShort}>{carddesc}</p>
-        </div>
-        <div className={styles.cardInfo}>
-          <div className={styles.cardLocWrap}>
-            <h6 className={styles.cardLoc}>{cardloc}</h6>
-          </div>
-          <h6 className={styles.cardLoc}>{`| ${date}`}</h6>
-        </div>
-      </div>
-    </section>
-  );
+const ImageCard = ({ alt, src }) => {
+  const { toPathname } = useContent();
+  const compid = (alt && `pifa-image-${toPathname(alt)}`) || "pifa-image";
+  const imgsrc = src === "" ? "/img/fallback.jpg" : `${imgURL}/${src}`;
+  const imgcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
+  return <img id={compid} alt={`Foto: ${alt} | Pifa Net`} loading="lazy" src={imgsrc} style={imgcss} />;
 };
 
 export const CatCard = ({ id, catname, image, onClick }) => {
-  const { toTitleCase, toPathname } = useContent();
-  const compid = catname ? `${id}-category-card-${toPathname(catname)}` : `${id}-category-card`;
-  const cardtitle = catname ? toTitleCase(catname) : "";
-  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
+  const { toPathname } = useContent();
+  const compid = (catname && `${id}-category-card-${toPathname(catname)}`) || `${id}-category-card`;
+  const cardstyle = { backgroundImage: (image && (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)")) || "url(/img/fallback.jpg)" };
 
   return (
-    <section id={compid} className={cat.catCard} style={cardstyle} onClick={onClick}>
-      <h1 className={cat.cardTitle}>{cardtitle}</h1>
+    <section id={compid} className={catcss.catCard} style={cardstyle} onClick={onClick}>
+      <h1 className={catcss.cardTitle}>{catname}</h1>
     </section>
   );
 };
 
 export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
-  const compid = title && tag ? `${id}-display-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-display-card`;
-  const cardtitle = title ? toTitleCase(title) : "";
-  const carddesc = short ? stripContent(short) : "";
-  const cardloc = loc ? toTitleCase(loc) : "";
-  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)", alignSelf: align ? align : "unset", height: height ? height : "unset", flex: flex ? flex : "unset" };
+  const compid = (title && tag && `${id}-display-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-display-card`;
+  const carddesc = (short && stripContent(short)) || "No description";
+  const cardloc = (loc && toTitleCase(loc)) || "N/A";
+  const cardstyle = { alignSelf: align ? align : "unset", height: height ? height : "unset", flex: flex ? flex : "unset" };
 
   return (
-    <section id={compid} className={display.newsDisplayCard} style={cardstyle} onClick={onClick}>
-      <div className={display.cardContent}>
+    <section id={compid} className={discss.newsDisplayCard} style={cardstyle} onClick={onClick}>
+      <section className={discss.cardContent}>
         <NewsTag id={compid} name={tag} />
-        <div className={display.cardHead}>
-          <h1 className={display.cardTitle}>{cardtitle}</h1>
-          <p className={display.cardShort}>{carddesc}</p>
-        </div>
-        <div className={display.cardInfo}>
-          <div className={display.cardLocWrap}>
-            <h6 className={display.cardLoc}>{cardloc}</h6>
+        <header className={discss.cardHead}>
+          <h1 className={discss.cardTitle}>{title}</h1>
+          <p className={discss.cardShort}>{carddesc}</p>
+        </header>
+        <div className={discss.cardInfo}>
+          <div className={discss.cardLocWrap}>
+            <h6 className={discss.cardLoc}>{cardloc}</h6>
           </div>
-          <h6 className={display.cardLoc}>{`| ${date}`}</h6>
+          <h6 className={discss.cardLoc}>{`| ${date}`}</h6>
         </div>
-      </div>
+      </section>
+      <ImageCard alt={title} src={image} />
     </section>
   );
 };
 
 export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname } = useContent();
-  const compid = title && tag ? `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-summary-card`;
-  const cardtitle = title ? toTitleCase(title) : "";
-  const cardloc = loc ? toTitleCase(loc) : "";
-  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
+  const compid = (title && tag && `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-summary-card`;
+  const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
-    <section id={compid} className={`${summary.newsSummaryCard} ${isPortrait ? summary.portrait : summary.landscape}`} onClick={onClick}>
+    <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`} onClick={onClick}>
       {isPortrait && (
-        <div className={`${summary.cardImage} ${summary.portrait}`} style={cardstyle}>
-          <div className={summary.cardLabel}>
-            <p className={summary.cardLabelText}>{tag}</p>
-          </div>
-        </div>
+        <section className={`${sumcss.cardImage} ${sumcss.portrait}`}>
+          <label className={sumcss.cardLabel}>
+            <p className={sumcss.cardLabelText}>{tag}</p>
+          </label>
+          <ImageCard alt={title} src={image} />
+        </section>
       )}
-      <div className={`${summary.cardHead} ${isPortrait ? summary.portrait : summary.landscape}`}>
-        <h1 className={summary.cardTitle}>{cardtitle}</h1>
-        <div className={summary.cardInfo}>
-          <div className={summary.cardLocWrap}>
-            <h6 className={summary.cardLoc}>{cardloc}</h6>
+      <header className={`${sumcss.cardHead} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+        <h1 className={sumcss.cardTitle}>{title}</h1>
+        <div className={sumcss.cardInfo}>
+          <div className={sumcss.cardLocWrap}>
+            <h6 className={sumcss.cardLoc}>{cardloc}</h6>
           </div>
-          <h6 className={summary.cardLoc}>{`| ${date}`}</h6>
+          <h6 className={sumcss.cardLoc}>{`| ${date}`}</h6>
         </div>
-      </div>
+      </header>
       {!isPortrait && (
-        <div className={`${summary.cardImage} ${summary.landscape}`} style={cardstyle}>
-          <div className={summary.cardLabel}>
-            <div className={summary.cardLabelText}>{tag}</div>
-          </div>
-        </div>
+        <section className={`${sumcss.cardImage} ${sumcss.landscape}`}>
+          <label className={sumcss.cardLabel}>
+            <div className={sumcss.cardLabelText}>{tag}</div>
+          </label>
+          <ImageCard alt={title} src={image} />
+        </section>
       )}
     </section>
   );
@@ -116,49 +96,75 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
 
 export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
-  const compid = title && tag ? `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}` : `${id}-feed-card`;
-  const cardtitle = title ? toTitleCase(title) : "";
-  const carddesc = short ? stripContent(short) : "";
-  const cardloc = loc ? toTitleCase(loc) : "";
-  const cardstyle = { backgroundImage: image ? (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)") : "url(/img/fallback.jpg)" };
+  const compid = (title && tag && `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-feed-card`;
+  const carddesc = (short && stripContent(short)) || "No description";
+  const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
-    <section id={compid} className={feed.newsFeedCard} onClick={onClick}>
-      <div className={feed.cardContent}>
-        <div className={feed.cardHead}>
-          <h1 className={feed.cardTitle}>{cardtitle}</h1>
-          <p className={feed.cardShort}>{carddesc}</p>
-        </div>
-        <div className={feed.cardInfo}>
-          <div className={feed.cardLocWrap}>
-            <h6 className={feed.cardLoc}>{cardloc}</h6>
+    <section id={compid} className={feecss.newsFeedCard} onClick={onClick}>
+      <section className={feecss.cardContent}>
+        <header className={feecss.cardHead}>
+          <h1 className={feecss.cardTitle}>{title}</h1>
+          <p className={feecss.cardShort}>{carddesc}</p>
+        </header>
+        <div className={feecss.cardInfo}>
+          <div className={feecss.cardLocWrap}>
+            <h6 className={feecss.cardLoc}>{cardloc}</h6>
           </div>
-          <h6 className={feed.cardLoc}>{`| ${date}`}</h6>
+          <h6 className={feecss.cardLoc}>{`| ${date}`}</h6>
         </div>
-      </div>
-      <div className={feed.cardImage} style={cardstyle}>
-        <div className={feed.cardLabel}>
-          <p className={feed.cardLabelText}>{tag}</p>
-        </div>
-      </div>
+      </section>
+      <section className={feecss.cardImage}>
+        <label className={feecss.cardLabel}>
+          <p className={feecss.cardLabelText}>{tag}</p>
+        </label>
+        <ImageCard alt={title} src={image} />
+      </section>
     </section>
   );
 };
 
 export const InfographicCard = ({ id, title, image, count = "0", status, onClick }) => {
-  const { toTitleCase, toPathname } = useContent();
-  const compid = title ? `${id}-infographic-card-${toPathname(title)}` : `${id}-infographic-card`;
-  const cardtitle = title ? toTitleCase(title) : "";
-  const cardimage = image ? image : "/img/fallback.jpg";
+  const { toPathname } = useContent();
+  const compid = (title && `${id}-infographic-card-${toPathname(title)}`) || `${id}-infographic-card`;
+  const cardimage = (image && image) || "/img/fallback.jpg";
 
   return (
-    <section id={compid} className={graph.infographicCard} onClick={onClick}>
-      <Image className={graph.cardImageIcon} alt={cardtitle} src={cardimage} />
-      <div className={graph.cardContent}>
-        {status && <span className={graph.cardLabel}>{status}</span>}
-        <h1 className={graph.cardTitle}>{cardtitle}</h1>
-        <p className={graph.cardInfo}>{`${count} Konten`}</p>
-      </div>
+    <section id={compid} className={gracss.infographicCard} onClick={onClick}>
+      <Image className={gracss.cardImageIcon} alt={title} src={cardimage} />
+      <header className={gracss.cardContent}>
+        {status && <span className={gracss.cardLabel}>{status}</span>}
+        <h1 className={gracss.cardTitle}>{title}</h1>
+        <p className={gracss.cardInfo}>{`${count} Konten`}</p>
+      </header>
+    </section>
+  );
+};
+
+const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
+  const { toTitleCase, toPathname, stripContent } = useContent();
+  const compid = (title && tag && `${id}-news-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-news-card`;
+  const carddesc = (short && stripContent(short)) || "No description";
+  const cardloc = (loc && toTitleCase(loc)) || "N/A";
+
+  return (
+    <section id={compid} className={newcss.newsCard} onClick={onClick}>
+      <section className={newcss.cardImage}>
+        <NewsTag id={compid} name={tag} />
+        <ImageCard alt={title} src={image} />
+      </section>
+      <section className={newcss.cardContent}>
+        <header className={newcss.cardHead}>
+          <h1 className={newcss.cardTitle}>{title}</h1>
+          <p className={newcss.cardShort}>{carddesc}</p>
+        </header>
+        <div className={newcss.cardInfo}>
+          <div className={newcss.cardLocWrap}>
+            <h6 className={newcss.cardLoc}>{cardloc}</h6>
+          </div>
+          <h6 className={newcss.cardLoc}>{`| ${date}`}</h6>
+        </div>
+      </section>
     </section>
   );
 };

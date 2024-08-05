@@ -4,7 +4,7 @@ import styles from "./styles/loader.module.css";
 
 export const BlurUpImg = ({ className, style, alt, src }) => {
   const { toPathname } = useContent();
-  const compid = alt ? toPathname(alt) : "";
+  const compid = (alt && toPathname(alt)) || "";
   const [loaded, setLoaded] = useState(false);
   const [blurredSrc, setBlurredSrc] = useState("");
   const [actualSrc, setActualSrc] = useState("");
