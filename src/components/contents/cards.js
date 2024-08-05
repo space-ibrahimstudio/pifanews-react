@@ -1,7 +1,6 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useContent } from "@ibrahimstudio/react";
 import { NewsTag } from "./markers";
-import { Image } from "./image";
 import newcss from "./styles/news-card.module.css";
 import catcss from "./styles/cat-card.module.css";
 import discss from "./styles/news-display-card.module.css";
@@ -14,9 +13,38 @@ const imgURL = process.env.REACT_APP_IMAGE_URL;
 const ImageCard = ({ alt, src }) => {
   const { toPathname } = useContent();
   const compid = (alt && `pifa-image-${toPathname(alt)}`) || "pifa-image";
-  const imgsrc = src === "" ? "/img/fallback.jpg" : `${imgURL}/${src}`;
+  // const imgsrc = src === "" ? "/img/fallback.jpg" : `${imgURL}/${src}`;
   const imgcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
-  return <img id={compid} alt={`Foto: ${alt} | Pifa Net`} loading="lazy" src={imgsrc} style={imgcss} />;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [blurDataUrl, setBlurDataUrl] = useState(null);
+
+  const createBlurredImage = (imgSrc) => {
+    const img = new Image();
+    img.src = imgSrc;
+    img.crossOrigin = "anonymous";
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const scale = 0.1;
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      setBlurDataUrl(canvas.toDataURL());
+      console.log("blurred url:", canvas.toDataURL());
+    };
+  };
+
+  useEffect(() => {
+    createBlurredImage(`${imgURL}/${src}`);
+  }, [src]);
+
+  return (
+    <Fragment>
+      {!isLoaded && blurDataUrl && <img id={compid} alt={`Foto: ${alt} | Pifa Net`} loading="lazy" src={blurDataUrl} style={{ ...imgcss, filter: "blur(10px)", transition: "opacity 0.5s" }} />}
+      <img id={compid} alt={`Foto: ${alt} | Pifa Net`} loading="lazy" src={src} style={{ ...imgcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
+    </Fragment>
+  );
 };
 
 export const CatCard = ({ id, catname, image, onClick }) => {
@@ -131,7 +159,7 @@ export const InfographicCard = ({ id, title, image, count = "0", status, onClick
 
   return (
     <section id={compid} className={gracss.infographicCard} onClick={onClick}>
-      <Image className={gracss.cardImageIcon} alt={title} src={cardimage} />
+      <img className={gracss.cardImageIcon} alt={title} src={cardimage} />
       <header className={gracss.cardContent}>
         {status && <span className={gracss.cardLabel}>{status}</span>}
         <h1 className={gracss.cardTitle}>{title}</h1>
