@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
 import { useWindow } from "@ibrahimstudio/react";
@@ -9,9 +9,12 @@ import { TabButton, TabButtonGen } from "../user-inputs/buttons";
 import styles from "./styles/navbar.module.css";
 
 export const Navbar = ({ id }) => {
+  const ref = useRef(null);
   const { width } = useWindow();
   const { categoryData } = useFetch();
   const compid = `${id}-top-navigation`;
+  const [leftShadow, setLeftShadow] = useState(false);
+  const [rightShadow, setRightShadow] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -30,6 +33,20 @@ export const Navbar = ({ id }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => {
+      const { scrollWidth = 0, scrollLeft = 0, offsetWidth = 0 } = ref.current || {};
+      setLeftShadow(scrollLeft > 0);
+      setRightShadow(scrollLeft + offsetWidth < scrollWidth);
+    };
+    onScroll();
+    const node = ref.current;
+    node.addEventListener("scroll", onScroll);
+    return () => {
+      node.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   return (
     <header id={compid} className={`${styles.navbar} ${scrolled ? styles.scroll : ""}`}>
       <section className={styles.navTop}>
@@ -45,11 +62,13 @@ export const Navbar = ({ id }) => {
         ) : (
           <nav className={styles.navMenu}>
             <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
-            <div className={styles.navMenuHscroll}>
-              <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-slider-news-section-berita-infografis" />
-              {categoryData.map((menu, index) => (
-                <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/${menu.slug}`} text={menu.nama_kategori_berita} />
-              ))}
+            <div className={`${styles.navMenuItems} ${leftShadow ? styles.leftShadow : ""} ${rightShadow ? styles.rightShadow : ""}`}>
+              <div ref={ref} className={styles.navMenuHscroll}>
+                <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-slider-news-section-berita-infografis" />
+                {categoryData.map((menu, index) => (
+                  <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/${menu.slug}`} text={menu.nama_kategori_berita} />
+                ))}
+              </div>
             </div>
           </nav>
         )}

@@ -60,14 +60,16 @@ export const BlurUpImg = ({ className, style, alt, src }) => {
   );
 };
 
-const LoadingScreen = () => {
+export const LoadingScreen = () => {
   return (
     <section className={styles.loadingScreen}>
-      <span className={`${styles.loadingCircle} ${styles.sp1}`}>
-        <span className={`${styles.loadingCircle} ${styles.sp2}`}>
-          <span className={`${styles.loadingCircle} ${styles.sp3}`}></span>
+      <div className={styles.loadingContent}>
+        <span className={`${styles.loadingCircle} ${styles.sp1}`}>
+          <span className={`${styles.loadingCircle} ${styles.sp2}`}>
+            <span className={`${styles.loadingCircle} ${styles.sp3}`}></span>
+          </span>
         </span>
-      </span>
+      </div>
     </section>
   );
 };

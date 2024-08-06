@@ -62,7 +62,7 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title
   );
 };
 
-export const FeedsGroup = ({ id, category, filter = "popular" }) => {
+export const FeedsGroup = ({ id, category }) => {
   const navigate = useNavigate();
   const ref = useRef(null);
   const { apiRead } = useApi();
@@ -70,7 +70,7 @@ export const FeedsGroup = ({ id, category, filter = "popular" }) => {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(10);
-  const [postsFilter, setPostsFilter] = useState(filter);
+  const [postsFilter, setPostsFilter] = useState("update");
 
   const compid = `${id}-feeds-group`;
 
@@ -102,7 +102,7 @@ export const FeedsGroup = ({ id, category, filter = "popular" }) => {
   const handleScroll = () => {
     if (ref.current) {
       const { scrollTop, scrollHeight, clientHeight } = ref.current;
-      if (scrollTop + clientHeight >= scrollHeight) {
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
         setLimit((prevLimit) => prevLimit + 10);
       }
     }
@@ -116,8 +116,10 @@ export const FeedsGroup = ({ id, category, filter = "popular" }) => {
     const feedsBodyEl = ref.current;
     if (feedsBodyEl) {
       feedsBodyEl.addEventListener("scroll", handleScroll);
+      feedsBodyEl.addEventListener("touchmove", handleScroll);
       return () => {
         feedsBodyEl.removeEventListener("scroll", handleScroll);
+        feedsBodyEl.removeEventListener("touchmove", handleScroll);
       };
     }
   }, []);

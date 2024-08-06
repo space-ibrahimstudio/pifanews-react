@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { useContent, useWindow } from "@ibrahimstudio/react";
 import { Link } from "react-router-dom";
+import { Image } from "../contents/image";
 import { ImageCard } from "../contents/cards";
 import styles from "./styles/postdet-article.module.css";
 
@@ -41,10 +42,8 @@ export const PostdetArticle = ({ id, title, loc, date, thumbnail, image, content
 
   return (
     <section style={{ flex: "1", overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: "var(--pixel-10)" }}>
-      <div style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }}>
-        <ImageCard alt={thumbnail} src={image} />
-      </div>
-      <i style={{ position: "relative", color: "var(--color-secondary)", opacity: "0.5", fontFamily: "var(--font-inter)", fontSize: "var(--font-tiny)", fontWeight: "500", textAlign: "left", alignSelf: "stretch" }}>{thumbnail}</i>
+      <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={thumbnail} src={`https://pifa.co.id/img_berita/${image}`} />
+      <i style={{ position: "relative", color: "var(--color-secondary)", opacity: "0.5", fontFamily: "var(--font-inter)", fontSize: "var(--font-tiny)", fontWeight: "500", textAlign: "left", alignSelf: "stretch", marginLeft: "var(--pixel-20)" }}>{thumbnail}</i>
       <article id={compid} className={styles.postdetArticle}>
         <BreadCrumbs paths={paths} />
         <header className={styles.postdetHead}>

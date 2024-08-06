@@ -13,6 +13,7 @@
 
 .navMenu,
 .navMenuHscroll,
+.navMenuItems,
 .navOption,
 .navTop {
   display: flex;
@@ -29,13 +30,59 @@
 }
 
 .navMenu,
+.navMenuItems,
 .navMenuHscroll {
   flex: 1;
   justify-content: flex-start;
 }
 
+.navMenuItems {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.navMenuItems::before,
+.navMenuItems::after {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  filter: blur(2px);
+  width: var(--pixel-15);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.navMenuItems.leftShadow::before,
+.navMenuItems.rightShadow::after {
+  opacity: 1;
+}
+
+.navMenuItems::before {
+  left: 0;
+  margin-block: var(--pixel-5);
+  transform: translateX(var(--pixel-min-10));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+}
+
+.navMenuItems::after {
+  right: 0;
+  margin-block: var(--pixel-5);
+  transform: translateX(var(--pixel-10));
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+}
+
+.navMenu,
+.navMenuHscroll {
+  flex: 1;
+}
+
 .navMenuHscroll {
   overflow-x: auto;
+  position: relative;
 }
 
 .navMenuHscroll::-webkit-scrollbar {

@@ -22,7 +22,7 @@ export const NewsSection = ({ id, catId, scope, slug }) => {
     setLoading(true);
     const formData = new FormData();
     formData.append("idcat", catId);
-    formData.append("limit", "11");
+    formData.append("limit", "6");
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "categorynew");
@@ -38,7 +38,7 @@ export const NewsSection = ({ id, catId, scope, slug }) => {
     setLoading(true);
     const formData = new FormData();
     formData.append("idcat", catId);
-    formData.append("limit", "10");
+    formData.append("limit", "5");
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "cattrendingnew");
@@ -62,7 +62,7 @@ export const NewsSection = ({ id, catId, scope, slug }) => {
         <Container300>{latestPostData.length > 0 && <NewsDisplayCard id={`${compid}-${latestPostData[0].id}`} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={latestPostData[0].img_berita} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" onClick={() => navigate(`/berita/${latestPostData[0].slug}`)} />}</Container300>
         <Container300>
           {/* prettier-ignore */}
-          <NewsGroup id={`${compid}-newest`} isPortrait={width < 464 ? true : false} title={<Fragment>{`Terbaru di `}<TextHint>{scope}</TextHint></Fragment>} posts={latestPostData.slice(1, 10)} />
+          <NewsGroup id={`${compid}-newest`} isPortrait={width < 464 ? true : false} title={<Fragment>{`Terbaru di `}<TextHint>{scope}</TextHint></Fragment>} posts={latestPostData.slice(1)} />
         </Container300>
         <Container300>
           {/* prettier-ignore */}

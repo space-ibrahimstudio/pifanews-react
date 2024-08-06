@@ -74,6 +74,10 @@
   font-weight: 500;
 }
 
+.postdetBody p {
+  margin-bottom: var(--pixel-15);
+}
+
 .postdetBody ul,
 .postdetBody ol {
   margin-left: var(--pixel-20);
