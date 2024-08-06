@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { useContent, useWindow } from "@ibrahimstudio/react";
 import { Link } from "react-router-dom";
+import { ImageCard } from "../contents/cards";
 import styles from "./styles/postdet-article.module.css";
 
 export const BreadCrumbs = ({ paths = [] }) => {
@@ -32,20 +33,27 @@ export const PostdetAside = ({ children }) => {
   return <div style={asidestyle}>{children}</div>;
 };
 
-export const PostdetArticle = ({ id, title, loc, date, content, paths = [] }) => {
+export const PostdetArticle = ({ id, title, loc, date, thumbnail, image, content, paths = [] }) => {
+  const { width } = useWindow();
   const { toTitleCase } = useContent();
   const compid = `${id}-article-board`;
   const postloc = loc ? toTitleCase(loc) : "";
 
   return (
-    <article id={compid} className={styles.postdetArticle}>
-      <BreadCrumbs paths={paths} />
-      <header className={styles.postdetHead}>
-        <h1 className={styles.postdetTitle}>{title}</h1>
-        <span className={styles.postdetDetail}>{`${postloc} | ${date}`}</span>
-      </header>
-      <div className={styles.postdetBody} dangerouslySetInnerHTML={{ __html: content }}></div>
-    </article>
+    <section style={{ flex: "1", overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: "var(--pixel-10)" }}>
+      <div style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }}>
+        <ImageCard alt={thumbnail} src={image} />
+      </div>
+      <i style={{ position: "relative", color: "var(--color-secondary)", opacity: "0.5", fontFamily: "var(--font-inter)", fontSize: "var(--font-tiny)", fontWeight: "500", textAlign: "left", alignSelf: "stretch" }}>{thumbnail}</i>
+      <article id={compid} className={styles.postdetArticle}>
+        <BreadCrumbs paths={paths} />
+        <header className={styles.postdetHead}>
+          <h1 className={styles.postdetTitle}>{title}</h1>
+          <span className={styles.postdetDetail}>{`${postloc} | ${date}`}</span>
+        </header>
+        <div className={styles.postdetBody} dangerouslySetInnerHTML={{ __html: content }}></div>
+      </article>
+    </section>
   );
 };
 

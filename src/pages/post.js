@@ -90,9 +90,8 @@ const PostPage = () => {
       <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} />
       <PageLayout pageid={id}>
         <PostdetSection>
-          <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)" }} alt={postDetailData.thumnail_berita} src={`https://pifa.co.id/img_berita/${postDetailData.img_berita}`} />
           <PostdetContent>
-            <PostdetArticle id={id} paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
+            <PostdetArticle id={id} paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} thumbnail={postDetailData.thumnail_berita} image={postDetailData.img_berita && postDetailData.img_berita} content={postDetailData.isi_berita} />
             <PostdetAside>
               <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" posts={trendingPostData} />
               <InlineadsSection label="" src="/img/inline-ads.webp" />
