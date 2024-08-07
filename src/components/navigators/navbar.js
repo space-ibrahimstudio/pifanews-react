@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
 import { useWindow } from "@ibrahimstudio/react";
+import { useAuth } from "../../libs/security/auth";
 import { useFetch } from "../../libs/plugins/fetch";
 import { ISHome, ISSearch } from "@ibrahimstudio/icons";
 import { Close } from "../contents/icons";
@@ -10,6 +12,8 @@ import styles from "./styles/navbar.module.css";
 
 export const Navbar = ({ id }) => {
   const ref = useRef(null);
+  const navigate = useNavigate();
+  const { isLoggedin, logout } = useAuth();
   const { width } = useWindow();
   const { categoryData } = useFetch();
   const compid = `${id}-top-navigation`;
@@ -18,6 +22,8 @@ export const Navbar = ({ id }) => {
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const handleLogout = () => logout();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,8 +58,8 @@ export const Navbar = ({ id }) => {
       <section className={styles.navTop}>
         <img className={styles.navLogoIcon} alt="" src="/png/pifa-logo.png" />
         <div className={styles.navOption}>
-          <Button id={`${compid}-advertising`} variant="line" color="var(--color-primary)" size="sm" buttonText="Beriklan Disini" />
-          <Button id={`${compid}-login`} size="sm" buttonText="Login" />
+          <Button id={`${compid}-advertising`} variant="line" color="var(--color-primary)" size="sm" buttonText={isLoggedin ? "Posting Iklan" : "Beriklan Disini"} />
+          {isLoggedin ? <Button id={`${compid}-logout`} size="sm" buttonText="Keluar" onClick={handleLogout} /> : <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => navigate("/login")} />}
         </div>
       </section>
       <section className={styles.navBottom}>

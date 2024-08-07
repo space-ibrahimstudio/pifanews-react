@@ -4,6 +4,7 @@ import { useFetch } from "./libs/plugins/fetch";
 import HomePage from "./pages/home";
 import CategoryPage from "./pages/category";
 import PostPage from "./pages/post";
+import LoginPage from "./pages/login";
 
 function App() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function App() {
         <Route key={index} path={`/${item.slug}`} element={<CategoryPage category={item.slug} />} />
       ))}
       <Route path="/berita/:slug" element={<PostPage />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }

@@ -7,6 +7,7 @@ import { ApiProvider } from "./libs/plugins/api";
 import { LoadingProvider } from "./components/contents/loader";
 import { FetchProvider } from "./libs/plugins/fetch";
 import { Document } from "./libs/plugins/document";
+import { AuthProvider } from "./libs/security/auth";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
@@ -20,9 +21,11 @@ root.render(
           <Document>
             <ApiProvider>
               <LoadingProvider>
-                <FetchProvider>
-                  <App />
-                </FetchProvider>
+                <AuthProvider>
+                  <FetchProvider>
+                    <App />
+                  </FetchProvider>
+                </AuthProvider>
               </LoadingProvider>
             </ApiProvider>
           </Document>

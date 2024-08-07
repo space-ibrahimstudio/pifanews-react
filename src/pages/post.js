@@ -10,7 +10,6 @@ import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import PostdetSection, { PostdetContent, PostdetArticle, PostdetAside } from "../components/layouts/postdet";
 import { AdBanner } from "../components/contents/image";
-import { Image } from "../components/contents/image";
 import NewsCard from "../components/contents/cards";
 import { NewsSummaryGroup } from "../components/contents/groups";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
