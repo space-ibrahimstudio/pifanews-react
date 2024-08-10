@@ -62,8 +62,8 @@ const PostPage = () => {
 
   const paths = [
     { label: "Beranda", url: "/" },
-    { label: catPostData && catPostData.nama_kategori_berita, url: catPostData && `/${catPostData.slug}` },
-    { label: pageInfo.title, url: `/${postDetailData.slug}` },
+    { label: catPostData && catPostData.nama_kategori_berita, url: catPostData && `/berita/kategori/${catPostData.slug}` },
+    { label: pageInfo.title, url: `/berita/${postDetailData.slug}` },
   ];
 
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;

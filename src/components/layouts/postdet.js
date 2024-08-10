@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import { useContent, useWindow } from "@ibrahimstudio/react";
 import { Link } from "react-router-dom";
 import { Image } from "../contents/image";
-import { ImageCard } from "../contents/cards";
 import styles from "./styles/postdet-article.module.css";
 
 export const BreadCrumbs = ({ paths = [] }) => {
