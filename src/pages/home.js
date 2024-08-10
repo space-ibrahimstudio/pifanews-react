@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useFetch } from "../libs/plugins/fetch";
-import { getTrendingTags, getInfographicPosts, getAdDatas } from "../libs/sources/local-data";
+import { getInfographicPosts, getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import { News3Grid } from "../components/layouts/grids";
@@ -21,10 +21,9 @@ const HomePage = () => {
   const { width } = useWindow();
   const { short } = useDocument();
   const navigate = useNavigate();
-  const { categoryData, localCatData, trendingPostData, latestPostData, popularPostData } = useFetch();
+  const { categoryData, localCatData, trendingPostData, latestPostData, popularPostData, trendingTagData } = useFetch();
   const id = `${short}-home`;
   const [graphicPosts, setGraphicPosts] = useState([]);
-  const [tags, setTags] = useState([]);
   const [ads, setAds] = useState([]);
 
   const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
@@ -61,18 +60,6 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const tag = await getTrendingTags();
-        setTags(tag);
-      } catch (error) {
-        console.error("error getting trending tags:", error);
-      }
-    };
-    fetchTags();
-  }, []);
-
-  useEffect(() => {
     const fetchPosts = async () => {
       try {
         const post = await getAdDatas();
@@ -89,7 +76,7 @@ const HomePage = () => {
       <SEO title="Beranda" route="/" />
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={tags} />
+        <TagsSection tags={trendingTagData} />
         <HeroSection>
           <News3Grid id={id} posts={trendingPostData} />
           <Aside>

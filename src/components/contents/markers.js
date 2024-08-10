@@ -8,6 +8,16 @@ export const TextHint = ({ children }) => {
   return <span style={{ color: "var(--color-primary)" }}>{children}</span>;
 };
 
+export const NewsCount = ({ id, value }) => {
+  const compid = `${id}-news-count}`;
+
+  return (
+    <div id={compid} className={tagcss.cardLabel}>
+      <p className={tagcss.cardLabelText}>{value}</p>
+    </div>
+  );
+};
+
 export const NewsTag = ({ id, name }) => {
   const { toPathname } = useContent();
   const compid = (name && `${id}-news-tag-${toPathname(name)}`) || `${id}-news-tag`;

@@ -35,7 +35,7 @@ const LoginPage = () => {
     }
     setLoading(true);
     try {
-      await login(inputData, "origin");
+      await login(inputData);
     } catch (error) {
       console.error("error when trying to login:", error);
     } finally {

@@ -5,6 +5,7 @@ import HomePage from "./pages/home";
 import CategoryPage from "./pages/category";
 import PostPage from "./pages/post";
 import LoginPage from "./pages/login";
+import TagPage from "./pages/tag";
 
 function App() {
   const location = useLocation();
@@ -21,6 +22,7 @@ function App() {
         <Route key={index} path={`/${item.slug}`} element={<CategoryPage category={item.slug} />} />
       ))}
       <Route path="/berita/:slug" element={<PostPage />} />
+      <Route path="/topic/:slug" element={<TagPage />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>
   );

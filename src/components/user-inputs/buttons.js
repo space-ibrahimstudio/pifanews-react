@@ -68,8 +68,7 @@ export const SourceButton = ({ id, to }) => {
 };
 
 export const TagsButton = ({ id, text, onClick }) => {
-  const { toPathname } = useContent();
-  const compid = text ? `${id}-tags-${toPathname(text)}` : `${id}-tags`;
+  const compid = `${id}-tags`;
 
   return (
     <button id={compid} className={tag.tagsButton} onClick={onClick}>

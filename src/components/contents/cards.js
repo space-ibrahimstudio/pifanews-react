@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useContent } from "@ibrahimstudio/react";
-import { NewsTag } from "./markers";
+import { useAuth } from "../../libs/security/auth";
+import { NewsTag, NewsCount } from "./markers";
 import imgcss from "./styles/image-card.module.css";
 import newcss from "./styles/news-card.module.css";
 import catcss from "./styles/cat-card.module.css";
@@ -49,7 +50,8 @@ export const CatCard = ({ id, catname, image, onClick }) => {
   );
 };
 
-export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
+export const NewsDisplayCard = ({ id, title, short, tag, count, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
+  const { isLoggedin, userData } = useAuth();
   const { toTitleCase, toPathname, stripContent } = useContent();
   const compid = (title && tag && `${id}-display-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-display-card`;
   const carddesc = (short && stripContent(short)) || "No description";
@@ -59,7 +61,10 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
   return (
     <section id={compid} className={discss.newsDisplayCard} style={cardstyle} onClick={onClick}>
       <section className={discss.cardContent}>
-        <NewsTag id={compid} name={tag} />
+        <div style={{ display: "flex", flexDirection: "row", gap: "var(--pixel-10)", alignItems: "flex-start", justifyContent: "flex-start" }}>
+          <NewsTag id={compid} name={tag} />
+          {isLoggedin && userData.level === "admin" && <NewsCount id={compid} value={count} />}
+        </div>
         <header className={discss.cardHead}>
           <h1 className={discss.cardTitle}>{title}</h1>
           <p className={discss.cardShort}>{carddesc}</p>

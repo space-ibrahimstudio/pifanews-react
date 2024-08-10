@@ -15,6 +15,7 @@ export const FetchProvider = ({ children }) => {
   const [latestPostData, setLatestPostData] = useState([]);
   const [popularPostData, setPopularPostData] = useState([]);
   const [relatedPostData, setRelatedPostData] = useState([]);
+  const [trendingTagData, setTrendingTagData] = useState([]);
 
   const fetchAdditionalData = async () => {
     const formData = new FormData();
@@ -34,6 +35,8 @@ export const FetchProvider = ({ children }) => {
       setPopularPostData(populardata && populardata.length > 0 ? populardata : []);
       const relateddata = await apiRead(formData, "main", "relatednew");
       setRelatedPostData(relateddata && relateddata.length > 0 ? relateddata : []);
+      const trendingtagdata = await apiGet("main", "viewtag");
+      setTrendingTagData(trendingtagdata && trendingtagdata.length > 0 ? trendingtagdata : []);
     } catch (error) {
       console.error("error:", error);
     } finally {
@@ -45,7 +48,7 @@ export const FetchProvider = ({ children }) => {
     fetchAdditionalData();
   }, [location.pathname]);
 
-  return <FetchContext.Provider value={{ categoryData, localCatData, trendingPostData, latestPostData, popularPostData, relatedPostData }}>{children}</FetchContext.Provider>;
+  return <FetchContext.Provider value={{ categoryData, localCatData, trendingPostData, latestPostData, popularPostData, relatedPostData, trendingTagData }}>{children}</FetchContext.Provider>;
 };
 
 export const useFetch = () => useContext(FetchContext);

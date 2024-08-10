@@ -13,7 +13,7 @@ import styles from "./styles/navbar.module.css";
 export const Navbar = ({ id }) => {
   const ref = useRef(null);
   const navigate = useNavigate();
-  const { isLoggedin, logout } = useAuth();
+  const { isLoggedin, logout, userData } = useAuth();
   const { width } = useWindow();
   const { categoryData } = useFetch();
   const compid = `${id}-top-navigation`;
@@ -58,7 +58,7 @@ export const Navbar = ({ id }) => {
       <section className={styles.navTop}>
         <img className={styles.navLogoIcon} alt="" src="/png/pifa-logo.png" />
         <div className={styles.navOption}>
-          <Button id={`${compid}-advertising`} variant="line" color="var(--color-primary)" size="sm" buttonText={isLoggedin ? "Posting Iklan" : "Beriklan Disini"} />
+          <Button id={`${compid}-action`} variant="line" color="var(--color-primary)" size="sm" buttonText={isLoggedin ? (userData.level === "admin" ? "Dashboard" : "Posting Iklan") : "Beriklan Disini"} onClick={isLoggedin ? (userData.level === "admin" ? () => alert("Dashboard coming soon!") : () => alert("Add Post coming soon!")) : () => navigate("/login")} />
           {isLoggedin ? <Button id={`${compid}-logout`} size="sm" buttonText="Keluar" onClick={handleLogout} /> : <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => navigate("/login")} />}
         </div>
       </section>

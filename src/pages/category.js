@@ -5,7 +5,7 @@ import { useDocument } from "../libs/plugins/document";
 import { useLoading } from "../components/contents/loader";
 import { useFetch } from "../libs/plugins/fetch";
 import { useApi } from "../libs/plugins/api";
-import { getTrendingTags, getAdDatas } from "../libs/sources/local-data";
+import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import Container300, { Aside } from "../components/layouts/containers";
@@ -25,11 +25,10 @@ const CategoryPage = ({ category }) => {
   const { width } = useWindow();
   const { apiRead } = useApi();
   const { setLoading } = useLoading();
-  const { categoryData } = useFetch();
+  const { categoryData, trendingTagData } = useFetch();
   const [pageInfo, setPageInfo] = useState({ id: "", title: "", desc: "", path: "", thumbnail: "" });
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
-  const [tags, setTags] = useState([]);
   const [ads, setAds] = useState([]);
 
   const id = (category && `${short}-${category}`) || `${short}-category`;
@@ -88,18 +87,6 @@ const CategoryPage = ({ category }) => {
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const tag = await getTrendingTags();
-        setTags(tag);
-      } catch (error) {
-        console.error("error getting trending tags:", error);
-      }
-    };
-    fetchTags();
-  }, []);
-
-  useEffect(() => {
     const fetchPosts = async () => {
       try {
         const post = await getAdDatas();
@@ -127,7 +114,7 @@ const CategoryPage = ({ category }) => {
       <SEO title={pageInfo.title} route={pageInfo.path} />
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={tags} />
+        <TagsSection tags={trendingTagData} />
         <HeroSection>
           {trendingPostData.length > 0 && (
             <Container300>
