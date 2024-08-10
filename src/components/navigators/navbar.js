@@ -25,6 +25,12 @@ export const Navbar = ({ id }) => {
 
   const handleLogout = () => logout();
 
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/pencarian/${query}`);
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 120) {
@@ -64,7 +70,9 @@ export const Navbar = ({ id }) => {
       </section>
       <section className={styles.navBottom}>
         {searchOpen && width <= 580 ? (
-          <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} startContent={<ISSearch />} />
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", margin: "0", flexShrink: "0", boxSizing: "border-box", flex: "1" }} onKeyDown={handleSearch}>
+            <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} startContent={<ISSearch />} />
+          </div>
         ) : (
           <nav className={styles.navMenu}>
             <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
@@ -72,14 +80,14 @@ export const Navbar = ({ id }) => {
               <div ref={ref} className={styles.navMenuHscroll}>
                 <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-slider-news-section-berita-infografis" />
                 {categoryData.map((menu, index) => (
-                  <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/${menu.slug}`} text={menu.nama_kategori_berita} />
+                  <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
                 ))}
               </div>
             </div>
           </nav>
         )}
         {width > 580 ? (
-          <div className={styles.navSearch}>
+          <div className={styles.navSearch} onKeyDown={handleSearch}>
             <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} endContent={<ISSearch />} />
           </div>
         ) : (

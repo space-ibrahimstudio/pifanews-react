@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useContent } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useApi } from "../libs/plugins/api";
 import { useFetch } from "../libs/plugins/fetch";
@@ -12,34 +13,32 @@ import { TagsSection } from "../sections/tags-section";
 import { NewsSliderSection } from "../sections/news-slider-section";
 import NewsCard from "../components/contents/cards";
 
-const TagPage = () => {
+const SearchPage = () => {
+  const { query } = useParams();
   const navigate = useNavigate();
-  const { slug } = useParams();
+  const { toPathname } = useContent();
   const { short } = useDocument();
   const { apiRead } = useApi();
   const { trendingTagData } = useFetch();
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
-  const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
-  const [tagPostData, setTagPostData] = useState([]);
+  const [searchedData, setSearchedData] = useState([]);
   const [ads, setAds] = useState([]);
 
-  const id = (slug && `${short}-${slug}`) || `${short}-tag`;
+  const id = `${short}-${toPathname(query)}`;
 
   const fetchTagPosts = async (newLimit) => {
     if (loading) return;
     setLoading(true);
     const formData = new FormData();
-    formData.append("tag", slug);
+    formData.append("search", query);
     formData.append("limit", newLimit);
     try {
-      const tagdata = await apiRead(formData, "main", "tagnew");
-      if (tagdata && tagdata.length > 0) {
-        setTagPostData(tagdata);
-        setPageInfo({ title: tagdata[0].name, desc: "", path: `/berita/tag/${tagdata[0].tag}`, thumbnail: "" });
+      const searchdata = await apiRead(formData, "main", "searchnew");
+      if (searchdata && searchdata.length > 0) {
+        setSearchedData(searchdata);
       } else {
-        setTagPostData([]);
-        setPageInfo({ title: "", desc: "", path: "", thumbnail: "" });
+        setSearchedData([]);
       }
     } catch (error) {
       console.error("error:", error);
@@ -64,21 +63,21 @@ const TagPage = () => {
 
   useEffect(() => {
     fetchTagPosts(limit);
-  }, [slug, limit]);
+  }, [query, limit]);
 
   useEffect(() => {
     setLimit(12);
-  }, [slug]);
+  }, [query]);
 
   return (
     <Fragment>
-      <SEO title={pageInfo.title} route={pageInfo.path} />
+      <SEO title={`Pencarian "${query}"`} route={`/pencarian/${query}`} />
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={trendingTagData} />
-        <NewsGridSection title="Tag" scope={pageInfo.title} setLimit={setLimit} loading={loading}>
-          {tagPostData.map((post, index) => (
-            <NewsCard id={id} key={index} title={post["berita"][0].judul_berita} short={post["berita"][0].isi_berita} tag={post["berita"][0].nama_kategori_berita} image={post["berita"][0].img_berita} loc={post["berita"][0].penulis_berita} date={post["berita"][0].tanggal_berita} onClick={() => navigate(`/berita/${post["berita"][0].slug}`)} />
+        <NewsGridSection title="Pencarian" scope={query} setLimit={setLimit} loading={loading}>
+          {searchedData.map((post, index) => (
+            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsGridSection>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
@@ -87,4 +86,4 @@ const TagPage = () => {
   );
 };
 
-export default TagPage;
+export default SearchPage;

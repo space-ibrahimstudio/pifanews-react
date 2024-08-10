@@ -40,7 +40,7 @@ async function fetchPostSlug() {
 }
 
 async function updatePackageJson(catslugs, postslugs) {
-  const updatedInclude = ["/", ...catslugs.map((item) => `/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  const updatedInclude = ["/", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
   packageJson.reactSnap.include = updatedInclude;
 
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));

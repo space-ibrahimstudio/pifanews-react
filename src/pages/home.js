@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useFetch } from "../libs/plugins/fetch";
+import { useApi } from "../libs/plugins/api";
 import { getInfographicPosts, getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
@@ -21,14 +22,35 @@ const HomePage = () => {
   const { width } = useWindow();
   const { short } = useDocument();
   const navigate = useNavigate();
-  const { categoryData, localCatData, trendingPostData, latestPostData, popularPostData, trendingTagData } = useFetch();
+  const location = useLocation();
+  const { apiRead } = useApi();
+  const { categoryData, localCatData, latestPostData, popularPostData, trendingTagData } = useFetch();
   const id = `${short}-home`;
+  const [limit, setLimit] = useState(13);
+  const [loading, setLoading] = useState(false);
+  const [trendingPostData, setTrendingPostData] = useState([]);
   const [graphicPosts, setGraphicPosts] = useState([]);
   const [ads, setAds] = useState([]);
 
   const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
   const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.img} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+
+  const fetchTrendingPostData = async (newLimit) => {
+    if (loading) return;
+    const formData = new FormData();
+    formData.append("limit", newLimit);
+    formData.append("hal", "0");
+    setLoading(true);
+    try {
+      const trendingdata = await apiRead(formData, "main", "trendingnew");
+      setTrendingPostData(trendingdata && trendingdata.length > 0 ? trendingdata : []);
+    } catch (error) {
+      console.error("error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const adSections = [
     { content: ads, renderContent: renderAds, style: { minWidth: "100%" } },
@@ -46,6 +68,14 @@ const HomePage = () => {
       adIndex++;
     }
   }
+
+  useEffect(() => {
+    fetchTrendingPostData(limit);
+  }, [location, limit]);
+
+  useEffect(() => {
+    setLimit(13);
+  }, [location]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -80,7 +110,7 @@ const HomePage = () => {
         <HeroSection>
           <News3Grid id={id} posts={trendingPostData} />
           <Aside>
-            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3, 10)} />
+            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3)} setLimit={setLimit} loading={loading} />
           </Aside>
         </HeroSection>
         <NewsSliderSection noSource title="Berita" scope="Infografis" content={graphicPosts} renderContent={renderInfographic} />

@@ -11,7 +11,7 @@ export const TagsSection = ({ id, tags }) => {
     <section id={compid} className={styles.tagsSection}>
       <div className={styles.tagsContent}>
         {tags.map((tag, index) => (
-          <TagsButton key={index} id={`${compid}-${tag.slug}`} text={tag.nama_kategori_tag} onClick={() => navigate(`/topic/${tag.slug}`)} />
+          <TagsButton key={index} id={`${compid}-${tag.slug}`} text={tag.nama_kategori_tag} onClick={() => navigate(`/berita/tag/${tag.slug}`)} />
         ))}
       </div>
     </section>

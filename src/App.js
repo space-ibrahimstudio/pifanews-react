@@ -6,6 +6,7 @@ import CategoryPage from "./pages/category";
 import PostPage from "./pages/post";
 import LoginPage from "./pages/login";
 import TagPage from "./pages/tag";
+import SearchPage from "./pages/search";
 
 function App() {
   const location = useLocation();
@@ -19,10 +20,11 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       {categoryData.map((item, index) => (
-        <Route key={index} path={`/${item.slug}`} element={<CategoryPage category={item.slug} />} />
+        <Route key={index} path={`/berita/kategori/${item.slug}`} element={<CategoryPage category={item.slug} />} />
       ))}
       <Route path="/berita/:slug" element={<PostPage />} />
-      <Route path="/topic/:slug" element={<TagPage />} />
+      <Route path="/berita/tag/:slug" element={<TagPage />} />
+      <Route path="/pencarian/:query" element={<SearchPage />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>
   );

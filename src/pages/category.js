@@ -37,7 +37,7 @@ const CategoryPage = ({ category }) => {
     if (categoryData && categoryData.length > 0) {
       const pageinfo = categoryData.filter((cat) => cat.slug === category);
       if (pageinfo && pageinfo.length > 0) {
-        setPageInfo({ id: pageinfo[0].id, title: pageinfo[0].nama_kategori_berita, desc: "", path: `/${pageinfo[0].slug}`, thumbnail: "" });
+        setPageInfo({ id: pageinfo[0].id, title: pageinfo[0].nama_kategori_berita, desc: "", path: `/berita/kategori/${pageinfo[0].slug}`, thumbnail: "" });
       } else {
         setPageInfo({ id: "", title: "", desc: "", path: "", thumbnail: "" });
       }

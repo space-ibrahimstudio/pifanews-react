@@ -11,9 +11,38 @@ import newcss from "./styles/news-group.module.css";
 import sumcss from "./styles/news-summary-group.module.css";
 import feecss from "./styles/feeds-group.module.css";
 
-const NewsGroup = ({ id, isPortrait = false, title, posts = [] }) => {
+const NewsGroup = ({ id, isPortrait = false, title, posts = [], setLimit, loading = false }) => {
   const navigate = useNavigate();
+  const ref = useRef(null);
   const compid = `${id}-news-group`;
+
+  const handleScroll = () => {
+    if (ref.current) {
+      if (isPortrait) {
+        const { scrollLeft, scrollWidth, clientWidth } = ref.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 5 && !loading) {
+          setLimit((prevLimit) => prevLimit + 5);
+        }
+      } else {
+        const { scrollTop, scrollHeight, clientHeight } = ref.current;
+        if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
+          setLimit((prevLimit) => prevLimit + 5);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const feedsBodyEl = ref.current;
+    if (feedsBodyEl) {
+      feedsBodyEl.addEventListener("scroll", handleScroll);
+      feedsBodyEl.addEventListener("touchmove", handleScroll);
+      return () => {
+        feedsBodyEl.removeEventListener("scroll", handleScroll);
+        feedsBodyEl.removeEventListener("touchmove", handleScroll);
+      };
+    }
+  }, [loading, isPortrait]);
 
   return (
     <section id={compid} className={`${newcss.newsGroup} ${isPortrait ? "" : newcss.landscape}`}>
@@ -24,22 +53,52 @@ const NewsGroup = ({ id, isPortrait = false, title, posts = [] }) => {
           </div>
         </div>
       </header>
-      <section className={`${newcss.groupBodyVscroll} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
-        <div className={`${newcss.groupBody} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
+      <section ref={isPortrait ? null : ref} className={`${newcss.groupBodyVscroll} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
+        <div ref={isPortrait ? ref : null} className={`${newcss.groupBody} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
           {posts.map((post, index) => (
             <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
+          {loading && <LoadingContent />}
         </div>
       </section>
     </section>
   );
 };
 
-export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title, posts = [] }) => {
+export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title, posts = [], setLimit, loading = false }) => {
   const navigate = useNavigate();
+  const ref = useRef(null);
   const { toPathname } = useContent();
   const compid = (title && `${id}-summary-group-${toPathname(title)}`) || `${id}-summary-group`;
   const groupto = (title && `/${toPathname(title)}`) || "/";
+
+  const handleScroll = () => {
+    if (ref.current) {
+      if (isPortrait) {
+        const { scrollLeft, scrollWidth, clientWidth } = ref.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 5 && !loading) {
+          setLimit((prevLimit) => prevLimit + 10);
+        }
+      } else {
+        const { scrollTop, scrollHeight, clientHeight } = ref.current;
+        if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
+          setLimit((prevLimit) => prevLimit + 10);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const feedsBodyEl = ref.current;
+    if (feedsBodyEl) {
+      feedsBodyEl.addEventListener("scroll", handleScroll);
+      feedsBodyEl.addEventListener("touchmove", handleScroll);
+      return () => {
+        feedsBodyEl.removeEventListener("scroll", handleScroll);
+        feedsBodyEl.removeEventListener("touchmove", handleScroll);
+      };
+    }
+  }, [loading, isPortrait]);
 
   return (
     <section id={compid} className={`${sumcss.newsSummaryGroup} ${isPortrait ? "" : sumcss.landscape} ${variant === "primary" ? sumcss.primary : ""}`} style={style}>
@@ -51,13 +110,14 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title
           <SourceButton id={compid} to={groupto} />
         </div>
       </header>
-      <div className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
-        <div className={`${sumcss.groupBody} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+      <section ref={isPortrait ? null : ref} className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+        <div ref={isPortrait ? ref : null} className={`${sumcss.groupBody} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
           {posts.map((post, index) => (
             <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
+          {loading && <LoadingContent />}
         </div>
-      </div>
+      </section>
     </section>
   );
 };
@@ -83,6 +143,7 @@ export const FeedsGroup = ({ id, category }) => {
   const switchStatus = (value) => setPostsFilter(value);
 
   const fetchLatestPosts = async (newLimit) => {
+    if (loading) return;
     const idcat = categoryData.find((cat) => cat.slug === category)?.id;
     setLoading(true);
     const formData = new FormData();
@@ -102,7 +163,7 @@ export const FeedsGroup = ({ id, category }) => {
   const handleScroll = () => {
     if (ref.current) {
       const { scrollTop, scrollHeight, clientHeight } = ref.current;
-      if (scrollTop + clientHeight >= scrollHeight - 5) {
+      if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
         setLimit((prevLimit) => prevLimit + 10);
       }
     }
@@ -111,6 +172,10 @@ export const FeedsGroup = ({ id, category }) => {
   useEffect(() => {
     fetchLatestPosts(limit);
   }, [limit, category]);
+
+  useEffect(() => {
+    setLimit(10);
+  }, [category]);
 
   useEffect(() => {
     const feedsBodyEl = ref.current;
@@ -122,7 +187,7 @@ export const FeedsGroup = ({ id, category }) => {
         feedsBodyEl.removeEventListener("touchmove", handleScroll);
       };
     }
-  }, []);
+  }, [loading]);
 
   return (
     <section id={compid} className={feecss.feedsGroup}>
