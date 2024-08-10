@@ -27,7 +27,7 @@ const HomePage = () => {
   const [ads, setAds] = useState([]);
 
   const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
-  const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.image} />;
+  const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.img} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   const adSections = [
