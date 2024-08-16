@@ -16,6 +16,8 @@ import { NewsHscrollSection } from "../sections/news-hscroll-section";
 import { NewsSliderSection } from "../sections/news-slider-section";
 import { InlineadsSection } from "../sections/inlineads-section";
 
+const imgURL = process.env.REACT_APP_IMAGE_URL;
+
 const PostPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ const PostPage = () => {
       const postdetail = await apiRead(formData, "main", "detailnew");
       if (postdetail && postdetail.length > 0) {
         setPostDetailData(postdetail[0]);
-        setPageInfo({ title: postdetail[0].judul_berita, desc: postdetail[0].isi_berita, path: `/berita/${postdetail[0].slug}`, thumbnail: `https://pifa.co.id/img_berita/${postdetail[0].img_berita}` });
+        setPageInfo({ title: postdetail[0].judul_berita, desc: postdetail[0].isi_berita, path: `/berita/${postdetail[0].slug}`, thumbnail: `${imgURL}/${postdetail[0].img_berita}` });
         if (categoryData && categoryData.length > 0) {
           const catdetail = categoryData.find((cat) => cat.id === postdetail[0].nama_kategori_berita_id);
           setCatPostData(catdetail ? catdetail : null);
