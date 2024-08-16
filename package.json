@@ -16,15 +16,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "test": "react-scripts test",
     "start": "react-scripts start",
-    "prebuild": "node update-slugs.js",
-    "build": "npm run clean && cross-env GENERATE_SOURCEMAP=false react-scripts build",
-    "clean": "npm run backup && rimraf build",
     "eject": "react-scripts eject",
-    "deploy": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
-    "static": "npm run build && react-snap",
-    "backup": "rimraf backup && node src/libs/plugins/backup.js"
+    "backup": "rimraf backup && node src/libs/plugins/backup.js",
+    "rstore": "node src/libs/plugins/restore.js",
+    "clean": "npm run backup && rimraf build",
+    "crawl": "node update-slugs.js",
+    "spagen": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "stagen": "npm run crawl && npm run spagen && react-snap"
   },
   "eslintConfig": {
     "extends": [
