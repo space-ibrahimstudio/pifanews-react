@@ -10,7 +10,7 @@ import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import Container300, { Aside } from "../components/layouts/containers";
 import { AdBanner } from "../components/contents/image";
-import NewsCard, { NewsDisplayCard } from "../components/contents/cards";
+import NewsCard, { NewsDisplayCard, NewsFeedCard } from "../components/contents/cards";
 import { NewsSummaryGroup, FeedsGroup } from "../components/contents/groups";
 import { HeroSection } from "../sections/hero-section";
 import { TagsSection } from "../sections/tags-section";
@@ -29,6 +29,12 @@ const CategoryPage = ({ category }) => {
   const [pageInfo, setPageInfo] = useState({ id: "", title: "", desc: "", path: "", thumbnail: "" });
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
+  const [postsFilter, setPostsFilter] = useState("update");
+  const [feedLimit, setFeedLimit] = useState(10);
+  const [feedPostData, setFeedPostData] = useState([]);
+  const [trendLimit, setTrendLimit] = useState(11);
+  const [trendLoading, setTrendLoading] = useState(false);
+  const [feedsLoading, setFeedsLoading] = useState(false);
   const [ads, setAds] = useState([]);
 
   const id = (category && `${short}-${category}`) || `${short}-category`;
@@ -44,19 +50,32 @@ const CategoryPage = ({ category }) => {
     }
   };
 
+  const fetchTrendingPosts = async (idcat, newLimit) => {
+    if (trendLoading) return;
+    setTrendLoading(true);
+    const formData = new FormData();
+    formData.append("idcat", idcat);
+    formData.append("limit", newLimit);
+    formData.append("hal", "0");
+    try {
+      const postsdata = await apiRead(formData, "main", "cattrendingnew");
+      setTrendingPostData(postsdata && postsdata.length > 0 ? postsdata : []);
+    } catch (error) {
+      console.error("error:", error);
+    } finally {
+      setTrendLoading(false);
+    }
+  };
+
   const fetchLatestPosts = async (idcat) => {
     setLoading(true);
     const formData = new FormData();
     formData.append("idcat", idcat);
-    formData.append("limit", "11");
+    formData.append("limit", "3");
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "categorynew");
-      if (postsdata && postsdata.length > 0) {
-        setLatestPostData(postsdata);
-      } else {
-        setLatestPostData([]);
-      }
+      setLatestPostData(postsdata && postsdata.length > 0 ? postsdata : []);
     } catch (error) {
       console.error("error:", error);
     } finally {
@@ -64,27 +83,48 @@ const CategoryPage = ({ category }) => {
     }
   };
 
-  const fetchTrendingPosts = async (idcat) => {
-    setLoading(true);
+  const fetchFeedPosts = async (idcat, newLimit) => {
+    if (feedsLoading) return;
+    setFeedsLoading(true);
     const formData = new FormData();
     formData.append("idcat", idcat);
-    formData.append("limit", "10");
+    formData.append("limit", newLimit);
     formData.append("hal", "0");
+    let data;
     try {
-      const postsdata = await apiRead(formData, "main", "cattrendingnew");
-      if (postsdata && postsdata.length > 0) {
-        setTrendingPostData(postsdata);
-      } else {
-        setTrendingPostData([]);
+      switch (postsFilter) {
+        case "update":
+          data = await apiRead(formData, "main", "categorynew");
+          setFeedPostData(data && data.length > 0 ? data : []);
+          break;
+        case "hot":
+          data = await apiRead(formData, "main", "cattrendingnew");
+          setFeedPostData(data && data.length > 0 ? data : []);
+          break;
+        default:
+          setFeedPostData([]);
+          break;
       }
     } catch (error) {
       console.error("error:", error);
     } finally {
-      setLoading(false);
+      setFeedsLoading(false);
     }
   };
 
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+
+  useEffect(() => {
+    setTrendLimit(11);
+  }, [category]);
+
+  useEffect(() => {
+    setFeedLimit(10);
+  }, [category, postsFilter]);
+
+  useEffect(() => {
+    getPageInfo();
+  }, [category, categoryData]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -99,15 +139,22 @@ const CategoryPage = ({ category }) => {
   }, []);
 
   useEffect(() => {
-    getPageInfo();
-  }, [category, categoryData]);
+    if (pageInfo.id) {
+      fetchTrendingPosts(pageInfo.id, trendLimit);
+    }
+  }, [pageInfo.id, trendLimit]);
 
   useEffect(() => {
     if (pageInfo.id) {
       fetchLatestPosts(pageInfo.id);
-      fetchTrendingPosts(pageInfo.id);
     }
   }, [pageInfo.id]);
+
+  useEffect(() => {
+    if (pageInfo.id) {
+      fetchFeedPosts(pageInfo.id, feedLimit);
+    }
+  }, [pageInfo.id, feedLimit, postsFilter]);
 
   return (
     <Fragment>
@@ -122,7 +169,7 @@ const CategoryPage = ({ category }) => {
             </Container300>
           )}
           <Aside>
-            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={trendingPostData.slice(1, 10)} />
+            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={trendingPostData.slice(1)} setLimit={setTrendLimit} loading={trendLoading} />
           </Aside>
         </HeroSection>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
@@ -137,7 +184,11 @@ const CategoryPage = ({ category }) => {
           ))}
         </NewsHscrollSection>
         <FeedsSection>
-          <FeedsGroup id={id} category={category} />
+          <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setFeedLimit} loading={feedsLoading}>
+            {feedPostData.map((post, index) => (
+              <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            ))}
+          </FeedsGroup>
           <Aside>
             <InlineadsSection label="" src="/img/inline-ads.webp" />
           </Aside>

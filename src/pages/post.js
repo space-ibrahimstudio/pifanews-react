@@ -24,9 +24,12 @@ const PostPage = () => {
   const { width } = useWindow();
   const { apiRead } = useApi();
   const { setLoading } = useLoading();
-  const { categoryData, trendingPostData, relatedPostData } = useFetch();
+  const { categoryData, relatedPostData } = useFetch();
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
+  const [trendLimit, setTrendLimit] = useState(10);
+  const [trendLoading, setTrendLoading] = useState(false);
+  const [trendingPostData, setTrendingPostData] = useState([]);
   const [catPostData, setCatPostData] = useState(null);
   const [ads, setAds] = useState([]);
 
@@ -43,11 +46,7 @@ const PostPage = () => {
         setPageInfo({ title: postdetail[0].judul_berita, desc: postdetail[0].isi_berita, path: `/berita/${postdetail[0].slug}`, thumbnail: `https://pifa.co.id/img_berita/${postdetail[0].img_berita}` });
         if (categoryData && categoryData.length > 0) {
           const catdetail = categoryData.find((cat) => cat.id === postdetail[0].nama_kategori_berita_id);
-          if (catdetail) {
-            setCatPostData(catdetail);
-          } else {
-            setCatPostData(null);
-          }
+          setCatPostData(catdetail ? catdetail : null);
         }
       } else {
         setPostDetailData(null);
@@ -60,6 +59,22 @@ const PostPage = () => {
     }
   };
 
+  const fetchTrendingPosts = async (newLimit) => {
+    if (trendLoading) return;
+    setTrendLoading(true);
+    const formData = new FormData();
+    formData.append("limit", newLimit);
+    formData.append("hal", "0");
+    try {
+      const trendingdata = await apiRead(formData, "main", "trendingnew");
+      setTrendingPostData(trendingdata && trendingdata.length > 0 ? trendingdata : []);
+    } catch (error) {
+      console.error("error:", error);
+    } finally {
+      setTrendLoading(false);
+    }
+  };
+
   const paths = [
     { label: "Beranda", url: "/" },
     { label: catPostData && catPostData.nama_kategori_berita, url: catPostData && `/berita/kategori/${catPostData.slug}` },
@@ -67,6 +82,10 @@ const PostPage = () => {
   ];
 
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+
+  useEffect(() => {
+    setTrendLimit(10);
+  }, [slug]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -81,6 +100,10 @@ const PostPage = () => {
   }, []);
 
   useEffect(() => {
+    fetchTrendingPosts(trendLimit);
+  }, [trendLimit]);
+
+  useEffect(() => {
     fetchDetailPost();
   }, [slug, categoryData, location.pathname]);
 
@@ -92,7 +115,7 @@ const PostPage = () => {
           <PostdetContent>
             <PostdetArticle id={id} paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} thumbnail={postDetailData.thumnail_berita} image={postDetailData.img_berita && postDetailData.img_berita} content={postDetailData.isi_berita} />
             <PostdetAside>
-              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" posts={trendingPostData} />
+              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" posts={trendingPostData} setLimit={setTrendLimit} loading={trendLoading} />
               <InlineadsSection label="" src="/img/inline-ads.webp" />
             </PostdetAside>
           </PostdetContent>

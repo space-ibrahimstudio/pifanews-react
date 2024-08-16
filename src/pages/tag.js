@@ -7,10 +7,14 @@ import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import { AdBanner } from "../components/contents/image";
-import { NewsGridSection } from "../sections/news-grid-section";
 import { TagsSection } from "../sections/tags-section";
 import { NewsSliderSection } from "../sections/news-slider-section";
-import NewsCard from "../components/contents/cards";
+import { PageTitle, TextHint } from "../components/contents/markers";
+import { FeedsSection } from "../sections/feeds-section";
+import { InlineadsSection } from "../sections/inlineads-section";
+import { Aside } from "../components/layouts/containers";
+import { FeedsGroup } from "../components/contents/groups";
+import { NewsFeedCard } from "../components/contents/cards";
 
 const TagPage = () => {
   const navigate = useNavigate();
@@ -23,6 +27,7 @@ const TagPage = () => {
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
   const [tagPostData, setTagPostData] = useState([]);
   const [ads, setAds] = useState([]);
+  const [postsFilter, setPostsFilter] = useState("update");
 
   const id = (slug && `${short}-${slug}`) || `${short}-tag`;
 
@@ -76,12 +81,20 @@ const TagPage = () => {
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={trendingTagData} />
-        <NewsGridSection title="Tag" scope={pageInfo.title} setLimit={setLimit} loading={loading}>
-          {tagPostData.map((post, index) => (
-            <NewsCard id={id} key={index} title={post["berita"][0].judul_berita} short={post["berita"][0].isi_berita} tag={post["berita"][0].nama_kategori_berita} image={post["berita"][0].img_berita} loc={post["berita"][0].penulis_berita} date={post["berita"][0].tanggal_berita} onClick={() => navigate(`/berita/${post["berita"][0].slug}`)} />
-          ))}
-        </NewsGridSection>
-        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        <PageTitle>
+          {`Topik berita: `}
+          <TextHint>{pageInfo.title}</TextHint>
+        </PageTitle>
+        <FeedsSection>
+          <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setLimit} loading={loading}>
+            {tagPostData.map((post, index) => (
+              <NewsFeedCard key={index} id={id} title={post["berita"][0].judul_berita} short={post["berita"][0].isi_berita} tag={post["berita"][0].nama_kategori_berita} image={post["berita"][0].img_berita} loc={post["berita"][0].penulis_berita} date={post["berita"][0].tanggal_berita} onClick={() => navigate(`/berita/${post["berita"][0].slug}`)} />
+            ))}
+          </FeedsGroup>
+          <Aside>
+            <InlineadsSection label="" src="/img/inline-ads.webp" />
+          </Aside>
+        </FeedsSection>
       </PageLayout>
     </Fragment>
   );

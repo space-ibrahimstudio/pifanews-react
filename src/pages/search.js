@@ -8,14 +8,18 @@ import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
 import { AdBanner } from "../components/contents/image";
-import { NewsGridSection } from "../sections/news-grid-section";
+import { FeedsSection } from "../sections/feeds-section";
+import { InlineadsSection } from "../sections/inlineads-section";
 import { TagsSection } from "../sections/tags-section";
 import { NewsSliderSection } from "../sections/news-slider-section";
-import NewsCard from "../components/contents/cards";
+import { FeedsGroup } from "../components/contents/groups";
+import { Aside } from "../components/layouts/containers";
+import { PageTitle, TextHint } from "../components/contents/markers";
+import { NewsFeedCard } from "../components/contents/cards";
 
 const SearchPage = () => {
-  const { query } = useParams();
   const navigate = useNavigate();
+  const { query } = useParams();
   const { toPathname } = useContent();
   const { short } = useDocument();
   const { apiRead } = useApi();
@@ -24,6 +28,7 @@ const SearchPage = () => {
   const [limit, setLimit] = useState(12);
   const [searchedData, setSearchedData] = useState([]);
   const [ads, setAds] = useState([]);
+  const [postsFilter, setPostsFilter] = useState("update");
 
   const id = `${short}-${toPathname(query)}`;
 
@@ -75,12 +80,20 @@ const SearchPage = () => {
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={trendingTagData} />
-        <NewsGridSection title="Pencarian" scope={query} setLimit={setLimit} loading={loading}>
-          {searchedData.map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
-          ))}
-        </NewsGridSection>
-        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        <PageTitle>
+          {`Hasil pencarian: `}
+          <TextHint>{query}</TextHint>
+        </PageTitle>
+        <FeedsSection>
+          <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setLimit} loading={loading}>
+            {searchedData.map((post, index) => (
+              <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            ))}
+          </FeedsGroup>
+          <Aside>
+            <InlineadsSection label="" src="/img/inline-ads.webp" />
+          </Aside>
+        </FeedsSection>
       </PageLayout>
     </Fragment>
   );

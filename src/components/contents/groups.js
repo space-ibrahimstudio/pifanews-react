@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContent } from "@ibrahimstudio/react";
-import { useApi } from "../../libs/plugins/api";
-import { useFetch } from "../../libs/plugins/fetch";
 import { Input } from "@ibrahimstudio/input";
 import { SourceButton } from "../user-inputs/buttons";
-import { NewsSummaryCard, NewsFeedCard } from "./cards";
+import { NewsSummaryCard } from "./cards";
 import { LoadingContent } from "./loader";
 import newcss from "./styles/news-group.module.css";
 import sumcss from "./styles/news-summary-group.module.css";
@@ -122,44 +120,16 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title
   );
 };
 
-export const FeedsGroup = ({ id, category }) => {
-  const navigate = useNavigate();
+export const FeedsGroup = ({ id, postsFilter, setPostsFilter, setLimit, loading = false, children }) => {
   const ref = useRef(null);
-  const { apiRead } = useApi();
-  const { categoryData } = useFetch();
-  const [loading, setLoading] = useState(false);
-  const [posts, setPosts] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [postsFilter, setPostsFilter] = useState("update");
-
   const compid = `${id}-feeds-group`;
 
   const switchFilter = [
     { label: "Terbaru", value: "update" },
     { label: "Trending", value: "hot" },
-    { label: "Populer", value: "popular" },
   ];
 
   const switchStatus = (value) => setPostsFilter(value);
-
-  const fetchLatestPosts = async (newLimit) => {
-    if (loading) return;
-    const idcat = categoryData.find((cat) => cat.slug === category)?.id;
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("idcat", idcat);
-    formData.append("limit", newLimit);
-    formData.append("hal", "0");
-    try {
-      const postsdata = await apiRead(formData, "main", "categorynew");
-      setPosts(postsdata && postsdata.length > 0 ? postsdata : []);
-    } catch (error) {
-      console.error("error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleScroll = () => {
     if (ref.current) {
       const { scrollTop, scrollHeight, clientHeight } = ref.current;
@@ -168,14 +138,6 @@ export const FeedsGroup = ({ id, category }) => {
       }
     }
   };
-
-  useEffect(() => {
-    fetchLatestPosts(limit);
-  }, [limit, category]);
-
-  useEffect(() => {
-    setLimit(10);
-  }, [category]);
 
   useEffect(() => {
     const feedsBodyEl = ref.current;
@@ -195,12 +157,10 @@ export const FeedsGroup = ({ id, category }) => {
         <div className={feecss.feedsTitlewrap}>
           <h1 className={feecss.feedsTitle}>Feeds</h1>
         </div>
-        <Input id={`${compid}-switch-filter`} variant="select" isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
+        <Input id={`${compid}-switch-filter`} variant="select" noEmptyValue isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
       </header>
       <div ref={ref} className={feecss.feedsBody}>
-        {posts.map((post, index) => (
-          <NewsFeedCard key={index} id={`${compid}-${index}`} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
-        ))}
+        {children}
         {loading && <LoadingContent />}
       </div>
     </section>
