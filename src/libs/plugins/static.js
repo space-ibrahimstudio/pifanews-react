@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const { minify } = require("html-minifier");
 
-const CATEGORY_API_URL = "https://zulkarna.in/pifa_api/main/categorynew";
+const CATEGORY_API_URL = "https://api.pifa.co.id/main/categorynew";
 // const NEWS_DETAIL_API_URL = `${apiURL}/authapi/viewnews`;
 
 const MINIFY_OPTIONS = {

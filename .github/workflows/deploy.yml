@@ -32,7 +32,7 @@ jobs:
         run: npm install
 
       - name: Builds the app for production
-        run: CI= npm run build
+        run: CI= npm run static
 
       - name: List output files
         run: find build/ -print
@@ -40,7 +40,7 @@ jobs:
       - name: Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
+          server: ${{ secrets.FTP_HOST_PROD }}
+          username: ${{ secrets.FTP_USERNAME_PROD }}
+          password: ${{ secrets.FTP_PASSWORD_PROD }}
           local-dir: build/
