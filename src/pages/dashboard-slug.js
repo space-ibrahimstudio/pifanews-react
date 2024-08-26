@@ -181,7 +181,8 @@ const DashboardSlugPage = () => {
 
             const handlePublish = async (content) => {
               const formData = new FormData();
-              formData.append("data", JSON.stringify({ secret: userData.token_activation, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: content, thumbnail: inputData.thumbnail, tag: selectedTags }));
+              const base64Content = btoa(unescape(encodeURIComponent(content)));
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: base64Content, thumbnail: inputData.thumbnail, tag: selectedTags }));
               formData.append("fileimg", selectedImage);
               setIsSubmitting(true);
               try {
@@ -263,11 +264,9 @@ const DashboardSlugPage = () => {
   };
 
   useEffect(() => {
-    console.log("formatted date:", localeDate);
-  }, [inputData.tgl]);
-
-  useEffect(() => {
+    const formattedDate = formatDate(getCurrentDate());
     setInputData({ ...inputData, tgl: getCurrentDate() });
+    setLocaleDate(formattedDate);
   }, []);
 
   useEffect(() => {
