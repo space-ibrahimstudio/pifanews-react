@@ -1,0 +1,90 @@
+.toolButton {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  color: var(--color-secondary);
+  background-color: transparent;
+  transition: var(--transit);
+  padding: var(--pixel-5);
+  border-radius: var(--pixel-5);
+}
+
+.toolButton:hover {
+  background-color: var(--color-primary-5);
+}
+
+.toolButton.active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-10);
+}
+
+.contentArea {
+  border: none;
+  outline: none;
+  margin: 0;
+  min-height: var(--pixel-300);
+  overflow: auto;
+  padding: var(--pixel-10);
+  font-size: var(--font-sm);
+  color: var(--color-secondary);
+  font-family: var(--font-inter);
+  width: 100%;
+  text-align: left;
+  line-height: 135%;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  display: block;
+}
+
+.contentArea:focus {
+  border: none;
+  outline: none;
+}
+
+.contentArea h1 {
+  font-size: var(--font-lg);
+}
+
+.contentArea h2 {
+  font-size: var(--font-md);
+}
+
+.contentArea img {
+  max-width: 100%;
+  height: auto;
+}
+
+.contentArea ul,
+.contentArea ol {
+  padding-left: var(--pixel-30);
+  margin: 0;
+}
+
+.contentArea ul {
+  list-style-type: disc;
+}
+
+.contentArea ol {
+  list-style-type: decimal;
+}
+
+.editorContent {
+  align-self: stretch;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--pixel-10);
+  border-radius: var(--pixel-10);
+  border: 1px solid var(--color-primary-20);
+  box-sizing: border-box;
+  height: var(--pixel-500);
+  overflow-y: auto;
+  flex-direction: column;
+  transition: var(--transit);
+  background-color: var(--color-foreground);
+}
+
+.editorContent:focus-within {
+  border: 1px solid var(--color-primary);
+}

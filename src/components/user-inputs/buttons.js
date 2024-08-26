@@ -1,22 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useContent, useEvent } from "@ibrahimstudio/react";
+import { Close } from "../contents/icons";
 import tab from "./styles/tab-button.module.css";
 import tabg from "./styles/tab-button-gen.module.css";
 import source from "./styles/source-button.module.css";
 import tag from "./styles/tags-button.module.css";
 
-export const TabButton = ({ id, text, path, startContent, endContent }) => {
+export const TabButton = ({ id, text, path, type = "single", subTabData = [], startContent, endContent }) => {
   const location = useLocation();
-  const { toPathname } = useContent();
+  const { toPathname, toTitleCase } = useContent();
   const compid = text ? `${id}-tab-${toPathname(text)}` : `${id}-tab`;
   const [activeTab, setActiveTab] = useState(null);
+  const [subTabOpen, setSubTabOpen] = useState(false);
 
   useEffect(() => {
     setActiveTab(location.pathname);
   }, [location]);
 
-  return (
+  return type === "sub" ? (
+    <Fragment>
+      <button id={compid} className={`${tab.tabButton} ${activeTab === path ? tab.active : ""}`} onMouseEnter={() => setSubTabOpen(true)} onMouseLeave={() => setSubTabOpen(false)}>
+        {startContent}
+        <b className={tab.tabButtonText}>{text}</b>
+        {endContent}
+        {subTabOpen && subTabData.length > 0 && (
+          <section className={tab.tabSub}>
+            {subTabData.map((item, index) => (
+              <Link key={index} className={tab.tabSubButton} to={`/dashboard/${path}/${toPathname(item.submenu)}`}>
+                <b className={tab.tabSubButtonText}>{toTitleCase(item.submenu)}</b>
+              </Link>
+            ))}
+          </section>
+        )}
+      </button>
+    </Fragment>
+  ) : (
     <Link id={compid} className={`${tab.tabButton} ${activeTab === path ? tab.active : ""}`} to={path}>
       {startContent}
       <b className={tab.tabButtonText}>{text}</b>
@@ -67,12 +86,13 @@ export const SourceButton = ({ id, to }) => {
   );
 };
 
-export const TagsButton = ({ id, text, onClick }) => {
+export const TagsButton = ({ id, text, type = "reg", onClick }) => {
   const compid = `${id}-tags`;
 
   return (
-    <button id={compid} className={tag.tagsButton} onClick={onClick}>
+    <button id={compid} className={tag.tagsButton} onClick={type === "reg" ? onClick : () => {}}>
       <b className={tag.tagsButtonText}>{text}</b>
+      {type === "select" && <Close size="var(--pixel-20)" onClick={onClick} />}
     </button>
   );
 };

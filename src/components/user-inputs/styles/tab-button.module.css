@@ -1,3 +1,55 @@
+.tabSubButtonText {
+  flex: 1;
+  position: relative;
+  font-size: var(--font-xsm);
+  font-weight: 500;
+  font-family: var(--font-inter);
+  color: inherit;
+  text-align: left;
+}
+
+.tabSub,
+.tabSubButton {
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tabSubButton {
+  cursor: pointer;
+  border: 0;
+  padding: 0 var(--pixel-15);
+  background-color: transparent;
+  align-self: stretch;
+  border-bottom: 1px solid var(--color-secondlight-20);
+  box-sizing: border-box;
+  height: var(--pixel-50);
+  flex-shrink: 0;
+  flex-direction: row;
+  align-items: center;
+  color: var(--color-secondlight);
+  transition: var(--transit);
+}
+
+.tabSubButton:last-child {
+  border-bottom: unset;
+}
+
+.tabSubButton:hover {
+  background-color: var(--color-secondlight-10);
+}
+
+.tabSub {
+  position: absolute;
+  top: var(--pixel-70);
+  left: 0;
+  width: var(--pixel-200);
+  border-radius: 0 0 var(--pixel-10) var(--pixel-10);
+  background-color: var(--color-primary);
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .tabButtonText {
   flex: 1;
   position: relative;
@@ -12,12 +64,12 @@
 }
 
 .tabButton {
+  position: relative;
   cursor: pointer;
   border: 0;
   padding: 0 var(--pixel-15);
   background-color: transparent;
   height: var(--pixel-70);
-  overflow: hidden;
   flex-shrink: 0;
   display: flex;
   gap: var(--pixel-10);

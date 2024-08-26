@@ -28,13 +28,13 @@ export const FetchProvider = ({ children }) => {
       const catlocaldata = await apiGet("main", "categoryarea");
       setLocalCatData(catlocaldata && catlocaldata.length > 0 ? catlocaldata : []);
       const trendingdata = await apiRead(formData, "main", "trendingnew");
-      setTrendingPostData(trendingdata && trendingdata.length > 0 ? trendingdata : []);
+      setTrendingPostData(trendingdata && trendingdata.data && trendingdata.data.length > 0 ? trendingdata.data : []);
       const latestdata = await apiRead(formData, "main", "latestnew");
-      setLatestPostData(latestdata && latestdata.length > 0 ? latestdata : []);
+      setLatestPostData(latestdata && latestdata.data && latestdata.data.length > 0 ? latestdata.data : []);
       const populardata = await apiRead(formData, "main", "popularnew");
-      setPopularPostData(populardata && populardata.length > 0 ? populardata : []);
+      setPopularPostData(populardata && populardata.data && populardata.data.length > 0 ? populardata.data : []);
       const relateddata = await apiRead(formData, "main", "relatednew");
-      setRelatedPostData(relateddata && relateddata.length > 0 ? relateddata : []);
+      setRelatedPostData(relateddata && relateddata.data && relateddata.data.length > 0 ? relateddata.data : []);
       const trendingtagdata = await apiGet("main", "viewtag");
       setTrendingTagData(trendingtagdata && trendingtagdata.length > 0 ? trendingtagdata : []);
     } catch (error) {

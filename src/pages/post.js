@@ -43,11 +43,12 @@ const PostPage = () => {
     formData.append("slug", slug);
     try {
       const postdetail = await apiRead(formData, "main", "detailnew");
-      if (postdetail && postdetail.length > 0) {
-        setPostDetailData(postdetail[0]);
-        setPageInfo({ title: postdetail[0].judul_berita, desc: postdetail[0].isi_berita, path: `/berita/${postdetail[0].slug}`, thumbnail: `${imgURL}/${postdetail[0].img_berita}` });
+      if (postdetail && postdetail.data && postdetail.data.length > 0) {
+        const selecteddata = postdetail.data[0];
+        setPostDetailData(selecteddata);
+        setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgURL}/${selecteddata.img_berita}` });
         if (categoryData && categoryData.length > 0) {
-          const catdetail = categoryData.find((cat) => cat.id === postdetail[0].nama_kategori_berita_id);
+          const catdetail = categoryData.find((cat) => cat.id === selecteddata.nama_kategori_berita_id);
           setCatPostData(catdetail ? catdetail : null);
         }
       } else {
@@ -69,7 +70,7 @@ const PostPage = () => {
     formData.append("hal", "0");
     try {
       const trendingdata = await apiRead(formData, "main", "trendingnew");
-      setTrendingPostData(trendingdata && trendingdata.length > 0 ? trendingdata : []);
+      setTrendingPostData(trendingdata && trendingdata.data && trendingdata.data.length > 0 ? trendingdata.data : []);
     } catch (error) {
       console.error("error:", error);
     } finally {

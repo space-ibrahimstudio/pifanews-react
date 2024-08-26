@@ -7,6 +7,8 @@ import PostPage from "./pages/post";
 import LoginPage from "./pages/login";
 import TagPage from "./pages/tag";
 import SearchPage from "./pages/search";
+import DashboardPage from "./pages/dashboard";
+import DashboardSlugPage from "./pages/dashboard-slug";
 
 function App() {
   const location = useLocation();
@@ -26,6 +28,8 @@ function App() {
       <Route path="/berita/tag/:slug" element={<TagPage />} />
       <Route path="/pencarian/:query" element={<SearchPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/dashboard/:scope/:slug" element={<DashboardSlugPage />} />
     </Routes>
   );
 }

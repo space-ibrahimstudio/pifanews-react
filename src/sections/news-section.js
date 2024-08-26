@@ -30,7 +30,7 @@ export const NewsSection = ({ id, catId, scope, slug }) => {
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "categorynew");
-      setLatestPostData(postsdata && postsdata.length > 0 ? postsdata : []);
+      setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
     } finally {
@@ -47,7 +47,7 @@ export const NewsSection = ({ id, catId, scope, slug }) => {
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "cattrendingnew");
-      setTrendingPostData(postsdata && postsdata.length > 0 ? postsdata : []);
+      setTrendingPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
     } finally {

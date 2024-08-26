@@ -8,6 +8,7 @@
 }
 
 .tagsButton {
+  gap: var(--pixel-10);
   cursor: pointer;
   border: 1px solid var(--color-primary);
   padding: 0 var(--pixel-20);

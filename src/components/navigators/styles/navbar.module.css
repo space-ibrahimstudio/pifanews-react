@@ -30,7 +30,126 @@
 }
 
 .navMenu,
+.navMenuHscroll,
+.navMenuItems {
+  justify-content: flex-start;
+}
+
+.navMenu,
+.navMenuHscroll {
+  flex: 1;
+}
+
+.navMenuHscroll.pub {
+  overflow-x: auto;
+}
+
+.navMenuHscroll.pub::-webkit-scrollbar {
+  height: 0;
+}
+
+.navMenuHscroll.pub::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.navMenuHscroll.pub::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: var(--pixel-5);
+}
+
+.navMenu {
+  margin: 0;
+}
+
+.navMenu.pub {
+  overflow: hidden;
+}
+
+.navSearch {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  max-width: var(--pixel-300);
+}
+
+.navBottom,
+.navbar {
+  align-self: stretch;
+}
+
+.navBottom {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--pixel-15);
+  height: var(--pixel-70);
+}
+
+.navBottom.pub {
+  overflow: hidden;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background-color: var(--color-secondlight);
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 var(--pixel-50);
+  transform: translateY(0);
+  transition: var(--transit);
+}
+
+.navbar.pub {
+  overflow: hidden;
+}
+
+.navbar.scroll {
+  transform: translateY(var(--pixel-min-70));
+  box-shadow: 0 var(--pixel-5) var(--pixel-5) rgba(0, 0, 0, 0.05);
+}
+
+/* .navLogoIcon {
+  width: auto;
+  position: relative;
+  height: var(--pixel-40);
+  object-fit: cover;
+}
+
+.navOption {
+  overflow: hidden;
+  justify-content: center;
+  gap: var(--pixel-10);
+}
+
+.navMenu,
+.navMenuHscroll,
 .navMenuItems,
+.navOption,
+.navTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.navTop {
+  align-self: stretch;
+  height: var(--pixel-70);
+  overflow: hidden;
+  flex-shrink: 0;
+  justify-content: space-between;
+}
+
+.navMenu,
 .navMenuHscroll {
   flex: 1;
   justify-content: flex-start;
@@ -142,8 +261,8 @@
 
 .navbar.scroll {
   transform: translateY(var(--pixel-min-70));
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.05);
-}
+  box-shadow: 0 var(--pixel-5) var(--pixel-5) rgba(0, 0, 0, 0.05);
+} */
 
 @media (max-width: 910px) {
   .navbar {

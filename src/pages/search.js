@@ -40,8 +40,8 @@ const SearchPage = () => {
     formData.append("limit", newLimit);
     try {
       const searchdata = await apiRead(formData, "main", "searchnew");
-      if (searchdata && searchdata.length > 0) {
-        setSearchedData(searchdata);
+      if (searchdata && searchdata.data && searchdata.data.length > 0) {
+        setSearchedData(searchdata.data);
       } else {
         setSearchedData([]);
       }

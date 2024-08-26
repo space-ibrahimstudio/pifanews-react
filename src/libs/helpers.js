@@ -1,3 +1,26 @@
+export function getCurrentDate() {
+  const today = new Date();
+  const year = today.getFullYear();
+  let month = today.getMonth() + 1;
+  let day = today.getDate();
+
+  month = month < 10 ? "0" + month : month;
+  day = day < 10 ? "0" + day : day;
+
+  return `${year}-${month}-${day}`;
+}
+
+export const useOptions = () => {
+  const limitopt = [
+    { value: 12, label: "Baris per Halaman: 12" },
+    { value: 24, label: "Baris per Halaman: 24" },
+    { value: 48, label: "Baris per Halaman: 48" },
+    { value: 120, label: "Baris per Halaman: 120" },
+    { value: 500, label: "Baris per Halaman: 500" },
+  ];
+  return { limitopt };
+};
+
 export function inputValidator(formData, requiredFields) {
   const errors = {};
   const checkRequired = (value, field, path) => {

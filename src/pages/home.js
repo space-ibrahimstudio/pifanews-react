@@ -44,7 +44,7 @@ const HomePage = () => {
     setLoading(true);
     try {
       const trendingdata = await apiRead(formData, "main", "trendingnew");
-      setTrendingPostData(trendingdata && trendingdata.length > 0 ? trendingdata : []);
+      setTrendingPostData(trendingdata && trendingdata.data && trendingdata.data.length > 0 ? trendingdata.data : []);
     } catch (error) {
       console.error("error:", error);
     } finally {

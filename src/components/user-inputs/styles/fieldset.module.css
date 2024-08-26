@@ -1,0 +1,21 @@
+.inputWrap,
+.wrapBody {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.wrapBody {
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.inputWrap {
+  align-self: stretch;
+  justify-content: center;
+  text-align: left;
+  font-size: var(--font-sm);
+  color: var(--color-hint);
+  font-family: var(--font-inter);
+}

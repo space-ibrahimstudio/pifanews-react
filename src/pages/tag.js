@@ -39,9 +39,10 @@ const TagPage = () => {
     formData.append("limit", newLimit);
     try {
       const tagdata = await apiRead(formData, "main", "tagnew");
-      if (tagdata && tagdata.length > 0) {
-        setTagPostData(tagdata);
-        setPageInfo({ title: tagdata[0].name, desc: "", path: `/berita/tag/${tagdata[0].tag}`, thumbnail: "" });
+      if (tagdata && tagdata.data && tagdata.data.length > 0) {
+        const firstidxdata = tagdata.data[0];
+        setTagPostData(tagdata.data);
+        setPageInfo({ title: firstidxdata.name, desc: "", path: `/berita/tag/${firstidxdata.tag}`, thumbnail: "" });
       } else {
         setTagPostData([]);
         setPageInfo({ title: "", desc: "", path: "", thumbnail: "" });

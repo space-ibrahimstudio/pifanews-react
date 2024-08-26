@@ -59,7 +59,7 @@ const CategoryPage = ({ category }) => {
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "cattrendingnew");
-      setTrendingPostData(postsdata && postsdata.length > 0 ? postsdata : []);
+      setTrendingPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
     } finally {
@@ -75,7 +75,7 @@ const CategoryPage = ({ category }) => {
     formData.append("hal", "0");
     try {
       const postsdata = await apiRead(formData, "main", "categorynew");
-      setLatestPostData(postsdata && postsdata.length > 0 ? postsdata : []);
+      setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
     } finally {
@@ -95,11 +95,11 @@ const CategoryPage = ({ category }) => {
       switch (postsFilter) {
         case "update":
           data = await apiRead(formData, "main", "categorynew");
-          setFeedPostData(data && data.length > 0 ? data : []);
+          setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         case "hot":
           data = await apiRead(formData, "main", "cattrendingnew");
-          setFeedPostData(data && data.length > 0 ? data : []);
+          setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         default:
           setFeedPostData([]);
