@@ -20,6 +20,21 @@ async function fetchCatSlug() {
   }
 }
 
+async function fetchTagSlug() {
+  try {
+    const response = await axios.get(`${apiURL}/main/viewalltag`);
+    const tagdata = response.data;
+    if (!tagdata.error) {
+      return tagdata.data;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching tag slugs:", error);
+    process.exit(1);
+  }
+}
+
 async function fetchPostSlug() {
   const formData = new FormData();
   formData.append("limit", "250");
@@ -39,23 +54,23 @@ async function fetchPostSlug() {
   }
 }
 
-async function updatePackageJson(catslugs, postslugs) {
-  const updatedInclude = ["/", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+async function updatePackageJson(catslugs, tagslugs, postslugs) {
+  const updatedInclude = ["/", "/login", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...tagslugs.map((item) => `/berita/tag/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
   packageJson.reactSnap.include = updatedInclude;
 
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
   console.log("package.json updated successfully");
 }
 
-function generateSitemap(catslugs, postslugs) {
+function generateSitemap(catslugs, tagslugs, postslugs) {
   const domain = "https://beta.pifa.co.id";
   if (!domain) {
     console.error("REACT_APP_DOMAIN_URL environment variable is not set");
     process.exit(1);
   }
 
-  const staticUrls = ["/"];
-  const dynamicUrls = [...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  const staticUrls = ["/", "/login"];
+  const dynamicUrls = [...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...tagslugs.map((item) => `/berita/tag/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -83,9 +98,10 @@ ${dynamicUrls
 
 async function main() {
   const catslugs = await fetchCatSlug();
+  const tagslugs = await fetchTagSlug();
   const postslugs = await fetchPostSlug();
-  await updatePackageJson(catslugs, postslugs);
-  generateSitemap(catslugs, postslugs);
+  await updatePackageJson(catslugs, tagslugs, postslugs);
+  generateSitemap(catslugs, tagslugs, postslugs);
 }
 
 main();
