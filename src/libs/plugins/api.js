@@ -42,7 +42,7 @@ export const ApiProvider = ({ children }) => {
       const apires = res.data;
       if (!apires.error) {
         log(`reading ${endpoint} data:`, apires);
-        return apires.data;
+        return apires;
       } else {
         log(`failed to read ${endpoint} data`);
         return null;

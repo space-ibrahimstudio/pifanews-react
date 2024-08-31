@@ -5,7 +5,6 @@ import { Input } from "@ibrahimstudio/input";
 import { useWindow, useContent } from "@ibrahimstudio/react";
 import { useApi } from "../../libs/plugins/api";
 import { useAuth } from "../../libs/security/auth";
-import { useFetch } from "../../libs/plugins/fetch";
 import { ISHome, ISSearch } from "@ibrahimstudio/icons";
 import { Close } from "../contents/icons";
 import { TabButton, TabButtonGen } from "../user-inputs/buttons";
@@ -14,17 +13,17 @@ import styles from "./styles/navbar.module.css";
 export const Navbar = ({ id, parentType = "public" }) => {
   const ref = useRef(null);
   const navigate = useNavigate();
-  const { apiRead } = useApi();
+  const { apiGet, apiRead } = useApi();
   const { toTitleCase, toPathname } = useContent();
   const { isLoggedin, logout, userData } = useAuth();
   const { width } = useWindow();
-  const { categoryData } = useFetch();
   const compid = `${id}-top-navigation`;
   const [leftShadow, setLeftShadow] = useState(false);
   const [rightShadow, setRightShadow] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [publicMenus, setPublicMenus] = useState([]);
   const [privateMenus, setPrivateMenus] = useState([]);
 
   const handleLogout = () => logout();
@@ -32,6 +31,15 @@ export const Navbar = ({ id, parentType = "public" }) => {
   const handleSearch = (e) => {
     if (e.key === "Enter") {
       navigate(`/pencarian/${query}`);
+    }
+  };
+
+  const getPublicMenus = async () => {
+    try {
+      const publicmenus = await apiGet("main", "categorynew");
+      setPublicMenus(publicmenus && publicmenus.data && publicmenus.data.length > 0 ? publicmenus.data : []);
+    } catch (error) {
+      console.log("error:", error);
     }
   };
 
@@ -50,6 +58,8 @@ export const Navbar = ({ id, parentType = "public" }) => {
   useEffect(() => {
     if (parentType === "private") {
       getPrivateMenus();
+    } else {
+      getPublicMenus();
     }
   }, [parentType]);
 
@@ -111,7 +121,7 @@ export const Navbar = ({ id, parentType = "public" }) => {
                 ) : (
                   <Fragment>
                     <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-slider-news-section-berita-infografis" />
-                    {categoryData.map((menu, index) => (
+                    {publicMenus.map((menu, index) => (
                       <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
                     ))}
                   </Fragment>

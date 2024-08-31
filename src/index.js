@@ -5,7 +5,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { IbrahimStudioProvider } from "@ibrahimstudio/react";
 import { ApiProvider } from "./libs/plugins/api";
 import { LoadingProvider } from "./components/contents/loader";
-import { FetchProvider } from "./libs/plugins/fetch";
 import { Document } from "./libs/plugins/document";
 import { AuthProvider } from "./libs/security/auth";
 import App from "./App";
@@ -22,9 +21,7 @@ root.render(
             <ApiProvider>
               <LoadingProvider>
                 <AuthProvider>
-                  <FetchProvider>
-                    <App />
-                  </FetchProvider>
+                  <App />
                 </AuthProvider>
               </LoadingProvider>
             </ApiProvider>

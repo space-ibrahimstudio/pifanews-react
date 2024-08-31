@@ -44,6 +44,7 @@ const DashboardSlugPage = () => {
   const [tagQuery, setTagQuery] = useState("");
   const [tagSuggests, setTagSuggests] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [initialContent, setInitialContent] = useState("");
 
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -71,6 +72,17 @@ const DashboardSlugPage = () => {
       const formattedDate = formatDate(value);
       setLocaleDate(formattedDate);
     }
+  };
+
+  const restoreFormState = () => {
+    const formattedDate = formatDate(getCurrentDate());
+    setSelectedImage(null);
+    setSelectedTags([]);
+    setTagSuggests([]);
+    setTagQuery("");
+    setInitialContent("");
+    setInputData({ ...inputSchema, tgl: getCurrentDate() });
+    setLocaleDate(formattedDate);
   };
 
   const handleImageSelect = (file) => {
@@ -120,9 +132,9 @@ const DashboardSlugPage = () => {
       switch (scope) {
         case "berita":
           const newscatdata = await apiGet("main", "categorynew");
-          setNewsCatData(newscatdata && newscatdata.length > 0 ? newscatdata : []);
+          setNewsCatData(newscatdata && newscatdata.data && newscatdata.data.length > 0 ? newscatdata.data : []);
           const localcatdata = await apiGet("main", "categoryarea");
-          setLocalCatData(localcatdata && localcatdata.length > 0 ? localcatdata : []);
+          setLocalCatData(newscatdata && localcatdata.data && localcatdata.data.length > 0 ? localcatdata.data : []);
           break;
         default:
           break;
@@ -184,9 +196,15 @@ const DashboardSlugPage = () => {
               const base64Content = btoa(unescape(encodeURIComponent(content)));
               formData.append("data", JSON.stringify({ secret: userData.token_activation, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: base64Content, thumbnail: inputData.thumbnail, tag: selectedTags }));
               formData.append("fileimg", selectedImage);
+              const confirm = window.confirm("Apakah anda yakin untuk mempublish berita baru?");
+              if (!confirm) {
+                return;
+              }
               setIsSubmitting(true);
               try {
                 await apiCrud(formData, "office", "addnews");
+                alert("Selamat, postingan berita baru berhasil dipublish!");
+                restoreFormState();
               } catch (error) {
                 console.error("error:", error);
               } finally {
@@ -214,9 +232,9 @@ const DashboardSlugPage = () => {
                   </Fragment>
                 ) : (
                   <Fragment>
-                    <TextEditor maxW="var(--pixel-700)" initialContent="" onSubmit={handlePublish}>
+                    <TextEditor maxW="var(--pixel-700)" initialContent={initialContent} onSubmit={handlePublish}>
                       <Input id={`${id}-post-title`} type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                      <Input id={`${id}-post-banner`} variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
+                      <Input id={`${id}-post-banner`} variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" initialImage={selectedImage} onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
                       <Input id={`${id}-post-alt`} type="text" labelText="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errorContent={errors.thumbnail} isRequired />
                       <Fieldset>
                         <Input id={`${id}-post-catnews`} variant="select" isSearchable labelText="Kategori Berita" placeholder="Pilih kategori berita" name="catberita" value={inputData.catberita} options={newsCatData.map((item) => ({ value: item.id, label: item.nama_kategori_berita }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catberita", value: selectedValue } })} errorContent={errors.catberita} isRequired />
@@ -265,13 +283,18 @@ const DashboardSlugPage = () => {
 
   useEffect(() => {
     const formattedDate = formatDate(getCurrentDate());
-    setInputData({ ...inputData, tgl: getCurrentDate() });
+    setSelectedImage(null);
+    setSelectedTags([]);
+    setTagSuggests([]);
+    setTagQuery("");
+    setInitialContent("");
+    setInputData({ ...inputSchema, tgl: getCurrentDate() });
     setLocaleDate(formattedDate);
-  }, []);
+  }, [selectedMode]);
 
   useEffect(() => {
     fetchData();
-  }, [scope, slug, limit, currentPage]);
+  }, [scope, slug, limit, selectedMode, currentPage]);
 
   useEffect(() => {
     fetchAdditionalData();

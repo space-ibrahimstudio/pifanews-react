@@ -3,7 +3,6 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useLoading } from "../components/contents/loader";
-import { useFetch } from "../libs/plugins/fetch";
 import { useApi } from "../libs/plugins/api";
 import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
@@ -24,9 +23,8 @@ const PostPage = () => {
   const { slug } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
-  const { apiRead } = useApi();
+  const { apiRead, apiGet } = useApi();
   const { setLoading } = useLoading();
-  const { categoryData, relatedPostData } = useFetch();
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
   const [trendLimit, setTrendLimit] = useState(10);
@@ -34,9 +32,9 @@ const PostPage = () => {
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [catPostData, setCatPostData] = useState(null);
   const [ads, setAds] = useState([]);
+  const [relatedPostData, setRelatedPostData] = useState([]);
 
   const id = (slug && `${short}-${slug}`) || `${short}-slug`;
-
   const fetchDetailPost = async () => {
     setLoading(true);
     const formData = new FormData();
@@ -47,9 +45,10 @@ const PostPage = () => {
         const selecteddata = postdetail.data[0];
         setPostDetailData(selecteddata);
         setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgURL}/${selecteddata.img_berita}` });
-        if (categoryData && categoryData.length > 0) {
-          const catdetail = categoryData.find((cat) => cat.id === selecteddata.nama_kategori_berita_id);
-          setCatPostData(catdetail ? catdetail : null);
+        const catnews = await apiGet("main", "categorynew");
+        if (catnews && catnews.data && catnews.data.length > 0) {
+          const selectedcat = catnews.data.find((cat) => cat.id === selecteddata.nama_kategori_berita_id);
+          setCatPostData(selectedcat ? selectedcat : null);
         }
       } else {
         setPostDetailData(null);
@@ -78,6 +77,18 @@ const PostPage = () => {
     }
   };
 
+  const fetchRelatedPosts = async () => {
+    const formData = new FormData();
+    formData.append("limit", "3");
+    formData.append("hal", "0");
+    try {
+      const postsdata = await apiRead(formData, "main", "relatednew");
+      setRelatedPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
   const paths = [
     { label: "Beranda", url: "/" },
     { label: catPostData && catPostData.nama_kategori_berita, url: catPostData && `/berita/kategori/${catPostData.slug}` },
@@ -88,6 +99,7 @@ const PostPage = () => {
 
   useEffect(() => {
     setTrendLimit(10);
+    fetchRelatedPosts();
   }, [slug]);
 
   useEffect(() => {
@@ -108,7 +120,7 @@ const PostPage = () => {
 
   useEffect(() => {
     fetchDetailPost();
-  }, [slug, categoryData, location.pathname]);
+  }, [slug, location.pathname]);
 
   return (
     <Fragment>
@@ -124,7 +136,7 @@ const PostPage = () => {
           </PostdetContent>
         </PostdetSection>
         <NewsHscrollSection scope="Terkait">
-          {relatedPostData.slice(0, 3).map((post, index) => (
+          {relatedPostData.map((post, index) => (
             <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>

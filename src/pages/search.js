@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useContent } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useApi } from "../libs/plugins/api";
-import { useFetch } from "../libs/plugins/fetch";
 import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
@@ -22,13 +21,13 @@ const SearchPage = () => {
   const { query } = useParams();
   const { toPathname } = useContent();
   const { short } = useDocument();
-  const { apiRead } = useApi();
-  const { trendingTagData } = useFetch();
+  const { apiRead, apiGet } = useApi();
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
   const [searchedData, setSearchedData] = useState([]);
   const [ads, setAds] = useState([]);
   const [postsFilter, setPostsFilter] = useState("update");
+  const [trendTagData, setTrendTagData] = useState([]);
 
   const id = `${short}-${toPathname(query)}`;
 
@@ -52,6 +51,15 @@ const SearchPage = () => {
     }
   };
 
+  const fetchTrendTagData = async () => {
+    try {
+      const response = await apiGet("main", "viewtag");
+      setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   useEffect(() => {
@@ -67,19 +75,20 @@ const SearchPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchTagPosts(limit);
-  }, [query, limit]);
+    setLimit(12);
+    fetchTrendTagData();
+  }, [query]);
 
   useEffect(() => {
-    setLimit(12);
-  }, [query]);
+    fetchTagPosts(limit);
+  }, [query, limit]);
 
   return (
     <Fragment>
       <SEO title={`Pencarian "${query}"`} route={`/pencarian/${query}`} />
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={trendingTagData} />
+        <TagsSection tags={trendTagData} />
         <PageTitle>
           {`Hasil pencarian: `}
           <TextHint>{query}</TextHint>

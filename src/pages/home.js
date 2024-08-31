@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
-import { useFetch } from "../libs/plugins/fetch";
 import { useApi } from "../libs/plugins/api";
 import { getInfographicPosts, getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
@@ -23,18 +22,49 @@ const HomePage = () => {
   const { short } = useDocument();
   const navigate = useNavigate();
   const location = useLocation();
-  const { apiRead } = useApi();
-  const { categoryData, localCatData, latestPostData, popularPostData, trendingTagData } = useFetch();
+  const { apiRead, apiGet } = useApi();
   const id = `${short}-home`;
   const [limit, setLimit] = useState(13);
   const [loading, setLoading] = useState(false);
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [graphicPosts, setGraphicPosts] = useState([]);
   const [ads, setAds] = useState([]);
+  const [catNewsData, setCatNewsData] = useState([]);
+  const [catLocalData, setCatLocalData] = useState([]);
+  const [trendTagData, setTrendTagData] = useState([]);
+  const [latestPostData, setLatestPostData] = useState([]);
+  const [popularPostData, setPopularPostData] = useState([]);
 
   const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
   const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.img} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+
+  const fetchCatNewsData = async () => {
+    try {
+      const response = await apiGet("main", "categorynew");
+      setCatNewsData(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
+  const fetchCatLocalData = async () => {
+    try {
+      const response = await apiGet("main", "categoryarea");
+      setCatLocalData(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
+  const fetchTrendTagData = async () => {
+    try {
+      const response = await apiGet("main", "viewtag");
+      setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
 
   const fetchTrendingPostData = async (newLimit) => {
     if (loading) return;
@@ -52,6 +82,30 @@ const HomePage = () => {
     }
   };
 
+  const fetchLatestPosts = async () => {
+    const formData = new FormData();
+    formData.append("limit", "3");
+    formData.append("hal", "0");
+    try {
+      const postsdata = await apiRead(formData, "main", "latestnew");
+      setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
+  const fetchPopularPosts = async () => {
+    const formData = new FormData();
+    formData.append("limit", "3");
+    formData.append("hal", "0");
+    try {
+      const postsdata = await apiRead(formData, "main", "popularnew");
+      setPopularPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
   const adSections = [
     { content: ads, renderContent: renderAds, style: { minWidth: "100%" } },
     { content: ads, renderContent: renderAds, style: { minWidth: "100%" } },
@@ -60,14 +114,22 @@ const HomePage = () => {
 
   const combinedSections = [];
   let adIndex = 0;
-  for (let i = 0; i < categoryData.length; i++) {
-    const section = categoryData[i];
+  for (let i = 0; i < catNewsData.length; i++) {
+    const section = catNewsData[i];
     combinedSections.push({ type: "news", data: section });
     if ((i + 1) % 3 === 0 && adIndex < adSections.length) {
       combinedSections.push({ type: "ad", data: adSections[adIndex] });
       adIndex++;
     }
   }
+
+  useEffect(() => {
+    fetchCatNewsData();
+    fetchLatestPosts();
+    fetchCatLocalData();
+    fetchTrendTagData();
+    fetchPopularPosts();
+  }, [location]);
 
   useEffect(() => {
     fetchTrendingPostData(limit);
@@ -106,7 +168,7 @@ const HomePage = () => {
       <SEO title="Beranda" route="/" />
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={trendingTagData} />
+        <TagsSection tags={trendTagData} />
         <HeroSection>
           <News3Grid id={id} posts={trendingPostData} />
           <Aside>
@@ -116,14 +178,14 @@ const HomePage = () => {
         <NewsSliderSection noSource title="Berita" scope="Infografis" content={graphicPosts} renderContent={renderInfographic} />
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection scope="Terbaru">
-          {latestPostData.slice(0, 3).map((post, index) => (
+          {latestPostData.map((post, index) => (
             <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
-        <NewsSliderSection title="Berita" scope="Kabar Daerah" content={localCatData} renderContent={renderLocalCat} />
+        <NewsSliderSection title="Berita" scope="Kabar Daerah" content={catLocalData} renderContent={renderLocalCat} />
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection scope="Populer">
-          {popularPostData.slice(0, 3).map((post, index) => (
+          {popularPostData.map((post, index) => (
             <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>

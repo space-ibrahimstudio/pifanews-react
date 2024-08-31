@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/document";
 import { useLoading } from "../components/contents/loader";
-import { useFetch } from "../libs/plugins/fetch";
 import { useApi } from "../libs/plugins/api";
 import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
@@ -23,9 +22,8 @@ const CategoryPage = ({ category }) => {
   const navigate = useNavigate();
   const { short } = useDocument();
   const { width } = useWindow();
-  const { apiRead } = useApi();
+  const { apiGet, apiRead } = useApi();
   const { setLoading } = useLoading();
-  const { categoryData, trendingTagData } = useFetch();
   const [pageInfo, setPageInfo] = useState({ id: "", title: "", desc: "", path: "", thumbnail: "" });
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
@@ -36,17 +34,31 @@ const CategoryPage = ({ category }) => {
   const [trendLoading, setTrendLoading] = useState(false);
   const [feedsLoading, setFeedsLoading] = useState(false);
   const [ads, setAds] = useState([]);
+  const [trendTagData, setTrendTagData] = useState([]);
 
   const id = (category && `${short}-${category}`) || `${short}-category`;
 
-  const getPageInfo = () => {
-    if (categoryData && categoryData.length > 0) {
-      const pageinfo = categoryData.filter((cat) => cat.slug === category);
-      if (pageinfo && pageinfo.length > 0) {
-        setPageInfo({ id: pageinfo[0].id, title: pageinfo[0].nama_kategori_berita, desc: "", path: `/berita/kategori/${pageinfo[0].slug}`, thumbnail: "" });
+  const fetchCatNewsData = async () => {
+    try {
+      const response = await apiGet("main", "categorynew");
+      if (response && response.data && response.data.length > 0) {
+        const catnewsdata = response.data;
+        const selectedcat = catnewsdata.filter((item) => item.slug === category);
+        setPageInfo({ id: selectedcat[0].id, title: selectedcat[0].nama_kategori_berita, desc: "", path: `/berita/kategori/${selectedcat[0].slug}`, thumbnail: "" });
       } else {
         setPageInfo({ id: "", title: "", desc: "", path: "", thumbnail: "" });
       }
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
+
+  const fetchTrendTagData = async () => {
+    try {
+      const response = await apiGet("main", "viewtag");
+      setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
     }
   };
 
@@ -123,8 +135,9 @@ const CategoryPage = ({ category }) => {
   }, [category, postsFilter]);
 
   useEffect(() => {
-    getPageInfo();
-  }, [category, categoryData]);
+    fetchCatNewsData();
+    fetchTrendTagData();
+  }, [category]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -161,7 +174,7 @@ const CategoryPage = ({ category }) => {
       <SEO title={pageInfo.title} route={pageInfo.path} />
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={trendingTagData} />
+        <TagsSection tags={trendTagData} />
         <HeroSection>
           {trendingPostData.length > 0 && (
             <Container300>

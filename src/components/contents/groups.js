@@ -63,12 +63,11 @@ const NewsGroup = ({ id, isPortrait = false, title, posts = [], setLimit, loadin
   );
 };
 
-export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title, posts = [], setLimit, loading = false }) => {
+export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title, posts = [], setLimit, loading = false, to = "/" }) => {
   const navigate = useNavigate();
   const ref = useRef(null);
   const { toPathname } = useContent();
   const compid = (title && `${id}-summary-group-${toPathname(title)}`) || `${id}-summary-group`;
-  const groupto = (title && `/${toPathname(title)}`) || "/";
 
   const handleScroll = () => {
     if (ref.current) {
@@ -105,7 +104,7 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title
           <div className={sumcss.groupTitlewrap}>
             <h1 className={sumcss.groupTitle}>{title}</h1>
           </div>
-          <SourceButton id={compid} to={groupto} />
+          <SourceButton id={compid} to={to} />
         </div>
       </header>
       <section ref={isPortrait ? null : ref} className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>

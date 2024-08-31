@@ -1,5 +1,4 @@
-import React, { Fragment } from "react";
-import { SectionHead, TextHint } from "../components/contents/markers";
+import React from "react";
 import styles from "./styles/news-grid-section.module.css";
 
 export const NewsGridSection = ({ id, children }) => {

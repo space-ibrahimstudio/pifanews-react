@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDocument } from "../libs/plugins/document";
 import { useApi } from "../libs/plugins/api";
-import { useFetch } from "../libs/plugins/fetch";
 import { getAdDatas } from "../libs/sources/local-data";
 import { SEO } from "../libs/plugins/seo";
 import { PageLayout } from "../components/layouts/pages";
@@ -20,16 +19,25 @@ const TagPage = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const { short } = useDocument();
-  const { apiRead } = useApi();
-  const { trendingTagData } = useFetch();
+  const { apiRead, apiGet } = useApi();
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
   const [tagPostData, setTagPostData] = useState([]);
   const [ads, setAds] = useState([]);
+  const [trendTagData, setTrendTagData] = useState([]);
   const [postsFilter, setPostsFilter] = useState("update");
 
   const id = (slug && `${short}-${slug}`) || `${short}-tag`;
+
+  const fetchTrendTagData = async () => {
+    try {
+      const response = await apiGet("main", "viewtag");
+      setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
 
   const fetchTagPosts = async (newLimit) => {
     if (loading) return;
@@ -57,6 +65,11 @@ const TagPage = () => {
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   useEffect(() => {
+    setLimit(12);
+    fetchTrendTagData();
+  }, [slug]);
+
+  useEffect(() => {
     const fetchPosts = async () => {
       try {
         const post = await getAdDatas();
@@ -72,16 +85,12 @@ const TagPage = () => {
     fetchTagPosts(limit);
   }, [slug, limit]);
 
-  useEffect(() => {
-    setLimit(12);
-  }, [slug]);
-
   return (
     <Fragment>
       <SEO title={pageInfo.title} route={pageInfo.path} />
       <PageLayout pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={trendingTagData} />
+        <TagsSection tags={trendTagData} />
         <PageTitle>
           {`Topik berita: `}
           <TextHint>{pageInfo.title}</TextHint>
