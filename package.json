@@ -58,7 +58,8 @@
     ],
     "crawl": true,
     "include": [
-      "/"
+      "/",
+      "/login"
     ],
     "minifyHtml": {
       "collapseWhitespace": true,
