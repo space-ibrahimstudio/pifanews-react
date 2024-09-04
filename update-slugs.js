@@ -63,7 +63,7 @@ async function updatePackageJson(catslugs, tagslugs, postslugs) {
 }
 
 function generateSitemap(catslugs, tagslugs, postslugs) {
-  const domain = "https://beta.pifa.co.id";
+  const domain = "https://pifa.co.id";
   if (!domain) {
     console.error("REACT_APP_DOMAIN_URL environment variable is not set");
     process.exit(1);
