@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../libs/security/auth";
+import { useAuth } from "../../libs/security/auth";
 import styles from "./styles/dashboard.module.css";
 
 export const DashboardBody = ({ children }) => {
@@ -29,10 +29,14 @@ export const DashboardContainer = ({ children }) => {
 };
 
 const DashboardPage = () => {
-  const { isLoggedin } = useAuth();
+  const { isLoggedin, userData } = useAuth();
 
   if (!isLoggedin) {
     <Navigate to="/login" />;
+  }
+
+  if (userData.level !== "admin") {
+    <Navigate to="/" />;
   }
 
   return <Navigate to="/dashboard/berita/isi-berita" replace />;

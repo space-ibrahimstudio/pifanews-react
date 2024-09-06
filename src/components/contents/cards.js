@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useContent } from "@ibrahimstudio/react";
-import { useAuth } from "../../libs/security/auth";
-import { NewsTag, NewsCount } from "./markers";
+import { NewsTag } from "./markers";
 import imgcss from "./styles/image-card.module.css";
 import newcss from "./styles/news-card.module.css";
 import catcss from "./styles/cat-card.module.css";
@@ -50,8 +49,7 @@ export const CatCard = ({ id, catname, image, onClick }) => {
   );
 };
 
-export const NewsDisplayCard = ({ id, title, short, tag, count, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
-  const { isLoggedin, userData } = useAuth();
+export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
   const { toTitleCase, toPathname, stripContent } = useContent();
   const compid = (title && tag && `${id}-display-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-display-card`;
   const carddesc = (short && stripContent(short)) || "No description";
@@ -63,7 +61,6 @@ export const NewsDisplayCard = ({ id, title, short, tag, count, image, loc, date
       <section className={discss.cardContent}>
         <div style={{ display: "flex", flexDirection: "row", gap: "var(--pixel-10)", alignItems: "flex-start", justifyContent: "flex-start" }}>
           <NewsTag id={compid} name={tag} />
-          {isLoggedin && userData.level === "admin" && <NewsCount id={compid} value={count} />}
         </div>
         <header className={discss.cardHead}>
           <h1 className={discss.cardTitle}>{title}</h1>
@@ -173,7 +170,7 @@ const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
   return (
     <section id={compid} className={newcss.newsCard} onClick={onClick}>
       <section className={newcss.cardImage}>
-        <NewsTag id={compid} name={tag} />
+        {tag && <NewsTag id={compid} name={tag} />}
         <ImageCard alt={title} src={image} />
       </section>
       <section className={newcss.cardContent}>

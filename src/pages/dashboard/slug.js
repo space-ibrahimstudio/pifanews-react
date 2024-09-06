@@ -2,20 +2,20 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
-import { useApi } from "../libs/plugins/api";
-import { useAuth } from "../libs/security/auth";
-import { useDocument } from "../libs/plugins/document";
-import { useOptions, getCurrentDate } from "../libs/helpers";
-import { inputSchema, errorSchema } from "../libs/plugins/common";
-import { PageLayout } from "../components/layouts/pages";
-import { DashboardContainer, DashboardHead, DashboardToolbar, DashboardTool } from "./dashboard";
-import { NewsGridSection } from "../sections/news-grid-section";
-import TabSwitch from "../components/user-inputs/tab-switch";
-import Pagination from "../components/navigators/pagination";
-import Fieldset from "../components/user-inputs/inputs";
-import { TagsButton } from "../components/user-inputs/buttons";
-import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../components/user-inputs/text-editor";
-import NewsCard from "../components/contents/cards";
+import { useApi } from "../../libs/plugins/api";
+import { useAuth } from "../../libs/security/auth";
+import { useDocument } from "../../libs/plugins/document";
+import { useOptions, getCurrentDate } from "../../libs/helpers";
+import { inputSchema, errorSchema } from "../../libs/plugins/common";
+import { PageLayout } from "../../components/layouts/pages";
+import { DashboardContainer, DashboardHead, DashboardToolbar, DashboardTool } from "./index";
+import { NewsGridSection } from "../../sections/news-grid-section";
+import TabSwitch from "../../components/user-inputs/tab-switch";
+import Pagination from "../../components/navigators/pagination";
+import Fieldset from "../../components/user-inputs/inputs";
+import { TagsButton } from "../../components/user-inputs/buttons";
+import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/user-inputs/text-editor";
+import NewsCard from "../../components/contents/cards";
 
 const DashboardSlugPage = () => {
   const { scope, slug } = useParams();
@@ -225,7 +225,7 @@ const DashboardSlugPage = () => {
                   <Fragment>
                     <NewsGridSection>
                       {postData.map((post, index) => (
-                        <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.counter} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+                        <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/dashboard/berita/isi-berita/update/${post.slug}`)} />
                       ))}
                     </NewsGridSection>
                     {isDataShown > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
@@ -302,6 +302,10 @@ const DashboardSlugPage = () => {
 
   if (!isLoggedin) {
     <Navigate to="/login" />;
+  }
+
+  if (userData.level !== "admin") {
+    <Navigate to="/" />;
   }
 
   return (

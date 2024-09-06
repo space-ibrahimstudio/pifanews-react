@@ -7,8 +7,9 @@ import PostPage from "./pages/post";
 import LoginPage from "./pages/login";
 import TagPage from "./pages/tag";
 import SearchPage from "./pages/search";
-import DashboardPage from "./pages/dashboard";
-import DashboardSlugPage from "./pages/dashboard-slug";
+import DashboardPage from "./pages/dashboard/index";
+import DashboardSlugPage from "./pages/dashboard/slug";
+import DashboardUpdatePage from "./pages/dashboard/update";
 
 function App() {
   const location = useLocation();
@@ -44,6 +45,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/dashboard/:scope/:slug" element={<DashboardSlugPage />} />
+      <Route path="/dashboard/berita/isi-berita/update/:params" element={<DashboardUpdatePage />} />
     </Routes>
   );
 }
