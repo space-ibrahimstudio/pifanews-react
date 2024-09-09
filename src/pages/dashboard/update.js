@@ -264,6 +264,7 @@ const DashboardUpdatePage = () => {
       formData.append("data", JSON.stringify(submittedData));
       if (uslug === "kategori") {
         formData.append("idedit", selectedID);
+        formData.append("fileimg", selectedImage);
       }
       await apiCrud(formData, "office", endpoint);
       alert(successmsg);

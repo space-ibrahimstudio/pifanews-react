@@ -243,6 +243,9 @@ const DashboardSlugPage = () => {
       }
       const formData = new FormData();
       formData.append("data", JSON.stringify(submittedData));
+      if (slug === "kategori") {
+        formData.append("fileimg", selectedImage);
+      }
       await apiCrud(formData, "office", endpoint);
       alert(successmsg);
       log("submitted data:", submittedData);
