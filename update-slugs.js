@@ -44,9 +44,12 @@ async function fetchCatSlug() {
 // }
 
 async function fetchPostSlug() {
+  const formData = new FormData();
   try {
+    formData.append("limit", "2000");
+    formData.append("hal", "0");
     const url = `${apiURL}/authapi/viewnews`;
-    const response = await axios.get(url);
+    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
     if (!slugdata.error) {
       return slugdata.data;
