@@ -37,7 +37,7 @@ async function fetchTagSlug() {
 
 async function fetchPostSlug() {
   const formData = new FormData();
-  formData.append("limit", "250");
+  formData.append("limit", "5");
   formData.append("hal", "0");
   try {
     const url = `${apiURL}/main/latestnew`;
