@@ -44,7 +44,6 @@ async function fetchPostSlug() {
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
     if (!slugdata.error) {
-      console.log("data:", slugdata.data);
       return slugdata.data;
     } else {
       return [];
