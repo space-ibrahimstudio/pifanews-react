@@ -1,6 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useContent } from "@ibrahimstudio/react";
+import { useContent, useFormat } from "@ibrahimstudio/react";
+import { Button } from "@ibrahimstudio/button";
+import { Input } from "@ibrahimstudio/input";
+import { useDocument } from "../../libs/plugins/document";
 import { NewsTag } from "./markers";
+import { Edit, Trash, Close } from "./icons";
 import imgcss from "./styles/image-card.module.css";
 import newcss from "./styles/news-card.module.css";
 import catcss from "./styles/cat-card.module.css";
@@ -8,8 +12,117 @@ import discss from "./styles/news-display-card.module.css";
 import sumcss from "./styles/news-summary-card.module.css";
 import feecss from "./styles/news-feed-card.module.css";
 import gracss from "./styles/infographic-card.module.css";
+import cadcss from "./styles/cat-admin-card.module.css";
+import ogscss from "./styles/og-card.module.css";
+import tagcss from "./styles/tag-card.module.css";
 
 const imgURL = process.env.REACT_APP_IMAGE_URL;
+
+export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpdate, onEdit, inputData, setInputData, onChange, onClose, onSave, onDelete, isDisabled = false }) => {
+  const { toPathname } = useContent();
+  const { newDate } = useFormat();
+  const [editOpen, setEditOpen] = useState(openState);
+  const compid = (title && `${id}-tag-card-${toPathname(title)}`) || `${id}-tag-card`;
+
+  const openEdit = () => {
+    onEdit();
+    setEditOpen(true);
+  };
+
+  const closeEdit = () => {
+    onClose();
+    setEditOpen(false);
+  };
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    onSave();
+    setEditOpen(false);
+  };
+
+  return editOpen ? (
+    <form id={compid} className={tagcss.tagCard} onSubmit={handleSave}>
+      <Input id={`${id}-tag-name`} type="text" isLabeled={false} placeholder="Masukkan nama tag" name="name" value={inputData.name} onChange={onChange} isRequired />
+      <Button id={`${compid}-action-edit`} type="submit" buttonText="Simpan" />
+      <Button id={`${compid}-action-cancel`} type="button" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Close />} onClick={closeEdit} />
+    </form>
+  ) : (
+    <section id={compid} className={tagcss.tagCard}>
+      <header className={tagcss.cardContent}>
+        <h1 className={tagcss.cardTitle}>{title}</h1>
+        <span className={tagcss.cardDate}>
+          Created at: {newDate(timeCreate)} | Updated at: {newDate(timeUpdate)}
+        </span>
+      </header>
+      <Button id={`${compid}-action-edit`} size="sm" color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={openEdit} isDisabled={isDisabled} />
+      <Button id={`${compid}-action-delete`} size="sm" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} isDisabled={isDisabled} />
+    </section>
+  );
+
+  // return (
+  //   <section id={compid} className={tagcss.tagCard}>
+  //     {editOpen ? (
+  //       <Fragment>
+  //         <Input id={`${id}-tag-name`} type="text" labelText="Nama Tag" placeholder="Masukkan nama tag" name="judul" value={inputData.name} onChange={handleInputChange} isRequired />
+  //         <Button id={`${compid}-action-edit`} size="sm" buttonText="Simpan" onClick={handleSave} />
+  //         <Button id={`${compid}-action-edit`} size="sm" variant="hollow" color="var(--color-red)" buttonText="Batal" onClick={closeEdit} />
+  //       </Fragment>
+  //     ) : (
+  //       <header className={tagcss.cardContent}>
+  //         <h1 className={tagcss.cardTitle}>{title}</h1>
+  //         <span className={tagcss.cardDate}>
+  //           Created at: {newDate(timeCreate)} | Updated at: {newDate(timeUpdate)}
+  //         </span>
+  //       </header>
+  //     )}
+  //     <Button id={`${compid}-action-edit`} size="sm" color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={openEdit} />
+  //     <Button id={`${compid}-action-delete`} size="sm" color="var(--color-red)" bgColor="var(--color-red-5)" buttonText="Hapus" startContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} />
+  //   </section>
+  // );
+};
+
+export const OGCard = ({ id, image, title = "", scope = "/", desc = "" }) => {
+  const { company } = useDocument();
+  const { toPathname } = useContent();
+  const compid = (title && `${id}-og-card-${toPathname(title)}`) || `${id}-og-card`;
+
+  return (
+    <section id={compid} className={ogscss.ogCard}>
+      <img className={ogscss.cardImage} loading="lazy" alt={title} src={image} />
+      <header className={ogscss.cardContent}>
+        <h1 className={ogscss.contentTitle}>{title === "" ? "Open Graph Protocol" : `${title} | ${company}`}</h1>
+        <span className={`${ogscss.contentDesc} ${desc === "" ? ogscss.not : ""}`}>{desc === "" ? "How your content appears when it's shared on social media platforms like WhatsApp, Facebook, Twitter, and LinkedIn." : desc}</span>
+        <span className={ogscss.contentUrl}>{`pifa.co.id${scope}${toPathname(title)}`}</span>
+      </header>
+      <section className={ogscss.cardMssg}>
+        <p className={ogscss.mssgText}>
+          {`Hey, udah baca berita ini? `}
+          <span style={{ color: "var(--color-primary)", textDecoration: "underline" }}>{`https://pifa.co.id${scope}${toPathname(title)}`}</span>
+        </p>
+      </section>
+    </section>
+  );
+};
+
+export const CatAdmCard = ({ id, title, short, image, onEdit }) => {
+  const { toPathname } = useContent();
+  const compid = (title && `${id}-category-admin-card-${toPathname(title)}`) || `${id}-category-admin-card`;
+  const cardimg = image === "" ? "/img/fallback.jpg" : image;
+  const cardshrt = short === "" ? "no description." : short;
+
+  return (
+    <section id={compid} className={cadcss.catAdmCard}>
+      <img className={cadcss.cardImage} loading="lazy" alt={title} src={cardimg} />
+      <section className={cadcss.cardContent}>
+        <header className={cadcss.cardHead}>
+          <h1 className={cadcss.cardTitle}>{title}</h1>
+          <span className={cadcss.cardShort}>{cardshrt}</span>
+        </header>
+        <Button id={`${compid}-action-edit`} size="sm" color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Lihat & Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={onEdit} />
+      </section>
+    </section>
+  );
+};
 
 export const ImageCard = ({ alt, src }) => {
   const { toPathname } = useContent();

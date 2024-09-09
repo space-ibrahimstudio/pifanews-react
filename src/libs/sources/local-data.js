@@ -76,27 +76,6 @@ export async function getStaticPages() {
   return pages;
 }
 
-export async function getLocalCategories() {
-  const cats = [
-    { id: "1", name: "Pontianak", image: "/img/img-01.jpg" },
-    { id: "2", name: "Kubu Raya", image: "/img/img-02.jpg" },
-    { id: "3", name: "Mempawah", image: "/img/img-03.jpg" },
-    { id: "4", name: "Singkawang", image: "" },
-    { id: "5", name: "Bengkayang", image: "" },
-    { id: "6", name: "Sambas", image: "" },
-    { id: "7", name: "Landak", image: "" },
-    { id: "8", name: "Sanggau", image: "" },
-    { id: "9", name: "Sekadau", image: "" },
-    { id: "10", name: "Sintang", image: "" },
-    { id: "11", name: "Melawi", image: "" },
-    { id: "12", name: "Kapuas Hulu", image: "" },
-    { id: "13", name: "Ketapang", image: "" },
-    { id: "14", name: "Kayong Utara", image: "" },
-  ];
-
-  return cats;
-}
-
 export async function getInfographicPosts() {
   const posts = [
     {
@@ -143,14 +122,14 @@ export async function getInfographicPosts() {
 
 export async function getAdDatas() {
   const ads = [
-    { label: "", image: "/img/ad/1696303634.webp" },
-    { label: "", image: "/img/ad/1654149291.webp" },
-    { label: "", image: "/img/ad/1654149341.webp" },
-    { label: "", image: "/img/ad/1654149110.webp" },
-    { label: "", image: "/img/ad/1696303634.webp" },
-    { label: "", image: "/img/ad/1654149291.webp" },
-    { label: "", image: "/img/ad/1654149341.webp" },
-    { label: "", image: "/img/ad/1654149110.webp" },
+    { label: "SPACE AVAILABLE!!!", image: "/img/ad/1.png" },
+    { label: "PANTENGIN INFOGRAFIS DUNIA TERKINI", image: "/img/ad/2.png" },
+    { label: "LAPORKAN KEJADIAN PENTING DISEKITARMU", image: "/img/ad/3.png" },
+    { label: "BERITA TERUPDATE SETIAP HARI", image: "/img/ad/4.png" },
+    { label: "SPACE AVAILABLE!!!", image: "/img/ad/1.png" },
+    { label: "PANTENGIN INFOGRAFIS DUNIA TERKINI", image: "/img/ad/2.png" },
+    { label: "LAPORKAN KEJADIAN PENTING DISEKITARMU", image: "/img/ad/3.png" },
+    { label: "BERITA TERUPDATE SETIAP HARI", image: "/img/ad/4.png" },
   ];
 
   return ads;

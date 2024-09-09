@@ -63,6 +63,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  min-height: 80vh;
   padding: var(--pixel-20) var(--pixel-70);
   gap: var(--pixel-20);
 }

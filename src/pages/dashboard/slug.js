@@ -1,13 +1,17 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
+import { useDevmode } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
 import { useApi } from "../../libs/plugins/api";
 import { useAuth } from "../../libs/security/auth";
 import { useDocument } from "../../libs/plugins/document";
-import { useOptions, getCurrentDate } from "../../libs/helpers";
+import { useOptions, getCurrentDate, inputValidator } from "../../libs/helpers";
+import { SEO } from "../../libs/plugins/seo";
 import { inputSchema, errorSchema } from "../../libs/plugins/common";
 import { PageLayout } from "../../components/layouts/pages";
+import Container from "../../components/layouts/frames";
+import { CatGridSection } from "../../sections/cat-grid-section";
 import { DashboardContainer, DashboardHead, DashboardToolbar, DashboardTool } from "./index";
 import { NewsGridSection } from "../../sections/news-grid-section";
 import TabSwitch from "../../components/user-inputs/tab-switch";
@@ -15,11 +19,13 @@ import Pagination from "../../components/navigators/pagination";
 import Fieldset from "../../components/user-inputs/inputs";
 import { TagsButton } from "../../components/user-inputs/buttons";
 import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/user-inputs/text-editor";
-import NewsCard from "../../components/contents/cards";
+import { SubmitForm } from "../../components/user-inputs/form";
+import NewsCard, { CatAdmCard, OGCard, TagCard } from "../../components/contents/cards";
 
 const DashboardSlugPage = () => {
   const { scope, slug } = useParams();
   const navigate = useNavigate();
+  const { log } = useDevmode();
   const { isLoggedin, userData } = useAuth();
   const { apiRead, apiGet, apiCrud } = useApi();
   const { short } = useDocument();
@@ -31,13 +37,17 @@ const DashboardSlugPage = () => {
   const [isDataShown, setIsDataShown] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedID, setSelectedID] = useState("");
   const [selectedMode, setSelectedMode] = useState("view");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+  const [selectedCatType, setSelectedCatType] = useState("berita");
+  const [pageTitle, setPageTitle] = useState("");
 
-  const [postData, setPostData] = useState([]);
   const [inputData, setInputData] = useState({ ...inputSchema });
   const [errors, setErrors] = useState({ ...errorSchema });
 
+  const [postData, setPostData] = useState([]);
   const [newsCatData, setNewsCatData] = useState([]);
   const [localCatData, setLocalCatData] = useState([]);
   const [localeDate, setLocaleDate] = useState("");
@@ -45,6 +55,8 @@ const DashboardSlugPage = () => {
   const [tagSuggests, setTagSuggests] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [initialContent, setInitialContent] = useState("");
+  const [categoryData, setCategoryData] = useState([]);
+  const [tagsData, setTagsData] = useState([]);
 
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -77,6 +89,7 @@ const DashboardSlugPage = () => {
   const restoreFormState = () => {
     const formattedDate = formatDate(getCurrentDate());
     setSelectedImage(null);
+    setSelectedImageUrl(null);
     setSelectedTags([]);
     setTagSuggests([]);
     setTagQuery("");
@@ -87,6 +100,12 @@ const DashboardSlugPage = () => {
 
   const handleImageSelect = (file) => {
     setSelectedImage(file);
+    if (file && file.type.startsWith("image/")) {
+      const url = URL.createObjectURL(file);
+      setSelectedImageUrl(url);
+    } else {
+      setSelectedImageUrl(null);
+    }
   };
 
   const fetchData = async () => {
@@ -95,12 +114,13 @@ const DashboardSlugPage = () => {
     let data;
     setIsFetching(true);
     try {
-      const offset = (currentPage - 1) * limit;
-      formData.append("data", JSON.stringify({ secret: userData.token_activation, limit: limit, hal: offset }));
       switch (scope) {
         case "berita":
           switch (slug) {
             case "isi-berita":
+              setPageTitle(selectedMode === "add" ? "Tambah Berita" : "Daftar Berita");
+              const offset = (currentPage - 1) * limit;
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, limit: limit, hal: offset }));
               data = await apiRead(formData, "office", "viewnews");
               if (data && data.data && data.data.length > 0) {
                 setPostData(data.data);
@@ -108,6 +128,39 @@ const DashboardSlugPage = () => {
                 setIsDataShown(true);
               } else {
                 setPostData([]);
+                setTotalPages(0);
+                setIsDataShown(false);
+              }
+              break;
+            default:
+              break;
+          }
+          break;
+        case "master":
+          switch (slug) {
+            case "kategori":
+              setPageTitle(selectedMode === "add" ? "Tambah Kategori" : "Daftar Kategori");
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, kategori: selectedCatType }));
+              data = await apiRead(formData, "office", "viewcategory");
+              if (data && data.data && data.data.length > 0) {
+                setCategoryData(data.data);
+                setIsDataShown(true);
+              } else {
+                setCategoryData([]);
+                setIsDataShown(false);
+              }
+              break;
+            case "tags":
+              setPageTitle(selectedMode === "add" ? "Tambah Tag" : "Daftar Tag");
+              const offset = (currentPage - 1) * limit;
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, limit: limit, hal: offset }));
+              data = await apiRead(formData, "office", "viewtags");
+              if (data && data.data && data.data.length > 0) {
+                setTagsData(data.data);
+                setTotalPages(data.TTLPage);
+                setIsDataShown(true);
+              } else {
+                setTagsData([]);
                 setTotalPages(0);
                 setIsDataShown(false);
               }
@@ -144,13 +197,72 @@ const DashboardSlugPage = () => {
     }
   };
 
+  const handleSubmit = async (e, endpoint) => {
+    e.preventDefault();
+    let requiredFields = [];
+    switch (scope) {
+      case "master":
+        switch (slug) {
+          case "kategori":
+            requiredFields = ["judul", "desc"];
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
+    }
+    const validationErrors = inputValidator(inputData, requiredFields);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    const confirmmsg = "Apakah anda yakin untuk menambahkan data baru?";
+    const successmsg = "Selamat! Data baru berhasil ditambahkan.";
+    const errormsg = "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
+    const confirm = window.confirm(confirmmsg);
+    if (!confirm) {
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      let submittedData;
+      switch (scope) {
+        case "master":
+          switch (slug) {
+            case "kategori":
+              submittedData = { secret: userData.token_activation, name: inputData.judul, desc: inputData.desc };
+              break;
+            default:
+              break;
+          }
+          break;
+        default:
+          break;
+      }
+      const formData = new FormData();
+      formData.append("data", JSON.stringify(submittedData));
+      await apiCrud(formData, "office", endpoint);
+      alert(successmsg);
+      log("submitted data:", submittedData);
+      restoreFormState();
+    } catch (error) {
+      alert(errormsg);
+      console.error(errormsg, error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const renderContent = () => {
+    let modeSwitcher = [];
     switch (scope) {
       case "berita":
         switch (slug) {
           case "isi-berita":
             const tools = [["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul"]];
-            const switchButton = [
+            modeSwitcher = [
               { label: "Daftar Berita", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
               { label: "Tambah Berita", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
             ];
@@ -217,22 +329,23 @@ const DashboardSlugPage = () => {
                 <DashboardHead title="Isi Berita" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
                 <DashboardToolbar>
                   <DashboardTool>
-                    <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} />
+                    <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                   </DashboardTool>
-                  <TabSwitch buttons={switchButton} />
+                  <TabSwitch buttons={modeSwitcher} />
                 </DashboardToolbar>
-                {selectedMode === "view" ? (
+                {selectedMode === "view" && (
                   <Fragment>
                     <NewsGridSection>
                       {postData.map((post, index) => (
-                        <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/dashboard/berita/isi-berita/update/${post.slug}`)} />
+                        <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />
                       ))}
                     </NewsGridSection>
-                    {isDataShown > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+                    {isDataShown && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
                   </Fragment>
-                ) : (
-                  <Fragment>
-                    <TextEditor maxW="var(--pixel-700)" initialContent={initialContent} onSubmit={handlePublish}>
+                )}
+                {selectedMode === "add" && (
+                  <Container isasChild isWrap gap="var(--pixel-10)">
+                    <TextEditor minW="var(--pixel-350)" initialContent={initialContent} onSubmit={handlePublish}>
                       <Input id={`${id}-post-title`} type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
                       <Input id={`${id}-post-banner`} variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
                       <Input id={`${id}-post-alt`} type="text" labelText="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errorContent={errors.thumbnail} isRequired />
@@ -269,12 +382,162 @@ const DashboardSlugPage = () => {
                         <Button type="submit" buttonText="Publish Berita" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
                     </TextEditor>
-                  </Fragment>
+                    <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.thumbnail} scope="/berita/" />
+                  </Container>
                 )}
               </Fragment>
             );
           default:
             return null;
+        }
+      case "master":
+        switch (slug) {
+          case "kategori":
+            const switchCatType = [
+              { label: "Kategori Berita", onClick: () => setSelectedCatType("berita"), active: selectedCatType === "berita" },
+              { label: "Kategori Daerah", onClick: () => setSelectedCatType("daerah"), active: selectedCatType === "daerah" },
+            ];
+
+            modeSwitcher = [
+              { label: "Daftar Kategori", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
+              { label: "Tambah Kategori", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
+            ];
+
+            return (
+              <Fragment>
+                <DashboardHead title={selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"} desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
+                <DashboardToolbar>
+                  <TabSwitch buttons={switchCatType} />
+                  <TabSwitch buttons={modeSwitcher} />
+                </DashboardToolbar>
+                {selectedMode === "view" && (
+                  <CatGridSection>
+                    {categoryData.map((item, index) => (
+                      <CatAdmCard key={index} title={selectedCatType === "berita" ? item.nama_kategori_berita : item.nama_kategori_daerah} short={item.desc} image={item.img} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)} />
+                    ))}
+                  </CatGridSection>
+                )}
+                {selectedMode === "add" && (
+                  <Container isasChild isWrap gap="var(--pixel-10)">
+                    <SubmitForm minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
+                      <Input id={`${id}-cat-image`} variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" onSelect={handleImageSelect} isRequired />
+                      <Input id={`${id}-cat-title`} type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
+                      <Input id={`${id}-cat-desc`} type="text" labelText="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
+                      <EditorFooter>
+                        <Button type="submit" buttonText="Publish Kategori" action="save" isLoading={isSubmitting} />
+                      </EditorFooter>
+                    </SubmitForm>
+                    <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
+                  </Container>
+                )}
+              </Fragment>
+            );
+          case "tags":
+            modeSwitcher = [
+              { label: "Daftar Tag", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
+              { label: "Tambah Tag", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
+            ];
+
+            const closeAddTag = () => {
+              setInputData({ name: "" });
+              setSelectedMode("view");
+            };
+
+            const openEditTag = (id, content) => {
+              setSelectedID(id);
+              log("selected id:", id);
+              setInputData({ name: content });
+              setSelectedMode("view");
+            };
+
+            const closeEditTag = () => {
+              setSelectedID("");
+              setInputData({ name: "" });
+            };
+
+            const handleSaveTag = async (action) => {
+              const requiredFields = ["name"];
+              const validationErrors = inputValidator(inputData, requiredFields);
+              if (Object.keys(validationErrors).length > 0) {
+                setErrors(validationErrors);
+                return;
+              }
+              const confirmmsg = action === "add" ? "Apakah anda yakin untuk menambahkan data baru?" : "Apakah anda yakin untuk menyimpan perubahan?";
+              const successmsg = action === "add" ? "Selamat! Data baru berhasil ditambahkan." : "Selamat! Perubahan data berhasil disimpan.";
+              const errormsg = action === "add" ? "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi." : "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
+              const confirm = window.confirm(confirmmsg);
+              if (!confirm) {
+                return;
+              }
+              setIsSubmitting(true);
+              try {
+                const submittedData = { secret: userData.token_activation, name: inputData.name };
+                const formData = new FormData();
+                formData.append("data", JSON.stringify(submittedData));
+                if (action === "update") {
+                  formData.append("idedit", selectedID);
+                }
+                await apiCrud(formData, "office", "cudtags");
+                alert(successmsg);
+                log("submitted data:", submittedData);
+                setSelectedMode("view");
+                await fetchData();
+                await fetchAdditionalData();
+              } catch (error) {
+                alert(errormsg);
+                console.error(errormsg, error);
+              } finally {
+                setIsSubmitting(false);
+              }
+            };
+
+            const handleDeleteTag = async () => {
+              const confirmmsg = "Apakah anda yakin untuk menghapus data terpilih?";
+              const successmsg = "Selamat! Data terpilih berhasil dihapus.";
+              const errormsg = "Terjadi kesalahan saat menghapus data. Mohon periksa koneksi internet anda dan coba lagi.";
+              const confirm = window.confirm(confirmmsg);
+              if (!confirm) {
+                return;
+              }
+              setIsSubmitting(true);
+              try {
+                const submittedData = { secret: userData.token_activation, name: "" };
+                const formData = new FormData();
+                formData.append("data", JSON.stringify(submittedData));
+                formData.append("iddel", selectedID);
+                await apiCrud(formData, "office", "cudtags");
+                alert(successmsg);
+                log("submitted data:", submittedData);
+                await fetchData();
+                await fetchAdditionalData();
+              } catch (error) {
+                alert(errormsg);
+                console.error(errormsg, error);
+              } finally {
+                setIsSubmitting(false);
+              }
+            };
+
+            return (
+              <Fragment>
+                <DashboardHead title="Tag Berita" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
+                <DashboardToolbar>
+                  <DashboardTool>
+                    <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                  </DashboardTool>
+                  <TabSwitch buttons={modeSwitcher} />
+                </DashboardToolbar>
+                <Container isasChild gap="unset">
+                  <Fragment>
+                    {selectedMode === "add" && <TagCard openState title={inputData.name} timeCreate="" timeUpdate="" inputData={inputData} setInputData={setInputData} onChange={handleInputChange} onClose={closeAddTag} onSave={() => handleSaveTag("add")} />}
+                    {tagsData.map((item, index) => (
+                      <TagCard key={index} title={item.nama_kategori_tag} timeCreate={item.created_at} timeUpdate={item.updated_at} onEdit={() => openEditTag(item.id, item.nama_kategori_tag)} inputData={inputData} setInputData={setInputData} onChange={handleInputChange} onClose={closeEditTag} onSave={() => handleSaveTag("update")} onDelete={handleDeleteTag} isDisabled={selectedMode === "add"} />
+                    ))}
+                  </Fragment>
+                </Container>
+                {isDataShown && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+              </Fragment>
+            );
         }
       default:
         return null;
@@ -282,19 +545,12 @@ const DashboardSlugPage = () => {
   };
 
   useEffect(() => {
-    const formattedDate = formatDate(getCurrentDate());
-    setSelectedImage(null);
-    setSelectedTags([]);
-    setTagSuggests([]);
-    setTagQuery("");
-    setInitialContent("");
-    setInputData({ ...inputSchema, tgl: getCurrentDate() });
-    setLocaleDate(formattedDate);
-  }, [selectedMode]);
+    restoreFormState();
+  }, [selectedMode, slug === "kategori" ? selectedCatType : null]);
 
   useEffect(() => {
     fetchData();
-  }, [scope, slug, limit, selectedMode, currentPage]);
+  }, [scope, slug, limit, selectedMode, slug === "kategori" ? selectedCatType : null, currentPage]);
 
   useEffect(() => {
     fetchAdditionalData();
@@ -309,9 +565,12 @@ const DashboardSlugPage = () => {
   }
 
   return (
-    <PageLayout pageid={id} type="private">
-      <DashboardContainer>{renderContent()}</DashboardContainer>
-    </PageLayout>
+    <Fragment>
+      <SEO title={pageTitle} route={`/dashboard/${scope}/${slug}`} />
+      <PageLayout pageid={id} type="private">
+        <DashboardContainer>{renderContent()}</DashboardContainer>
+      </PageLayout>
+    </Fragment>
   );
 };
 

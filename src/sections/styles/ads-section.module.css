@@ -4,7 +4,7 @@
   object-fit: cover;
   width: 100%;
   height: auto;
-  max-height: var(--pixel-200);
+  /* max-height: var(--pixel-200); */
   flex-shrink: 0;
 }
 
@@ -29,7 +29,7 @@
     padding: var(--pixel-20);
   }
 
-  .adsContent {
+  /* .adsContent {
     max-height: var(--pixel-150);
-  }
+  } */
 }

@@ -1,0 +1,58 @@
+.tagCard {
+  background-color: var(--color-secondlight);
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-foreground);
+  padding: var(--pixel-15) var(--pixel-20);
+  display: flex;
+  gap: var(--pixel-10);
+  align-items: flex-start;
+  align-self: stretch;
+  color: var(--color-secondary);
+  transition: var(--transit);
+}
+
+.tagCard:hover {
+  color: var(--color-primary);
+  background-color: var(--color-secondlight-30);
+}
+
+.tagCard:first-child {
+  border-radius: var(--pixel-10) var(--pixel-10) 0 0;
+}
+
+.tagCard:last-child {
+  border-radius: 0 0 var(--pixel-10) var(--pixel-10);
+  border-bottom: unset;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  overflow: hidden;
+  gap: var(--pixel-10);
+}
+
+.cardTitle,
+.cardDate {
+  overflow: hidden;
+  align-self: stretch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardTitle {
+  color: inherit;
+  font-family: var(--font-jakarta);
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
+
+.cardDate {
+  color: var(--color-secondary);
+  font-family: var(--font-inter);
+  font-size: var(--font-xsm);
+  font-weight: 500;
+  opacity: 0.5;
+}

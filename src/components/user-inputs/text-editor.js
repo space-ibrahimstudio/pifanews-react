@@ -235,11 +235,11 @@ export const EditorToolbar = ({ tools, formatText, toggleHeading, activeFormats,
   );
 };
 
-const TextEditor = ({ children, maxW, initialContent = "", onSubmit }) => {
+const TextEditor = ({ children, minW = "unset", maxW = "unset", initialContent = "", onSubmit }) => {
   const editorRef = useRef(null);
   const { log } = useDevmode();
   const { userData } = useAuth();
-  const editorstyles = { width: "100%", maxWidth: maxW, borderRadius: "var(--pixel-20)", backgroundColor: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "var(--pixel-20)", gap: "var(--pixel-15)" };
+  const editorstyles = { flex: "1", minWidth: minW, maxWidth: maxW, borderRadius: "var(--pixel-20)", backgroundColor: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "var(--pixel-20)", gap: "var(--pixel-15)" };
   const [activeFormats, setActiveFormats] = useState({ h1: false, h2: false, paragraph: false, bold: false, italic: false, underline: false, strikethrough: false, ol: false, ul: false });
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);

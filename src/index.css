@@ -34,6 +34,8 @@
   --color-secondlight-30: rgba(255, 255, 255, 0.3);
   --color-secondlight-40: rgba(255, 255, 255, 0.4);
   --color-secondlight-50: rgba(255, 255, 255, 0.5);
+  --color-red: #f31260;
+  --color-red-5: rgba(243, 18, 96, 0.05);
 
   --font-xlg: 50px;
   --font-lg: 35px;

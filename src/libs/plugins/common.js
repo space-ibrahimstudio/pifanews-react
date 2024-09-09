@@ -10,6 +10,8 @@ export const inputSchema = {
   content: "",
   thumbnail: "",
   tag: [{ tag: "" }],
+  desc: "",
+  image: "",
 };
 
 export const errorSchema = {
@@ -24,4 +26,6 @@ export const errorSchema = {
   content: "",
   thumbnail: "",
   tag: [{ tag: "" }],
+  desc: "",
+  image: "",
 };

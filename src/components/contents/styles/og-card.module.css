@@ -1,0 +1,85 @@
+.ogCard {
+  overflow: hidden;
+  background-color: var(--color-secondlight);
+  border-radius: var(--pixel-20) 0px var(--pixel-20) var(--pixel-20);
+  padding: var(--pixel-5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: var(--pixel-350);
+}
+
+.cardImage {
+  width: 100%;
+  height: var(--pixel-150);
+  border-radius: var(--pixel-15) var(--pixel-15) 0px 0px;
+}
+
+.cardContent {
+  background-color: var(--color-primary-5);
+  overflow: hidden;
+  border-radius: 0px 0px var(--pixel-15) var(--pixel-15);
+  padding: var(--pixel-10);
+  gap: var(--pixel-10);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.contentTitle {
+  font-family: var(--font-jakarta);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  display: -webkit-inline-box;
+  text-overflow: ellipsis;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.contentDesc,
+.contentUrl,
+.contentTitle {
+  overflow: hidden;
+  line-height: normal;
+  color: var(--color-secondary);
+  align-self: stretch;
+}
+
+.contentDesc,
+.contentUrl {
+  font-family: var(--font-inter);
+  font-size: var(--font-xsm);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contentDesc.not {
+  text-overflow: unset;
+  white-space: unset;
+}
+
+.contentUrl {
+  opacity: 0.5;
+}
+
+.cardMssg {
+  gap: var(--pixel-10);
+  padding: var(--pixel-10);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.mssgText {
+  align-self: stretch;
+  font-family: var(--font-inter);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--color-secondary);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}

@@ -20,6 +20,15 @@ export const FormHead = ({ title, desc }) => {
   );
 };
 
+export const SubmitForm = ({ minW = "unset", maxW = "unset", onSubmit, children }) => {
+  const editorstyles = { flex: "1", minWidth: minW, maxWidth: maxW, borderRadius: "var(--pixel-20)", backgroundColor: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "var(--pixel-20)", gap: "var(--pixel-15)" };
+  return (
+    <form style={editorstyles} onSubmit={onSubmit}>
+      {children}
+    </form>
+  );
+};
+
 const Form = ({ onSubmit, children }) => {
   return (
     <form className={styles.form} onSubmit={onSubmit}>

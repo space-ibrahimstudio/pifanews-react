@@ -45,7 +45,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/dashboard/:scope/:slug" element={<DashboardSlugPage />} />
-      <Route path="/dashboard/berita/isi-berita/update/:params" element={<DashboardUpdatePage />} />
+      <Route path="/dashboard/:uscope/:uslug/update/:params" element={<DashboardUpdatePage />} />
     </Routes>
   );
 }
