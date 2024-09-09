@@ -44,6 +44,7 @@ async function fetchPostSlug() {
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
     if (!slugdata.error) {
+      console.log("data:", slugdata.data);
       return slugdata.data;
     } else {
       return [];
@@ -54,15 +55,18 @@ async function fetchPostSlug() {
   }
 }
 
-async function updatePackageJson(catslugs, tagslugs, postslugs) {
-  const updatedInclude = ["/", "/login", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...tagslugs.map((item) => `/berita/tag/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+// async function updatePackageJson(catslugs, tagslugs, postslugs) {
+async function updatePackageJson(catslugs, postslugs) {
+  // const updatedInclude = ["/", "/login", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...tagslugs.map((item) => `/berita/tag/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  const updatedInclude = ["/", "/login", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
   packageJson.reactSnap.include = updatedInclude;
 
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
   console.log("package.json updated successfully");
 }
 
-function generateSitemap(catslugs, tagslugs, postslugs) {
+// function generateSitemap(catslugs, tagslugs, postslugs) {
+function generateSitemap(catslugs, postslugs) {
   const domain = "https://pifa.co.id";
   if (!domain) {
     console.error("REACT_APP_DOMAIN_URL environment variable is not set");
@@ -70,7 +74,8 @@ function generateSitemap(catslugs, tagslugs, postslugs) {
   }
 
   const staticUrls = ["/", "/login"];
-  const dynamicUrls = [...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...tagslugs.map((item) => `/berita/tag/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  // const dynamicUrls = [...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...tagslugs.map((item) => `/berita/tag/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  const dynamicUrls = [...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -100,8 +105,10 @@ async function main() {
   const catslugs = await fetchCatSlug();
   const tagslugs = await fetchTagSlug();
   const postslugs = await fetchPostSlug();
-  await updatePackageJson(catslugs, tagslugs, postslugs);
-  generateSitemap(catslugs, tagslugs, postslugs);
+  // await updatePackageJson(catslugs, tagslugs, postslugs);
+  // generateSitemap(catslugs, tagslugs, postslugs);
+  await updatePackageJson(catslugs, postslugs);
+  generateSitemap(catslugs, postslugs);
 }
 
 main();
