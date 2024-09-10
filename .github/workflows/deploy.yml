@@ -49,7 +49,11 @@ jobs:
           username: ${{ secrets.FTP_USERNAME_PROD }}
           password: ${{ secrets.FTP_PASSWORD_PROD }}
           local-dir: build/
-          exclude: build/berita/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/berita/**
           dangerous-clean-slate: false
 
       - name: 8. Sync "berita" folder (preserve older slugs)
