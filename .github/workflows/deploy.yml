@@ -70,7 +70,7 @@ jobs:
       - name: 10. Sync "berita" folder (preserve older slugs)
         run: |
           lftp -e "
-            mv berita_temp/* berita/; 
-            rmdir berita_temp; 
-            bye" 
-          -u ${{ secrets.FTP_USERNAME_PROD }},${{ secrets.FTP_PASSWORD_PROD }} ${{ secrets.FTP_HOST_PROD }}
+            open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ftp://${{ secrets.FTP_HOST }};
+            mv berita_temp/* berita/;
+            rmdir berita_temp;
+            bye"
