@@ -55,22 +55,22 @@ jobs:
             **/node_modules/**
             **/berita/**
 
-      # - name: 8. Sync "berita" folder (preserve older slugs)
-      #   uses: SamKirkland/FTP-Deploy-Action@4.3.3
-      #   with:
-      #     server: ${{ secrets.FTP_HOST_PROD }}
-      #     username: ${{ secrets.FTP_USERNAME_PROD }}
-      #     password: ${{ secrets.FTP_PASSWORD_PROD }}
-      #     local-dir: build/berita/
-      #     server-dir: berita/
-      #     dangerous-clean-slate: false
+      - name: 8. Sync "berita" folder to temp
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_HOST_PROD }}
+          username: ${{ secrets.FTP_USERNAME_PROD }}
+          password: ${{ secrets.FTP_PASSWORD_PROD }}
+          local-dir: build/berita/
+          server-dir: berita_temp/
 
-      - name: 8. Install `lftp`
+      - name: 9. Install `lftp`
         run: sudo apt-get install lftp
 
-      - name: 9. Sync "berita" folder (preserve older slugs)
+      - name: 10. Sync "berita" folder (preserve older slugs)
         run: |
-          lftp -c "
-          open -u ${{ secrets.FTP_USERNAME_PROD }},${{ secrets.FTP_PASSWORD_PROD }} ftp://${{ secrets.FTP_HOST_PROD }};
-          mirror --reverse --continue --verbose build/berita berita/
-          "
+          lftp -e "
+            mv berita_temp/* berita/; 
+            rmdir berita_temp; 
+            bye" 
+          -u ${{ secrets.FTP_USERNAME_PROD }},${{ secrets.FTP_PASSWORD_PROD }} ${{ secrets.FTP_HOST_PROD }}
