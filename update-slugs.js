@@ -46,8 +46,8 @@ async function fetchCatSlug() {
 async function fetchPostSlug() {
   const formData = new FormData();
   try {
-    formData.append("limit", "50");
-    formData.append("hal", "50");
+    formData.append("limit", "10");
+    formData.append("hal", "0");
     const url = `${apiURL}/authapi/viewnews`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
@@ -100,12 +100,14 @@ async function generateSitemap(catslugs, postslugs) {
   let existingUrls = [];
 
   if (fs.existsSync(sitemapPath)) {
+    console.log("existing sitemap.xml detected, merging data...");
     const existingSitemapData = fs.readFileSync(sitemapPath, "utf8");
     try {
       const parsedSitemap = await parseStringPromise(existingSitemapData);
       const existingUrlset = parsedSitemap.urlset.url;
       existingUrls = existingUrlset.map((urlObj) => ({
         loc: urlObj.loc[0],
+        changefreq: urlObj.changefreq[0],
         lastmod: urlObj.lastmod ? urlObj.lastmod[0] : null,
         priority: urlObj.priority ? parseFloat(urlObj.priority[0]) : 0.6,
       }));

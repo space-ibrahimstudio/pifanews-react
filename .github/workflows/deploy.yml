@@ -49,8 +49,8 @@ jobs:
           username: ${{ secrets.FTP_USERNAME_PROD }}
           password: ${{ secrets.FTP_PASSWORD_PROD }}
           local-dir: build/
-          exclude: berita/
-          dangerous-clean-slate: true
+          exclude: build/berita/
+          dangerous-clean-slate: false
 
       - name: 8. Sync "berita" folder (preserve older slugs)
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
