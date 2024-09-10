@@ -66,10 +66,8 @@ jobs:
 
       - name: 10. Sync "berita" folder (preserve older slugs)
         run: |
-          curl -T berita_temp/* \
-          -u ${{ secrets.FTP_USERNAME_PROD }}:${{ secrets.FTP_PASSWORD_PROD }} \
-          ftp://${{ secrets.FTP_HOST_PROD }}/berita/
-
-          curl -X "DELE" \
-          -u ${{ secrets.FTP_USERNAME_PROD }}:${{ secrets.FTP_PASSWORD_PROD }} \
-          ftp://${{ secrets.FTP_HOST_PROD }}/berita_temp/
+          ftp -inv ${{ secrets.FTP_HOST_PROD }} <<EOF
+          user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}
+          mv berita_temp/* berita/
+          bye
+          EOF
