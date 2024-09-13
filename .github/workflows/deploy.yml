@@ -85,6 +85,4 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST_PROD }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME_PROD }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_PROD }}
-        run: |
-          python3 -m pip install ftplib
-          python3 ftp_move.py
+        run: python3 ftp_move.py
