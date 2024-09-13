@@ -64,16 +64,13 @@ jobs:
           local-dir: build/berita/
           server-dir: berita_temp/
 
-      - name: 9. Install lftp
-        run: sudo apt-get install -y lftp
-
-      - name: 10. Sync "berita" folder (preserve older slugs)
+      - name: 9. Sync "berita" folder (preserve older slugs)
         run: |
-          lftp -u ${{ secrets.FTP_USERNAME_PROD }},${{ secrets.FTP_PASSWORD_PROD }} ${{ secrets.FTP_HOST_PROD }} <<EOF
-          set ssl:verify-certificate no
+          ftp -inv ${{ secrets.FTP_HOST_PROD }} <<EOF
+          user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}
           cd berita_temp
-          mirror -R . ../berita \
-          --exclude-glob kategori/ \
-          --exclude-glob .ftp-deploy-sync-state.json
+          mget *
+          lcd /tmp
+          mput * ../berita
           bye
           EOF
