@@ -64,13 +64,27 @@ jobs:
           local-dir: build/berita/
           server-dir: berita_temp/
 
-      - name: 9. Sync "berita" folder (preserve older slugs)
+      # - name: 9. Sync "berita" folder (preserve older slugs)
+      #   run: |
+      #     ftp -inv ${{ secrets.FTP_HOST_PROD }} <<EOF
+      #     user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}
+      #     cd berita_temp
+      #     mls * /tmp/filelist.txt
+      #     lcd /tmp
+      #     mget *.txt *.jpg *.png
+      #     cd ../berita
+      #     mput *
+      #     bye
+      #     EOF
+
+      - name: 9. Install Python
+        run: sudo apt-get install -y python3
+
+      - name: 10. FTP Recursive Move using Python
+        env:
+        FTP_HOST: ${{ secrets.FTP_HOST_PROD }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME_PROD }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_PROD }}
         run: |
-          ftp -inv ${{ secrets.FTP_HOST_PROD }} <<EOF
-          user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}
-          cd berita_temp
-          mget *
-          lcd /tmp
-          mput * ../berita
-          bye
-          EOF
+          python3 -m pip install ftplib
+          python3 ftp_move.py
