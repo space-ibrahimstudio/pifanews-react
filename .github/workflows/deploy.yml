@@ -1,11 +1,11 @@
-name: PIFA v0.1.0 (beta)
+name: PIFA v0.1.0
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 0 */2 * *"
+  # schedule:
+  #   - cron: "0 0 */2 * *"
 
 jobs:
   web-deploy:
@@ -64,10 +64,16 @@ jobs:
           local-dir: build/berita/
           server-dir: berita_temp/
 
+      - name: 9. Install lftp
+        run: sudo apt-get install -y lftp
+
       - name: 10. Sync "berita" folder (preserve older slugs)
         run: |
-          ftp -inv ${{ secrets.FTP_HOST_PROD }} <<EOF
-          user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}
-          mv berita_temp/* berita/
+          lftp -u ${{ secrets.FTP_USERNAME_PROD }},${{ secrets.FTP_PASSWORD_PROD }} ${{ secrets.FTP_HOST_PROD }} <<EOF
+          set ssl:verify-certificate no
+          cd berita_temp
+          mirror -R . ../berita \
+          --exclude-glob kategori/ \
+          --exclude-glob .ftp-deploy-sync-state.json
           bye
           EOF

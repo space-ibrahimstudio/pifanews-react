@@ -61,25 +61,7 @@
     "crawl": true,
     "include": [
       "/",
-      "/login",
-      "/berita/kategori/lokal",
-      "/berita/kategori/nasional",
-      "/berita/kategori/internasional",
-      "/berita/kategori/teknologi",
-      "/berita/kategori/lifestyle",
-      "/berita/kategori/sports",
-      "/berita/kategori/pifabiz",
-      "/berita/kategori/politik",
-      "/berita/menkes-vaksinasi-covid-19-untuk-anak-dilaksanakan-di-dinas-pendidikan-dan-sekolah",
-      "/berita/ribuan-orang-arab-saudi-operasi-koreksi-jenis-kelamin-akibat-disforia-gender",
-      "/berita/ketersediaan-oksigen-di-rsud-sultan-syarif-mohamad-alkadrie-sudah-aman",
-      "/berita/bus-pontianak-putussibau-alami-laka-tunggal",
-      "/berita/menteri-keuangan-sri-mulyani-umumkan-kenaikan-anggaran-covid-19-jadi-rp-193-triliun",
-      "/berita/usai-jalani-operasi-akibat-radang-usus-besar-kini-kondisi-paus-fransiskus-membaik",
-      "/berita/pemerintah-siapkan-skenario-terburuk-penanganan-covid-19-jika-kasus-40-50-ribu-per-hari",
-      "/berita/badan-litbangkes-kemenkes-laporkan-virus-corona-varian-eta-pertama-di-jakarta",
-      "/berita/walkot-pontianak-sampaikan-belasungkawa-wafatnya-kadisdikbud-syahdan-lazis",
-      "/berita/pemkot-pontianak-targetkan-150-ribu-warganya-tervaksin-hingga-akhir-juli"
+      "/login"
     ],
     "minifyHtml": {
       "collapseWhitespace": true,
