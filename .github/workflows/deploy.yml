@@ -92,9 +92,19 @@ jobs:
           echo "open ${{ secrets.FTP_HOST_PROD }}" >> ftp_commands.txt
           echo "user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}" >> ftp_commands.txt
           echo "binary" >> ftp_commands.txt
-          echo "lcd build/berita" >> ftp_commands.txt
-          echo "cd berita" >> ftp_commands.txt
-          echo "mput -O . *" >> ftp_commands.txt
+
+          find build/berita -type d | while read DIR; do
+            REMOTE_DIR=$(echo $DIR | sed 's#^build/##')
+            echo "mkdir berita/$REMOTE_DIR" >> ftp_commands.txt
+            echo "cd berita/$REMOTE_DIR" >> ftp_commands.txt
+          done
+
+          find build/berita -type f | while read FILE; do
+            REMOTE_FILE_DIR=$(dirname $FILE | sed 's#^build/##')
+            echo "cd berita/$REMOTE_FILE_DIR" >> ftp_commands.txt
+            echo "put $FILE" >> ftp_commands.txt
+          done
+
           echo "bye" >> ftp_commands.txt
 
       - name: 9. Deploy via FTP
