@@ -105,7 +105,7 @@ jobs:
           find build/berita -type f | while read FILE; do
             REMOTE_FILE_DIR=$(dirname $FILE | sed 's#^build/##')
             echo "cd /$REMOTE_FILE_DIR" >> ftp_commands.txt
-            echo "put $FILE" >> ftp_commands.txt
+            echo "put $(basename $FILE)" >> ftp_commands.txt
           done
 
           echo "bye" >> ftp_commands.txt
