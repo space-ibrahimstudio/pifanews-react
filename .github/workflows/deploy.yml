@@ -55,14 +55,14 @@ jobs:
             **/node_modules/**
             **/berita/**
 
-      - name: 8. Sync "berita" folder to temp
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ secrets.FTP_HOST_PROD }}
-          username: ${{ secrets.FTP_USERNAME_PROD }}
-          password: ${{ secrets.FTP_PASSWORD_PROD }}
-          local-dir: build/berita/
-          server-dir: berita_temp/
+      # - name: 8. Sync "berita" folder to temp
+      #   uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      #   with:
+      #     server: ${{ secrets.FTP_HOST_PROD }}
+      #     username: ${{ secrets.FTP_USERNAME_PROD }}
+      #     password: ${{ secrets.FTP_PASSWORD_PROD }}
+      #     local-dir: build/berita/
+      #     server-dir: berita_temp/
 
       # - name: 9. Sync "berita" folder (preserve older slugs)
       #   run: |
@@ -77,12 +77,25 @@ jobs:
       #     bye
       #     EOF
 
-      - name: 9. Install Python
-        run: sudo apt-get install -y python3
+      # - name: 9. Install Python
+      #   run: sudo apt-get install -y python3
 
-      - name: 10. FTP Recursive Move using Python
-        env:
-          FTP_HOST: ${{ secrets.FTP_HOST_PROD }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME_PROD }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_PROD }}
-        run: python3 ftp_move.py
+      # - name: 10. FTP Recursive Move using Python
+      #   env:
+      #     FTP_HOST: ${{ secrets.FTP_HOST_PROD }}
+      #     FTP_USERNAME: ${{ secrets.FTP_USERNAME_PROD }}
+      #     FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_PROD }}
+      #   run: python3 ftp_move.py
+
+      - name: 8. Create FTP Script
+        run: |
+          echo "open ${{ secrets.FTP_HOST_PROD }}" >> ftp_commands.txt
+          echo "user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}" >> ftp_commands.txt
+          echo "binary" >> ftp_commands.txt
+          echo "lcd build/berita" >> ftp_commands.txt
+          echo "cd berita" >> ftp_commands.txt
+          echo "mput -O . *" >> ftp_commands.txt
+          echo "bye" >> ftp_commands.txt
+
+      - name: 9. Deploy via FTP
+        run: ftp -inv < ftp_commands.txt
