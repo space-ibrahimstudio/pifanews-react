@@ -54,6 +54,9 @@ jobs:
             **/.git*/**
             **/node_modules/**
             **/berita/**
+            **/img/**
+            **/png/**
+            **/svg/**
 
       - name: 8. Sync "berita" folder
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
