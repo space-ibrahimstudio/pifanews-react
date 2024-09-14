@@ -95,8 +95,11 @@ jobs:
 
           find build/berita -type d | while read DIR; do
             REMOTE_DIR=$(echo $DIR | sed 's#^build/##')
-            echo "mkdir -p /$REMOTE_DIR" >> ftp_commands.txt
-            echo "cd /$REMOTE_DIR" >> ftp_commands.txt
+            PARENT_DIRS=$(dirname "/$REMOTE_DIR")
+            echo "cd /" >> ftp_commands.txt
+            echo "mkdir -p $PARENT_DIRS" >> ftp_commands.txt
+            echo "cd $PARENT_DIRS" >> ftp_commands.txt
+            echo "mkdir $(basename $REMOTE_DIR)" >> ftp_commands.txt
           done
 
           find build/berita -type f | while read FILE; do
