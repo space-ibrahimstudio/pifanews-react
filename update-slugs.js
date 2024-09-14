@@ -24,31 +24,12 @@ async function fetchCatSlug() {
   }
 }
 
-// async function fetchPostSlug() {
-//   const formData = new FormData();
-//   formData.append("limit", "10");
-//   formData.append("hal", "0");
-//   try {
-//     const url = `${apiURL}/main/latestnew`;
-//     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
-//     const slugdata = response.data;
-//     if (!slugdata.error) {
-//       return slugdata.data;
-//     } else {
-//       return [];
-//     }
-//   } catch (error) {
-//     console.error("Error fetching post slugs:", error);
-//     process.exit(1);
-//   }
-// }
-
 async function fetchPostSlug() {
   const formData = new FormData();
+  formData.append("limit", "20");
+  formData.append("hal", "0");
   try {
-    formData.append("limit", "1000");
-    formData.append("hal", "7000");
-    const url = `${apiURL}/authapi/viewnews`;
+    const url = `${apiURL}/main/latestnew`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
     if (!slugdata.error) {
@@ -61,6 +42,25 @@ async function fetchPostSlug() {
     process.exit(1);
   }
 }
+
+// async function fetchPostSlug() {
+//   const formData = new FormData();
+//   try {
+//     formData.append("limit", "1000");
+//     formData.append("hal", "7000");
+//     const url = `${apiURL}/authapi/viewnews`;
+//     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
+//     const slugdata = response.data;
+//     if (!slugdata.error) {
+//       return slugdata.data;
+//     } else {
+//       return [];
+//     }
+//   } catch (error) {
+//     console.error("Error fetching post slugs:", error);
+//     process.exit(1);
+//   }
+// }
 
 async function updatePackageJson(catslugs, postslugs) {
   const updatedInclude = ["/", "/login", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
