@@ -55,7 +55,7 @@ jobs:
             **/node_modules/**
             **/berita/**
 
-      - name: 8. Sync "berita" folder to temp
+      - name: 8. Sync "berita" folder
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST_PROD }}
@@ -63,6 +63,17 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD_PROD }}
           local-dir: build/berita/
           server-dir: berita/
+
+      - name: 9. Remove FTP sync state file
+        run: |
+          echo "open ${{ secrets.FTP_HOST_PROD }}" >> ftp_commands.txt
+          echo "user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}" >> ftp_commands.txt
+          echo "cd /berita" >> ftp_commands.txt
+          echo "delete .ftp-deploy-sync-state.json" >> ftp_commands.txt
+          echo "bye" >> ftp_commands.txt
+
+      - name: 10. Finish job
+        run: ftp -inv < ftp_commands.txt
 
       # - name: 9. Sync "berita" folder (preserve older slugs)
       #   run: |
