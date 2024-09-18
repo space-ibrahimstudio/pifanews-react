@@ -1,16 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
-import { useDocument } from "../libs/plugins/document";
-import { useApi } from "../libs/plugins/api";
-import { getInfographicPosts, getAdDatas } from "../libs/sources/local-data";
+import { useDocument } from "../libs/plugins/helpers";
+import { useApi } from "../libs/plugins/apis";
+import { getInfographicPosts, getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import { PageLayout } from "../components/layouts/pages";
+import Page from "../components/layout/frames";
 import { News3Grid } from "../components/layouts/grids";
-import { Aside } from "../components/layouts/containers";
-import { AdBanner } from "../components/contents/image";
-import NewsCard, { InfographicCard, CatCard } from "../components/contents/cards";
-import { NewsSummaryGroup } from "../components/contents/groups";
+import { Container } from "../components/layout/frames";
+import { AdBanner } from "../components/media/image";
+import NewsCard, { InfographicCard, CatCard } from "../components/layout/cards";
+import { NewsSummaryGroup } from "../components/layout/groups";
 import { HeroSection } from "../sections/hero-section";
 import { TagsSection } from "../sections/tags-section";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
@@ -166,14 +166,14 @@ const HomePage = () => {
   return (
     <Fragment>
       <SEO title="Beranda" route="/" />
-      <PageLayout pageid={id}>
+      <Page pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={trendTagData} />
         <HeroSection>
           <News3Grid id={id} posts={trendingPostData} />
-          <Aside>
+          <Container isasChild flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3)} setLimit={setLimit} loading={loading} />
-          </Aside>
+          </Container>
         </HeroSection>
         <NewsSliderSection noSource title="Berita" scope="Infografis" content={graphicPosts} renderContent={renderInfographic} />
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
@@ -189,12 +189,10 @@ const HomePage = () => {
             <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
         </NewsHscrollSection>
-        <Fragment>
-          {combinedSections.map((section, index) => (
-            <Fragment key={index}>{section.type === "ad" ? <NewsSliderSection noHead content={section.data.content} renderContent={section.data.renderContent} contentStyle={section.data.style} /> : <NewsSection scope={section.data.nama_kategori_berita} catId={section.data.id} slug={section.data.slug} />}</Fragment>
-          ))}
-        </Fragment>
-      </PageLayout>
+        {combinedSections.map((section, index) => (
+          <Fragment key={index}>{section.type === "ad" ? <NewsSliderSection noHead content={section.data.content} renderContent={section.data.renderContent} contentStyle={section.data.style} /> : <NewsSection scope={section.data.nama_kategori_berita} catId={section.data.id} slug={section.data.slug} />}</Fragment>
+        ))}
+      </Page>
     </Fragment>
   );
 };

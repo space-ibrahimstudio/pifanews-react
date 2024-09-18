@@ -3,35 +3,33 @@ import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useDevmode } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
-import { useApi } from "../../libs/plugins/api";
-import { useAuth } from "../../libs/security/auth";
-import { useDocument } from "../../libs/plugins/document";
-import { useOptions, getCurrentDate, inputValidator } from "../../libs/helpers";
+import { useApi } from "../../libs/plugins/apis";
+import { useAuth } from "../../libs/guards/auth";
+import { useOptions, getCurrentDate, inputValidator, useInputSchema, useDocument } from "../../libs/plugins/helpers";
 import { SEO } from "../../libs/plugins/seo";
-import { inputSchema, errorSchema } from "../../libs/plugins/common";
-import { PageLayout } from "../../components/layouts/pages";
-import Container from "../../components/layouts/frames";
+import Page from "../../components/layout/frames";
+import { Container } from "../../components/layout/frames";
 import { CatGridSection } from "../../sections/cat-grid-section";
 import { DashboardContainer, DashboardHead, DashboardToolbar, DashboardTool } from "./index";
 import { NewsGridSection } from "../../sections/news-grid-section";
-import TabSwitch from "../../components/user-inputs/tab-switch";
-import Pagination from "../../components/navigators/pagination";
-import Fieldset from "../../components/user-inputs/inputs";
-import { TagsButton } from "../../components/user-inputs/buttons";
-import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/user-inputs/text-editor";
-import { SubmitForm } from "../../components/user-inputs/form";
-import NewsCard, { CatAdmCard, OGCard, TagCard } from "../../components/contents/cards";
+import Pagination from "../../components/navigation/pagination";
+import Fieldset from "../../components/formel/inputs";
+import { TagsButton, SwitchButton } from "../../components/formel/buttons";
+import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/formel/text-editor";
+import Form from "../../components/formel/form";
+import NewsCard, { CatAdmCard, OGCard, TagCard } from "../../components/layout/cards";
 
 const DashboardSlugPage = () => {
   const { scope, slug } = useParams();
   const navigate = useNavigate();
   const { log } = useDevmode();
-  const { isLoggedin, userData } = useAuth();
+  const { userData } = useAuth();
   const { apiRead, apiGet, apiCrud } = useApi();
   const { short } = useDocument();
   const { limitopt } = useOptions();
+  const { inputSch, errorSch } = useInputSchema();
   const id = `${short}-${scope}-${slug}`;
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isDataShown, setIsDataShown] = useState(false);
@@ -44,8 +42,8 @@ const DashboardSlugPage = () => {
   const [selectedCatType, setSelectedCatType] = useState("berita");
   const [pageTitle, setPageTitle] = useState("");
 
-  const [inputData, setInputData] = useState({ ...inputSchema });
-  const [errors, setErrors] = useState({ ...errorSchema });
+  const [inputData, setInputData] = useState({ ...inputSch });
+  const [errors, setErrors] = useState({ ...errorSch });
 
   const [postData, setPostData] = useState([]);
   const [newsCatData, setNewsCatData] = useState([]);
@@ -94,7 +92,7 @@ const DashboardSlugPage = () => {
     setTagSuggests([]);
     setTagQuery("");
     setInitialContent("");
-    setInputData({ ...inputSchema, tgl: getCurrentDate() });
+    setInputData({ ...inputSch, tgl: getCurrentDate() });
     setLocaleDate(formattedDate);
   };
 
@@ -334,7 +332,7 @@ const DashboardSlugPage = () => {
                   <DashboardTool>
                     <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                   </DashboardTool>
-                  <TabSwitch buttons={modeSwitcher} />
+                  <SwitchButton buttons={modeSwitcher} />
                 </DashboardToolbar>
                 {selectedMode === "view" && (
                   <Fragment>
@@ -410,8 +408,8 @@ const DashboardSlugPage = () => {
               <Fragment>
                 <DashboardHead title={selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"} desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
                 <DashboardToolbar>
-                  <TabSwitch buttons={switchCatType} />
-                  <TabSwitch buttons={modeSwitcher} />
+                  <SwitchButton buttons={switchCatType} />
+                  <SwitchButton buttons={modeSwitcher} />
                 </DashboardToolbar>
                 {selectedMode === "view" && (
                   <CatGridSection>
@@ -422,14 +420,14 @@ const DashboardSlugPage = () => {
                 )}
                 {selectedMode === "add" && (
                   <Container isasChild isWrap gap="var(--pixel-10)">
-                    <SubmitForm minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
+                    <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
                       <Input id={`${id}-cat-image`} variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" onSelect={handleImageSelect} isRequired />
                       <Input id={`${id}-cat-title`} type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
                       <Input id={`${id}-cat-desc`} type="text" labelText="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
                       <EditorFooter>
                         <Button type="submit" buttonText="Publish Kategori" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
-                    </SubmitForm>
+                    </Form>
                     <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
                   </Container>
                 )}
@@ -528,7 +526,7 @@ const DashboardSlugPage = () => {
                   <DashboardTool>
                     <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                   </DashboardTool>
-                  <TabSwitch buttons={modeSwitcher} />
+                  <SwitchButton buttons={modeSwitcher} />
                 </DashboardToolbar>
                 <Container isasChild gap="unset">
                   <Fragment>
@@ -559,20 +557,16 @@ const DashboardSlugPage = () => {
     fetchAdditionalData();
   }, [scope]);
 
-  if (!isLoggedin) {
-    <Navigate to="/login" />;
-  }
-
   if (userData.level !== "admin") {
     <Navigate to="/" />;
   }
 
   return (
     <Fragment>
-      <SEO title={pageTitle} route={`/dashboard/${scope}/${slug}`} />
-      <PageLayout pageid={id} type="private">
+      <SEO title={pageTitle} route={`/dashboard/${scope}/${slug}`} isNoIndex />
+      <Page pageid={id} type="private">
         <DashboardContainer>{renderContent()}</DashboardContainer>
-      </PageLayout>
+      </Page>
     </Fragment>
   );
 };

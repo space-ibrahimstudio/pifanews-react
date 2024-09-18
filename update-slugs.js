@@ -4,9 +4,12 @@ const axios = require("axios");
 const { parseStringPromise, Builder } = require("xml2js");
 const moment = require("moment");
 const packageJson = require("./package.json");
+if (!process.env.CI) {
+  require("dotenv").config({ path: ".env.development" });
+}
 
-const domainURL = "https://pifa.co.id";
-const apiURL = "https://api.pifa.co.id";
+const domainURL = process.env.REACT_APP_DOMAIN_URL;
+const apiURL = process.env.REACT_APP_API_URL;
 
 async function fetchCatSlug() {
   try {

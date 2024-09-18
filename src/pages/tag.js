@@ -1,24 +1,26 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDocument } from "../libs/plugins/document";
-import { useApi } from "../libs/plugins/api";
-import { getAdDatas } from "../libs/sources/local-data";
+import { useWindow } from "@ibrahimstudio/react";
+import { useDocument } from "../libs/plugins/helpers";
+import { useApi } from "../libs/plugins/apis";
+import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import { PageLayout } from "../components/layouts/pages";
-import { AdBanner } from "../components/contents/image";
+import Page from "../components/layout/frames";
+import { AdBanner } from "../components/media/image";
 import { TagsSection } from "../sections/tags-section";
 import { NewsSliderSection } from "../sections/news-slider-section";
-import { PageTitle, TextHint } from "../components/contents/markers";
+import { PageTitle, TextHint } from "../components/feedback/markers";
 import { FeedsSection } from "../sections/feeds-section";
+import { Container } from "../components/layout/frames";
 import { InlineadsSection } from "../sections/inlineads-section";
-import { Aside } from "../components/layouts/containers";
-import { FeedsGroup } from "../components/contents/groups";
-import { NewsFeedCard } from "../components/contents/cards";
+import { FeedsGroup } from "../components/layout/groups";
+import { NewsFeedCard } from "../components/layout/cards";
 
 const TagPage = () => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const { short } = useDocument();
+  const { width } = useWindow();
   const { apiRead, apiGet } = useApi();
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
@@ -88,7 +90,7 @@ const TagPage = () => {
   return (
     <Fragment>
       <SEO title={pageInfo.title} route={pageInfo.path} />
-      <PageLayout pageid={id}>
+      <Page pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={trendTagData} />
         <PageTitle>
@@ -101,11 +103,11 @@ const TagPage = () => {
               <NewsFeedCard key={index} id={id} title={post["berita"][0].judul_berita} short={post["berita"][0].isi_berita} tag={post["berita"][0].nama_kategori_berita} image={post["berita"][0].img_berita} loc={post["berita"][0].penulis_berita} date={post["berita"][0].tanggal_berita} onClick={() => navigate(`/berita/${post["berita"][0].slug}`)} />
             ))}
           </FeedsGroup>
-          <Aside>
+          <Container isasChild flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <InlineadsSection label="" src="/img/inline-ads.webp" />
-          </Aside>
+          </Container>
         </FeedsSection>
-      </PageLayout>
+      </Page>
     </Fragment>
   );
 };

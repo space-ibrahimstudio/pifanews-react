@@ -1,6 +1,6 @@
 import React from "react";
 import { useContent } from "@ibrahimstudio/react";
-import { Image } from "../components/contents/image";
+import Image from "../components/media/image";
 import styles from "./styles/inlineads-section.module.css";
 
 export const InlineadsSection = ({ id, label, src }) => {

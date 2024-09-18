@@ -1,16 +1,15 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
-import { useDocument } from "../libs/plugins/document";
-import { useLoading } from "../components/contents/loader";
-import { useApi } from "../libs/plugins/api";
-import { getAdDatas } from "../libs/sources/local-data";
+import { useDocument } from "../libs/plugins/helpers";
+import { useLoading } from "../components/feedback/loader";
+import { useApi } from "../libs/plugins/apis";
+import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import { PageLayout } from "../components/layouts/pages";
-import Container300, { Aside } from "../components/layouts/containers";
-import { AdBanner } from "../components/contents/image";
-import NewsCard, { NewsDisplayCard, NewsFeedCard } from "../components/contents/cards";
-import { NewsSummaryGroup, FeedsGroup } from "../components/contents/groups";
+import Page, { Container } from "../components/layout/frames";
+import { AdBanner } from "../components/media/image";
+import NewsCard, { NewsDisplayCard, NewsFeedCard } from "../components/layout/cards";
+import { NewsSummaryGroup, FeedsGroup } from "../components/layout/groups";
 import { HeroSection } from "../sections/hero-section";
 import { TagsSection } from "../sections/tags-section";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
@@ -18,8 +17,9 @@ import { NewsSliderSection } from "../sections/news-slider-section";
 import { FeedsSection } from "../sections/feeds-section";
 import { InlineadsSection } from "../sections/inlineads-section";
 
-const CategoryPage = ({ category }) => {
+const CategoryPage = () => {
   const navigate = useNavigate();
+  const { category } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
   const { apiGet, apiRead } = useApi();
@@ -172,18 +172,18 @@ const CategoryPage = ({ category }) => {
   return (
     <Fragment>
       <SEO title={pageInfo.title} route={pageInfo.path} />
-      <PageLayout pageid={id}>
+      <Page pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={trendTagData} />
         <HeroSection>
           {trendingPostData.length > 0 && (
-            <Container300>
+            <Container isasChild flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
               <NewsDisplayCard id={`${id}-${trendingPostData[0].id}`} title={trendingPostData[0].judul_berita} short={trendingPostData[0].isi_berita} tag={trendingPostData[0].nama_kategori_berita} image={trendingPostData[0].img_berita} loc={trendingPostData[0].penulis_berita} date={trendingPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"} flex="1" onClick={() => navigate(`/berita/${trendingPostData[0].slug}`)} />
-            </Container300>
+            </Container>
           )}
-          <Aside>
+          <Container isasChild flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={trendingPostData.slice(1)} setLimit={setTrendLimit} loading={trendLoading} />
-          </Aside>
+          </Container>
         </HeroSection>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <NewsHscrollSection scope="Terbaru">
@@ -202,9 +202,9 @@ const CategoryPage = ({ category }) => {
               <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </FeedsGroup>
-          <Aside>
+          <Container isasChild flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <InlineadsSection label="" src="/img/inline-ads.webp" />
-          </Aside>
+          </Container>
         </FeedsSection>
         <NewsHscrollSection scope="Rekomendasi">
           {trendingPostData.slice(0, 3).map((post, index) => (
@@ -212,7 +212,7 @@ const CategoryPage = ({ category }) => {
           ))}
         </NewsHscrollSection>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-      </PageLayout>
+      </Page>
     </Fragment>
   );
 };

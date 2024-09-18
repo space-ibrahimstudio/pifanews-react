@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { SectionHead, TextHint } from "../components/contents/markers";
-import { CatCard } from "../components/contents/cards";
+import { CatCard } from "../components/layout/cards";
 import styles from "./styles/cat-section.module.css";
 
 export const CatSection = ({ id, cats }) => {

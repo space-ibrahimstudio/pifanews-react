@@ -3,21 +3,18 @@ import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useDevmode } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
-import { useApi } from "../../libs/plugins/api";
-import { useAuth } from "../../libs/security/auth";
-import { useDocument } from "../../libs/plugins/document";
+import { useApi } from "../../libs/plugins/apis";
+import { useAuth } from "../../libs/guards/auth";
 import { SEO } from "../../libs/plugins/seo";
-import { inputSchema, errorSchema } from "../../libs/plugins/common";
-import { inputValidator } from "../../libs/helpers";
-import { PageLayout } from "../../components/layouts/pages";
-import Container from "../../components/layouts/frames";
+import { inputValidator, useInputSchema, useDocument } from "../../libs/plugins/helpers";
+import Page, { Container } from "../../components/layout/frames";
 import { DashboardContainer, DashboardHead, DashboardToolbar } from "./index";
-import Fieldset from "../../components/user-inputs/inputs";
-import { TagsButton } from "../../components/user-inputs/buttons";
-import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/user-inputs/text-editor";
-import { SubmitForm } from "../../components/user-inputs/form";
-import { OGCard } from "../../components/contents/cards";
-import { Arrow, Trash } from "../../components/contents/icons";
+import Fieldset from "../../components/formel/inputs";
+import { TagsButton } from "../../components/formel/buttons";
+import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/formel/text-editor";
+import Form from "../../components/formel/form";
+import { OGCard } from "../../components/layout/cards";
+import { Arrow, Trash } from "../../components/content/icons";
 
 const imgURL = process.env.REACT_APP_IMAGE_URL;
 
@@ -25,9 +22,10 @@ const DashboardUpdatePage = () => {
   const { uscope, uslug, params } = useParams();
   const navigate = useNavigate();
   const { log } = useDevmode();
-  const { isLoggedin, userData } = useAuth();
+  const { userData } = useAuth();
   const { apiRead, apiGet, apiCrud } = useApi();
   const { short } = useDocument();
+  const { inputSch, errorSch } = useInputSchema();
   const id = `${short}-${params}`;
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,8 +34,8 @@ const DashboardUpdatePage = () => {
   const [selectedID, setSelectedID] = useState("");
   const [pageTitle, setPageTitle] = useState("");
 
-  const [inputData, setInputData] = useState({ ...inputSchema });
-  const [errors, setErrors] = useState({ ...errorSchema });
+  const [inputData, setInputData] = useState({ ...inputSch });
+  const [errors, setErrors] = useState({ ...errorSch });
 
   const [newsCatData, setNewsCatData] = useState([]);
   const [localCatData, setLocalCatData] = useState([]);
@@ -80,18 +78,22 @@ const DashboardUpdatePage = () => {
           switch (uslug) {
             case "isi-berita":
               formData.append("slug", params);
-              data = await apiRead(formData, "main", "detailnew");
-              if (data && data.data && data.data.length > 0) {
-                const selecteddata = data.data[0];
-                setSelectedID(selecteddata.id);
-                setPageTitle(selecteddata.judul_berita);
-                setInputData({ judul: selecteddata.judul_berita, thumbnail: selecteddata.thumnail_berita, catberita: selecteddata.nama_kategori_berita_id, catdaerah: selecteddata.nama_kategori_daerah_id, tgl: reversedDate(selecteddata.tanggal_berita), penulis: selecteddata.penulis_berita, image: `${imgURL}/${selecteddata.img_berita}` });
-                setInitialContent(selecteddata.isi_berita);
+              data = await apiRead(formData, "main", "detailnew2");
+              if (data && data.data) {
+                const selecteddata = data.data;
+                setSelectedID(selecteddata.berita.id);
+                setPageTitle(selecteddata.berita.judul_berita);
+                setInputData({ judul: selecteddata.berita.judul_berita, thumbnail: selecteddata.berita.thumnail_berita, catberita: selecteddata.berita.nama_kategori_berita_id, catdaerah: selecteddata.berita.nama_kategori_daerah_id, tgl: reversedDate(selecteddata.berita.tanggal_berita), penulis: selecteddata.berita.penulis_berita, image: `${imgURL}/${selecteddata.berita.img_berita}` });
+                setInitialContent(selecteddata.berita.isi_berita);
+                setLocaleDate(selecteddata.berita.tanggal_berita);
+                setSelectedTags(selecteddata.tag.map((item) => ({ tag: item.nama_kategori_tag })));
               } else {
                 setSelectedID("");
                 setPageTitle("404 NOT FOUND");
                 setInputData({ judul: "", thumbnail: "", catberita: "", catdaerah: "", tgl: "", penulis: "", image: "" });
                 setInitialContent("");
+                setLocaleDate("");
+                setSelectedTags([]);
                 navigate(-1);
               }
               break;
@@ -181,6 +183,7 @@ const DashboardUpdatePage = () => {
     if (name === "tgl" && value !== "") {
       const formattedDate = formatDate(value);
       setLocaleDate(formattedDate);
+      log(`converted: "${value}" => "${formattedDate}"`);
     }
   };
 
@@ -420,14 +423,14 @@ const DashboardUpdatePage = () => {
                   <Button id={`${id}-delete-button`} variant="line" color="var(--color-red)" buttonText="Hapus Kategori" onClick={() => handleDelete("cudcatberita")} startContent={<Trash size="var(--pixel-25)" />} />
                 </DashboardToolbar>
                 <Container isasChild isWrap gap="var(--pixel-10)">
-                  <SubmitForm minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
+                  <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
                     <Input id={`${id}-cat-image`} variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" initialImage={inputData.image} onSelect={handleImageSelect} isRequired />
                     <Input id={`${id}-cat-title`} type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
                     <Input id={`${id}-cat-desc`} type="text" labelText="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
                     <EditorFooter>
                       <Button type="submit" buttonText="Simpan Perubahan" action="save" isLoading={isSubmitting} />
                     </EditorFooter>
-                  </SubmitForm>
+                  </Form>
                   <OGCard image={selectedImageUrl ? selectedImageUrl : inputData.image && inputData.image !== "" ? inputData.image : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
                 </Container>
               </Fragment>
@@ -445,20 +448,16 @@ const DashboardUpdatePage = () => {
     fetchAdditionalData();
   }, [uscope, uslug, params]);
 
-  if (!isLoggedin) {
-    <Navigate to="/login" />;
-  }
-
   if (userData.level !== "admin") {
     <Navigate to="/" />;
   }
 
   return (
     <Fragment>
-      <SEO title={`Update: ${pageTitle}`} route={`/dashboard/${uscope}/${uslug}/update/${params}`} />
-      <PageLayout pageid={id} type="private">
+      <SEO title={`Update: ${pageTitle}`} route={`/dashboard/${uscope}/${uslug}/update/${params}`} isNoIndex />
+      <Page pageid={id} type="private">
         <DashboardContainer>{renderContent()}</DashboardContainer>
-      </PageLayout>
+      </Page>
     </Fragment>
   );
 };

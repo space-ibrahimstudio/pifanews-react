@@ -2,14 +2,14 @@ import React, { Fragment, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
-import { useDocument } from "../libs/plugins/document";
-import { useAuth } from "../libs/security/auth";
-import { inputValidator } from "../libs/helpers";
+import { useDocument } from "../libs/plugins/helpers";
+import { useAuth } from "../libs/guards/auth";
+import { inputValidator } from "../libs/plugins/helpers";
 import { SEO } from "../libs/plugins/seo";
-import { PageLayout } from "../components/layouts/pages";
+import Page from "../components/layout/frames";
 import Section from "../components/layouts/section";
-import Form, { FormHead, FormFieldset } from "../components/user-inputs/form";
-import { Image } from "../components/contents/image";
+import Form, { FormHead, FormFieldset } from "../components/formel/form";
+import Image from "../components/media/image";
 
 const LoginPage = () => {
   const { short } = useDocument();
@@ -50,9 +50,9 @@ const LoginPage = () => {
   return (
     <Fragment>
       <SEO title="Login" route="/login" />
-      <PageLayout pageid={id}>
+      <Page pageid={id}>
         <Section>
-          <Form onSubmit={handleLogin}>
+          <Form as="portal" onSubmit={handleLogin}>
             <FormHead title="Login" desc="Login dulu biar bisa komen, bikin konten dan atur notifikasi konten favoritmu. Yuk!" />
             <FormFieldset>
               <Input id={`${id}-username`} isLabeled={false} type="text" name="username" value={inputData.username} placeholder="Telepon atau Email" isRequired onChange={handleInputChange} errorContent={errors.username} />
@@ -71,7 +71,7 @@ const LoginPage = () => {
             </FormFieldset>
           </Form>
         </Section>
-      </PageLayout>
+      </Page>
     </Fragment>
   );
 };

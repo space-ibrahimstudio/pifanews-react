@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { NewsDisplayCard } from "../contents/cards";
+import { NewsDisplayCard } from "../layout/cards";
 import styles from "./styles/news3grid.module.css";
 
 export const News3Grid = ({ id, posts = [] }) => {

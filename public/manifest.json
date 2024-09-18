@@ -1,6 +1,7 @@
 {
-  "short_name": "Pifa Net App",
+  "short_name": "Pifa Net",
   "name": "Pifa Net Web App",
+  "description": "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market",
   "icons": [
     {
       "src": "favicon.ico",
@@ -19,7 +20,46 @@
     }
   ],
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "display_override": ["window-control-overlay", "standalone"],
+  "display": "fullscreen",
+  "theme_color": "#066ec3",
+  "background_color": "#f6f7f9",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "Berita Terbaru hari ini",
+      "short_name": "Terbaru",
+      "description": "View weather information for today",
+      "url": "/berita/insight/terbaru",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Berita Terpopuler hari ini",
+      "short_name": "Terpopuler",
+      "description": "View weather information for tomorrow",
+      "url": "/berita/insight/populer",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Berita Rekomendasi hari ini",
+      "short_name": "Rekomendasi",
+      "description": "View weather information for today",
+      "url": "/berita/insight/rekomendasi",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "capture-narrow.png",
+      "type": "image/png",
+      "sizes": "540x1055",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "capture-wide.png",
+      "type": "image/png",
+      "sizes": "900x540",
+      "form_factor": "wide"
+    }
+  ]
 }

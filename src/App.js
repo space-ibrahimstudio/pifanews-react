@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { useApi } from "./libs/plugins/api";
+import React, { useEffect } from "react";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
+import { useAuth } from "./libs/guards/auth";
 import HomePage from "./pages/home";
 import CategoryPage from "./pages/category";
 import PostPage from "./pages/post";
@@ -13,21 +13,7 @@ import DashboardUpdatePage from "./pages/dashboard/update";
 
 function App() {
   const location = useLocation();
-  const { apiGet } = useApi();
-  const [catNewsData, setCatNewsData] = useState([]);
-
-  const fetchData = async () => {
-    try {
-      const catnewsdata = await apiGet("main", "categorynew");
-      setCatNewsData(catnewsdata && catnewsdata.data && catnewsdata.data.length > 0 ? catnewsdata.data : []);
-    } catch (error) {
-      console.log("error:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { isLoggedin } = useAuth();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -36,16 +22,20 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      {catNewsData.map((item, index) => (
-        <Route key={index} path={`/berita/kategori/${item.slug}`} element={<CategoryPage category={item.slug} />} />
-      ))}
+      <Route path="/berita/kategori/:category" element={<CategoryPage />} />
       <Route path="/berita/:slug" element={<PostPage />} />
       <Route path="/berita/tag/:slug" element={<TagPage />} />
       <Route path="/pencarian/:query" element={<SearchPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
-      <Route path="/dashboard/:scope/:slug" element={<DashboardSlugPage />} />
-      <Route path="/dashboard/:uscope/:uslug/update/:params" element={<DashboardUpdatePage />} />
+      <Route path="/login" element={isLoggedin ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
+      <Route path="/dashboard" element={isLoggedin ? <DashboardPage /> : <Navigate to="/login" replace />} />
+      <Route path="/dashboard/:scope/:slug" element={isLoggedin ? <DashboardSlugPage /> : <Navigate to="/login" replace />} />
+      <Route path="/dashboard/:uscope/:uslug/update/:params" element={isLoggedin ? <DashboardUpdatePage /> : <Navigate to="/login" replace />} />
+      {/* no-index redirect */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/berita" element={<Navigate to="/" replace />} />
+      <Route path="/berita/kategori" element={<Navigate to="/" replace />} />
+      <Route path="/berita/tag" element={<Navigate to="/" replace />} />
+      <Route path="/pencarian" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { TagsButton } from "../components/user-inputs/buttons";
+import { TagsButton } from "../components/formel/buttons";
 import styles from "./styles/tags-section.module.css";
 
 export const TagsSection = ({ id, tags }) => {

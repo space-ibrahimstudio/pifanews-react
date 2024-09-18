@@ -1,16 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
-import { useDocument } from "../libs/plugins/document";
-import { useLoading } from "../components/contents/loader";
-import { useApi } from "../libs/plugins/api";
-import { getAdDatas } from "../libs/sources/local-data";
+import { useDocument } from "../libs/plugins/helpers";
+import { useLoading } from "../components/feedback/loader";
+import { useApi } from "../libs/plugins/apis";
+import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import { PageLayout } from "../components/layouts/pages";
+import Page from "../components/layout/frames";
 import PostdetSection, { PostdetContent, PostdetArticle, PostdetAside } from "../components/layouts/postdet";
-import { AdBanner } from "../components/contents/image";
-import NewsCard from "../components/contents/cards";
-import { NewsSummaryGroup } from "../components/contents/groups";
+import { AdBanner } from "../components/media/image";
+import NewsCard from "../components/layout/cards";
+import { NewsSummaryGroup } from "../components/layout/groups";
 import { NewsHscrollSection } from "../sections/news-hscroll-section";
 import { NewsSliderSection } from "../sections/news-slider-section";
 import { InlineadsSection } from "../sections/inlineads-section";
@@ -35,6 +35,7 @@ const PostPage = () => {
   const [relatedPostData, setRelatedPostData] = useState([]);
 
   const id = (slug && `${short}-${slug}`) || `${short}-slug`;
+
   const fetchDetailPost = async () => {
     setLoading(true);
     const formData = new FormData();
@@ -124,8 +125,8 @@ const PostPage = () => {
 
   return (
     <Fragment>
-      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} />
-      <PageLayout pageid={id}>
+      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category={catPostData && catPostData.nama_kategori_berita} author={postDetailData.penulis_berita} datecreate={postDetailData.created_at} dateupdate={postDetailData.updated_at} />
+      <Page pageid={id}>
         <PostdetSection>
           <PostdetContent>
             <PostdetArticle id={id} paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} thumbnail={postDetailData.thumnail_berita} image={postDetailData.img_berita && postDetailData.img_berita} content={postDetailData.isi_berita} />
@@ -141,7 +142,7 @@ const PostPage = () => {
           ))}
         </NewsHscrollSection>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-      </PageLayout>
+      </Page>
     </Fragment>
   );
 };

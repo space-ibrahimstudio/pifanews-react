@@ -1,25 +1,26 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useContent } from "@ibrahimstudio/react";
-import { useDocument } from "../libs/plugins/document";
-import { useApi } from "../libs/plugins/api";
-import { getAdDatas } from "../libs/sources/local-data";
+import { useContent, useWindow } from "@ibrahimstudio/react";
+import { useDocument } from "../libs/plugins/helpers";
+import { useApi } from "../libs/plugins/apis";
+import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import { PageLayout } from "../components/layouts/pages";
-import { AdBanner } from "../components/contents/image";
+import Page from "../components/layout/frames";
+import { AdBanner } from "../components/media/image";
 import { FeedsSection } from "../sections/feeds-section";
 import { InlineadsSection } from "../sections/inlineads-section";
 import { TagsSection } from "../sections/tags-section";
 import { NewsSliderSection } from "../sections/news-slider-section";
-import { FeedsGroup } from "../components/contents/groups";
-import { Aside } from "../components/layouts/containers";
-import { PageTitle, TextHint } from "../components/contents/markers";
-import { NewsFeedCard } from "../components/contents/cards";
+import { FeedsGroup } from "../components/layout/groups";
+import { Container } from "../components/layout/frames";
+import { PageTitle, TextHint } from "../components/feedback/markers";
+import { NewsFeedCard } from "../components/layout/cards";
 
 const SearchPage = () => {
   const navigate = useNavigate();
   const { query } = useParams();
   const { toPathname } = useContent();
+  const { width } = useWindow();
   const { short } = useDocument();
   const { apiRead, apiGet } = useApi();
   const [loading, setLoading] = useState(false);
@@ -86,7 +87,7 @@ const SearchPage = () => {
   return (
     <Fragment>
       <SEO title={`Pencarian "${query}"`} route={`/pencarian/${query}`} />
-      <PageLayout pageid={id}>
+      <Page pageid={id}>
         <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         <TagsSection tags={trendTagData} />
         <PageTitle>
@@ -99,11 +100,11 @@ const SearchPage = () => {
               <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </FeedsGroup>
-          <Aside>
+          <Container isasChild flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <InlineadsSection label="" src="/img/inline-ads.webp" />
-          </Aside>
+          </Container>
         </FeedsSection>
-      </PageLayout>
+      </Page>
     </Fragment>
   );
 };

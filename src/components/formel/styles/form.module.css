@@ -1,0 +1,51 @@
+.fieldsetText {
+  align-self: stretch;
+  position: relative;
+  font-weight: 500;
+}
+
+.formFieldset {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--pixel-10);
+  text-align: center;
+  font-size: var(--font-xsm);
+  color: var(--color-secondary);
+  font-family: var(--font-inter);
+}
+
+.formDesc,
+.formTitle {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+}
+
+.formTitle {
+  font-size: inherit;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+.formDesc {
+  font-size: var(--font-sm);
+  line-height: 135%;
+  font-family: var(--font-inter);
+  color: var(--color-secondary);
+}
+
+.formHead {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--pixel-15);
+  text-align: center;
+  font-size: var(--font-lg);
+  color: var(--color-primary);
+  font-family: var(--font-jakarta);
+}

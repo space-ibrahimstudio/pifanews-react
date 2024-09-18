@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useContent } from "@ibrahimstudio/react";
-import { SectionHead, TextHint } from "../components/contents/markers";
+import { SectionHead, TextHint } from "../components/feedback/markers";
 import styles from "./styles/news-slider-section.module.css";
 
 export const NewsSliderSection = ({ id, title, scope, content, renderContent, swipeThreshold = 50, slideInterval = 3000, noHead = false, noSource = false, contentStyle }) => {

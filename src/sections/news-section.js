@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
-import { useApi } from "../libs/plugins/api";
-import { SectionHead, TextHint } from "../components/contents/markers";
-import Container300 from "../components/layouts/containers";
-import { NewsDisplayCard } from "../components/contents/cards";
-import NewsGroup from "../components/contents/groups";
+import { useApi } from "../libs/plugins/apis";
+import { Container } from "../components/layout/frames";
+import { SectionHead, TextHint } from "../components/feedback/markers";
+import { NewsDisplayCard } from "../components/layout/cards";
+import NewsGroup from "../components/layout/groups";
 import styles from "./styles/news-section.module.css";
 
 export const NewsSection = ({ id, catId, scope, slug }) => {
@@ -73,15 +73,17 @@ export const NewsSection = ({ id, catId, scope, slug }) => {
       {/* prettier-ignore */}
       <SectionHead id={compid} title={<Fragment>{`Berita `}<TextHint>{scope}</TextHint></Fragment>} to={`berita/kategori/${slug}`} />
       <div className={styles.sectionBody}>
-        <Container300>{latestPostData.length > 0 && <NewsDisplayCard id={`${compid}-${latestPostData[0].id}`} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={latestPostData[0].img_berita} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" onClick={() => navigate(`/berita/${latestPostData[0].slug}`)} />}</Container300>
-        <Container300>
+        <Container isasChild flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
+          {latestPostData.length > 0 && <NewsDisplayCard id={`${compid}-${latestPostData[0].id}`} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={latestPostData[0].img_berita} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" onClick={() => navigate(`/berita/${latestPostData[0].slug}`)} />}
+        </Container>
+        <Container isasChild flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
           {/* prettier-ignore */}
           <NewsGroup id={`${compid}-newest`} isPortrait={width < 464 ? true : false} title={<Fragment>{`Terbaru di `}<TextHint>{scope}</TextHint></Fragment>} posts={latestPostData.slice(1)} setLimit={setLatestLimit} loading={latestLoading} />
-        </Container300>
-        <Container300>
+        </Container>
+        <Container isasChild flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
           {/* prettier-ignore */}
           <NewsGroup id={`${compid}-trending`} isPortrait={width > 700 && width < 840 ? true : width < 686 ? true : false} title={<Fragment>{`Trending di `}<TextHint>{scope}</TextHint></Fragment>} posts={trendingPostData} setLimit={setTrendingLimit} loading={trendingLoading} />
-        </Container300>
+        </Container>
       </div>
     </section>
   );

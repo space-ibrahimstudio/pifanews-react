@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { useContent } from "@ibrahimstudio/react";
-import { SectionHead, TextHint } from "../components/contents/markers";
+import { SectionHead, TextHint } from "../components/feedback/markers";
 import styles from "./styles/news-hscroll-section.module.css";
 
 export const NewsHscrollSection = ({ id, scope, children }) => {
