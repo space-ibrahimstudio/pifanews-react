@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useContent, useEvent } from "@ibrahimstudio/react";
+import { toPathname } from "../../libs/plugins/helpers";
 import { Close } from "../content/icons";
 import tabcss from "./styles/tab-button.module.css";
 import tbgcss from "./styles/tab-button-gen.module.css";
@@ -8,7 +9,7 @@ import srccss from "./styles/source-button.module.css";
 import tagcss from "./styles/tags-button.module.css";
 import swtcss from "./styles/switch-button.module.css";
 
-export const SwitchButton = ({ id, buttons = [] }) => {
+export const SwitchButton = ({ id, type = "reg", buttons = [] }) => {
   const compid = `${id}-switch-button`;
 
   return (
@@ -16,7 +17,8 @@ export const SwitchButton = ({ id, buttons = [] }) => {
       <section className={swtcss.tabScroll}>
         {buttons.map((button, index) => (
           <button key={index} type="button" className={`${swtcss.tabButton} ${button.active ? swtcss.active : ""}`} onClick={button.onClick}>
-            <b className={swtcss.buttonText}>{button.label}</b>
+            {type === "reg" && <b className={swtcss.buttonText}>{button.label}</b>}
+            {type === "ico" && button.icon}
           </button>
         ))}
       </section>
@@ -51,7 +53,6 @@ export const SourceButton = ({ id, to }) => {
 export const TabButtonGen = ({ id, text, type = "route", path, targetId, startContent, endContent }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { toPathname } = useContent();
   const { scroll } = useEvent();
   const compid = text ? `${id}-tab-general-${toPathname(text)}` : `${id}-tab-general`;
   const [activeTab, setActiveTab] = useState(null);
@@ -79,7 +80,7 @@ export const TabButtonGen = ({ id, text, type = "route", path, targetId, startCo
 
 const TabButton = ({ id, text, path, type = "single", subTabData = [], startContent, endContent }) => {
   const location = useLocation();
-  const { toPathname, toTitleCase } = useContent();
+  const { toTitleCase } = useContent();
   const compid = text ? `${id}-tab-${toPathname(text)}` : `${id}-tab`;
   const [activeTab, setActiveTab] = useState(null);
   const [subTabOpen, setSubTabOpen] = useState(false);

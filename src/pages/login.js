@@ -2,18 +2,18 @@ import React, { Fragment, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
-import { useDocument } from "../libs/plugins/helpers";
-import { useAuth } from "../libs/guards/auth";
-import { inputValidator } from "../libs/plugins/helpers";
+import { useDocument, inputValidator } from "../libs/plugins/helpers";
+import useAuth from "../libs/guards/auth";
+import useGraph from "../components/content/graph";
 import { SEO } from "../libs/plugins/seo";
-import Page from "../components/layout/frames";
-import Section from "../components/layouts/section";
-import Form, { FormHead, FormFieldset } from "../components/formel/form";
+import Page, { Container, Section, Header } from "../components/layout/frames";
+import Form from "../components/formel/form";
 import Image from "../components/media/image";
 
 const LoginPage = () => {
   const { short } = useDocument();
   const { isLoggedin, login } = useAuth();
+  const { H1, P } = useGraph();
   const id = `${short}-login`;
   const [loading, setLoading] = useState(false);
   const [inputData, setInputData] = useState({ username: "", password: "" });
@@ -51,26 +51,34 @@ const LoginPage = () => {
     <Fragment>
       <SEO title="Login" route="/login" />
       <Page pageid={id}>
-        <Section>
+        <Container alignSelf="stretch" alignItems="center">
           <Form as="portal" onSubmit={handleLogin}>
-            <FormHead title="Login" desc="Login dulu biar bisa komen, bikin konten dan atur notifikasi konten favoritmu. Yuk!" />
-            <FormFieldset>
+            <Header isasChild>
+              <H1 size="lg" color="var(--color-primary)" align="center">
+                Login
+              </H1>
+              <P align="center">Login dulu biar bisa komen, bikin konten dan atur notifikasi konten favoritmu. Yuk!</P>
+            </Header>
+            <Section alignItems="center" gap="var(--pixel-10)">
               <Input id={`${id}-username`} isLabeled={false} type="text" name="username" value={inputData.username} placeholder="Telepon atau Email" isRequired onChange={handleInputChange} errorContent={errors.username} />
               <Input id={`${id}-password`} isLabeled={false} type="password" name="password" value={inputData.password} placeholder="Password" isRequired onChange={handleInputChange} errorContent={errors.password} />
-            </FormFieldset>
-            <FormFieldset>
+            </Section>
+            <Section alignItems="center" gap="var(--pixel-10)">
               <Button id={`${id}-submit-login`} type="submit" isFullwidth buttonText="Login" isLoading={loading} />
               <Button id={`${id}-submit-forgot`} isFullwidth variant="hollow" color="var(--color-primary)" buttonText="Lupa Password?" />
-            </FormFieldset>
-            <FormFieldset>
+            </Section>
+            <Section alignItems="center" gap="var(--pixel-10)">
               <Button id={`${id}-fb-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Facebook" startContent={<Image style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/fb-auth.svg" />} onClick={() => {}} />
               <Button id={`${id}-g-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Google" startContent={<Image style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/gm-auth.svg" />} onClick={() => {}} />
-            </FormFieldset>
-            <FormFieldset startContent="Belum Punya Akun?">
+            </Section>
+            <Section alignItems="center" gap="var(--pixel-10)">
+              <P size="xsm" align="center">
+                Belum Punya Akun?
+              </P>
               <Button id={`${id}-signup`} isFullwidth variant="line" color="var(--color-primary)" buttonText="Daftar Sekarang" onClick={() => {}} />
-            </FormFieldset>
+            </Section>
           </Form>
-        </Section>
+        </Container>
       </Page>
     </Fragment>
   );

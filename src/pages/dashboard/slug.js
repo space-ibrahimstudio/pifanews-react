@@ -1,33 +1,36 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
-import { useDevmode } from "@ibrahimstudio/react";
+import { useDevmode, useWindow } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
-import { useApi } from "../../libs/plugins/apis";
-import { useAuth } from "../../libs/guards/auth";
-import { useOptions, getCurrentDate, inputValidator, useInputSchema, useDocument } from "../../libs/plugins/helpers";
+import useApi from "../../libs/plugins/apis";
+import useAuth from "../../libs/guards/auth";
+import useGraph from "../../components/content/graph";
+import { useOptions, getCurrentDate, inputValidator, useInputSchema, useDocument, stripHtml } from "../../libs/plugins/helpers";
 import { SEO } from "../../libs/plugins/seo";
-import Page from "../../components/layout/frames";
-import { Container } from "../../components/layout/frames";
-import { CatGridSection } from "../../sections/cat-grid-section";
-import { DashboardContainer, DashboardHead, DashboardToolbar, DashboardTool } from "./index";
-import { NewsGridSection } from "../../sections/news-grid-section";
+import Page, { Section, Header, Container } from "../../components/layout/frames";
+import Grid from "../../components/layout/grids";
 import Pagination from "../../components/navigation/pagination";
 import Fieldset from "../../components/formel/inputs";
 import { TagsButton, SwitchButton } from "../../components/formel/buttons";
 import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/formel/text-editor";
 import Form from "../../components/formel/form";
+import { VGrid, VList, VPlus } from "../../components/content/icons";
 import NewsCard, { CatAdmCard, OGCard, TagCard } from "../../components/layout/cards";
+
+const imgdomain = process.env.REACT_APP_API_URL;
 
 const DashboardSlugPage = () => {
   const { scope, slug } = useParams();
   const navigate = useNavigate();
   const { log } = useDevmode();
+  const { width } = useWindow();
   const { userData } = useAuth();
   const { apiRead, apiGet, apiCrud } = useApi();
   const { short } = useDocument();
   const { limitopt } = useOptions();
   const { inputSch, errorSch } = useInputSchema();
+  const { H1, P } = useGraph();
   const id = `${short}-${scope}-${slug}`;
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,6 +40,7 @@ const DashboardSlugPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedID, setSelectedID] = useState("");
   const [selectedMode, setSelectedMode] = useState("view");
+  const [selectedView, setSelectedView] = useState("grid");
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [selectedCatType, setSelectedCatType] = useState("berita");
@@ -55,6 +59,7 @@ const DashboardSlugPage = () => {
   const [initialContent, setInitialContent] = useState("");
   const [categoryData, setCategoryData] = useState([]);
   const [tagsData, setTagsData] = useState([]);
+  const [moduleData, setModuleData] = useState([]);
 
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -118,7 +123,7 @@ const DashboardSlugPage = () => {
             case "isi-berita":
               setPageTitle(selectedMode === "add" ? "Tambah Berita" : "Daftar Berita");
               const offset = (currentPage - 1) * limit;
-              formData.append("data", JSON.stringify({ secret: userData.token_activation, limit: limit, hal: offset }));
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, limit, hal: offset }));
               data = await apiRead(formData, "office", "viewnews");
               if (data && data.data && data.data.length > 0) {
                 setPostData(data.data);
@@ -151,7 +156,7 @@ const DashboardSlugPage = () => {
             case "tags":
               setPageTitle(selectedMode === "add" ? "Tambah Tag" : "Daftar Tag");
               const offset = (currentPage - 1) * limit;
-              formData.append("data", JSON.stringify({ secret: userData.token_activation, limit: limit, hal: offset }));
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, limit, hal: offset }));
               data = await apiRead(formData, "office", "viewtags");
               if (data && data.data && data.data.length > 0) {
                 setTagsData(data.data);
@@ -159,6 +164,27 @@ const DashboardSlugPage = () => {
                 setIsDataShown(true);
               } else {
                 setTagsData([]);
+                setTotalPages(0);
+                setIsDataShown(false);
+              }
+              break;
+            default:
+              break;
+          }
+          break;
+        case "event":
+          switch (slug) {
+            case "module":
+              setPageTitle(selectedMode === "add" ? "Tambah Modul" : "Daftar Modul");
+              const offset = (currentPage - 1) * limit;
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, limit, hal: offset }));
+              data = await apiRead(formData, "event", "viewevent");
+              if (data && data.data && data.data.length > 0) {
+                setModuleData(data.data);
+                setTotalPages(data.TTLPage);
+                setIsDataShown(true);
+              } else {
+                setModuleData([]);
                 setTotalPages(0);
                 setIsDataShown(false);
               }
@@ -195,7 +221,7 @@ const DashboardSlugPage = () => {
     }
   };
 
-  const handleSubmit = async (e, endpoint) => {
+  const handleSubmit = async (e, endpoint, sendpoint = "office") => {
     e.preventDefault();
     let requiredFields = [];
     switch (scope) {
@@ -203,6 +229,15 @@ const DashboardSlugPage = () => {
         switch (slug) {
           case "kategori":
             requiredFields = ["judul", "desc"];
+            break;
+          default:
+            break;
+        }
+        break;
+      case "event":
+        switch (slug) {
+          case "module":
+            requiredFields = ["judul", "highlight", "desc", "info", "syarat", "tanggal"];
             break;
           default:
             break;
@@ -236,15 +271,24 @@ const DashboardSlugPage = () => {
               break;
           }
           break;
+        case "event":
+          switch (slug) {
+            case "module":
+              submittedData = { secret: userData.token_activation, title: inputData.judul, highlight: inputData.highlight, descripiton: inputData.desc, info: inputData.info, syarat: inputData.syarat, tanggal: inputData.tanggal };
+              break;
+            default:
+              break;
+          }
+          break;
         default:
           break;
       }
       const formData = new FormData();
       formData.append("data", JSON.stringify(submittedData));
-      if (slug === "kategori") {
+      if (slug === "kategori" || slug === "module") {
         formData.append("fileimg", selectedImage);
       }
-      await apiCrud(formData, "office", endpoint);
+      await apiCrud(formData, sendpoint, endpoint);
       alert(successmsg);
       log("submitted data:", submittedData);
       restoreFormState();
@@ -258,14 +302,20 @@ const DashboardSlugPage = () => {
 
   const renderContent = () => {
     let modeSwitcher = [];
+    let viewSwitcher = [];
     switch (scope) {
       case "berita":
         switch (slug) {
           case "isi-berita":
             const tools = [["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul"]];
             modeSwitcher = [
-              { label: "Daftar Berita", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
-              { label: "Tambah Berita", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
+              { icon: <VList size="var(--pixel-20)" />, label: "Daftar Berita", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
+              { icon: <VPlus size="var(--pixel-20)" />, label: "Tambah Berita", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
+            ];
+
+            viewSwitcher = [
+              { icon: <VGrid size="var(--pixel-20)" />, onClick: () => setSelectedView("grid"), active: selectedView === "grid" },
+              { icon: <VList size="var(--pixel-20)" />, onClick: () => setSelectedView("list"), active: selectedView === "list" },
             ];
 
             const fetchTagSuggests = async (query) => {
@@ -305,21 +355,31 @@ const DashboardSlugPage = () => {
             };
 
             const handlePublish = async (content) => {
-              const formData = new FormData();
-              const base64Content = btoa(unescape(encodeURIComponent(content)));
-              formData.append("data", JSON.stringify({ secret: userData.token_activation, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: base64Content, thumbnail: inputData.thumbnail, tag: selectedTags }));
-              formData.append("fileimg", selectedImage);
-              const confirm = window.confirm("Apakah anda yakin untuk mempublish berita baru?");
+              const requiredFields = ["tgl", "judul", "penulis", "catberita", "catdaerah", "thumbnail"];
+              const validationErrors = inputValidator(inputData, requiredFields);
+              if (Object.keys(validationErrors).length > 0) {
+                setErrors(validationErrors);
+                return;
+              }
+              const confirmmsg = "Apakah anda yakin untuk menambahkan data baru?";
+              const successmsg = "Selamat! Data baru berhasil ditambahkan.";
+              const errormsg = "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
+              const confirm = window.confirm(confirmmsg);
               if (!confirm) {
                 return;
               }
               setIsSubmitting(true);
               try {
+                const base64Content = btoa(unescape(encodeURIComponent(content)));
+                const submittedData = { secret: userData.token_activation, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: base64Content, thumbnail: inputData.thumbnail, tag: selectedTags };
+                const formData = new FormData();
+                formData.append("data", JSON.stringify(submittedData));
+                formData.append("fileimg", selectedImage);
                 await apiCrud(formData, "office", "addnews");
-                alert("Selamat, postingan berita baru berhasil dipublish!");
+                alert(successmsg);
                 restoreFormState();
               } catch (error) {
-                console.error("error:", error);
+                console.error(errormsg, error);
               } finally {
                 setIsSubmitting(false);
               }
@@ -327,25 +387,34 @@ const DashboardSlugPage = () => {
 
             return (
               <Fragment>
-                <DashboardHead title="Isi Berita" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
-                <DashboardToolbar>
-                  <DashboardTool>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    Isi Berita
+                  </H1>
+                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                </Header>
+                <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
+                  <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
                     <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
-                  </DashboardTool>
-                  <SwitchButton buttons={modeSwitcher} />
-                </DashboardToolbar>
+                    {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
+                  </Section>
+                  <SwitchButton type={width >= 464 ? "reg" : "ico"} buttons={modeSwitcher} />
+                </Section>
                 {selectedMode === "view" && (
                   <Fragment>
-                    <NewsGridSection>
+                    <Grid gridTemplateRows={selectedView === "grid" ? "unset" : "repeat(2, auto)"} gridTemplateColumns={selectedView === "grid" ? "repeat(auto-fill, minmax(var(--pixel-300), 1fr))" : "repeat(auto-fill, minmax(var(--pixel-350), 1fr))"} gap="var(--pixel-10)">
                       {postData.map((post, index) => (
-                        <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />
+                        <Fragment key={index}>
+                          {selectedView === "grid" && <NewsCard title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />}
+                          {selectedView === "list" && <CatAdmCard title={post.judul_berita} short={stripHtml(post.isi_berita)} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />}
+                        </Fragment>
                       ))}
-                    </NewsGridSection>
+                    </Grid>
                     {isDataShown && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
                   </Fragment>
                 )}
                 {selectedMode === "add" && (
-                  <Container isasChild isWrap gap="var(--pixel-10)">
+                  <Section isWrap gap="var(--pixel-10)">
                     <TextEditor minW="var(--pixel-350)" initialContent={initialContent} onSubmit={handlePublish}>
                       <Input id={`${id}-post-title`} type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
                       <Input id={`${id}-post-banner`} variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
@@ -360,31 +429,27 @@ const DashboardSlugPage = () => {
                       </Fieldset>
                       <EditorToolbar tools={tools} />
                       <EditorContent />
-                      <Fragment>
-                        {selectedTags.length > 0 && (
-                          <Fieldset>
-                            {selectedTags.map((item, index) => (
-                              <TagsButton key={index} id={`${id}-tag-${index}`} type="select" text={item.tag} onClick={() => handleRemoveTag(item.tag)} />
-                            ))}
-                          </Fieldset>
-                        )}
-                      </Fragment>
+                      {selectedTags.length > 0 && (
+                        <Fieldset>
+                          {selectedTags.map((item, index) => (
+                            <TagsButton key={index} id={`${id}-tag-${index}`} type="select" text={item.tag} onClick={() => handleRemoveTag(item.tag)} />
+                          ))}
+                        </Fieldset>
+                      )}
                       <Input id={`${id}-post-tag`} type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tagQuery" value={tagQuery} onChange={handleTagSearch} />
-                      <Fragment>
-                        {tagSuggests.length > 0 && (
-                          <Fieldset>
-                            {tagSuggests.map((item, index) => (
-                              <TagsButton key={index} id={`${id}-suggest-tag-${index}`} text={item.nama_kategori_tag} onClick={() => handleAddTag(item)} />
-                            ))}
-                          </Fieldset>
-                        )}
-                      </Fragment>
+                      {tagSuggests.length > 0 && (
+                        <Fieldset>
+                          {tagSuggests.map((item, index) => (
+                            <TagsButton key={index} id={`${id}-suggest-tag-${index}`} text={item.nama_kategori_tag} onClick={() => handleAddTag(item)} />
+                          ))}
+                        </Fieldset>
+                      )}
                       <EditorFooter>
                         <Button type="submit" buttonText="Publish Berita" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
                     </TextEditor>
-                    <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.thumbnail} scope="/berita/" />
-                  </Container>
+                    <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} mssg="Hai, udah baca berita ini?" title={inputData.judul} desc={inputData.thumbnail} scope="/berita/" />
+                  </Section>
                 )}
               </Fragment>
             );
@@ -406,20 +471,25 @@ const DashboardSlugPage = () => {
 
             return (
               <Fragment>
-                <DashboardHead title={selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"} desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
-                <DashboardToolbar>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    {selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"}
+                  </H1>
+                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                </Header>
+                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <SwitchButton buttons={switchCatType} />
                   <SwitchButton buttons={modeSwitcher} />
-                </DashboardToolbar>
+                </Section>
                 {selectedMode === "view" && (
-                  <CatGridSection>
+                  <Grid gridTemplateRows="repeat(2, auto)" gridTemplateColumns="repeat(auto-fill, minmax(var(--pixel-350), 1fr))" gap="var(--pixel-10)">
                     {categoryData.map((item, index) => (
-                      <CatAdmCard key={index} title={selectedCatType === "berita" ? item.nama_kategori_berita : item.nama_kategori_daerah} short={item.desc} image={item.img} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)} />
+                      <CatAdmCard key={index} title={selectedCatType === "berita" ? item.nama_kategori_berita : item.nama_kategori_daerah} short={item.desc} image={`${imgdomain}/images/img_berita/${item.img}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)} />
                     ))}
-                  </CatGridSection>
+                  </Grid>
                 )}
                 {selectedMode === "add" && (
-                  <Container isasChild isWrap gap="var(--pixel-10)">
+                  <Section isWrap gap="var(--pixel-10)">
                     <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
                       <Input id={`${id}-cat-image`} variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" onSelect={handleImageSelect} isRequired />
                       <Input id={`${id}-cat-title`} type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
@@ -428,8 +498,8 @@ const DashboardSlugPage = () => {
                         <Button type="submit" buttonText="Publish Kategori" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
                     </Form>
-                    <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
-                  </Container>
+                    <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} mssg="Hai, udah baca berita ini?" title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
+                  </Section>
                 )}
               </Fragment>
             );
@@ -521,29 +591,107 @@ const DashboardSlugPage = () => {
 
             return (
               <Fragment>
-                <DashboardHead title="Tag Berita" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
-                <DashboardToolbar>
-                  <DashboardTool>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    Tag Berita
+                  </H1>
+                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                </Header>
+                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
+                  <Section isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
                     <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
-                  </DashboardTool>
+                  </Section>
                   <SwitchButton buttons={modeSwitcher} />
-                </DashboardToolbar>
-                <Container isasChild gap="unset">
-                  <Fragment>
-                    {selectedMode === "add" && <TagCard openState title={inputData.name} timeCreate="" timeUpdate="" inputData={inputData} setInputData={setInputData} onChange={handleInputChange} onClose={closeAddTag} onSave={() => handleSaveTag("add")} />}
-                    {tagsData.map((item, index) => (
-                      <TagCard key={index} title={item.nama_kategori_tag} timeCreate={item.created_at} timeUpdate={item.updated_at} onEdit={() => openEditTag(item.id, item.nama_kategori_tag)} inputData={inputData} setInputData={setInputData} onChange={handleInputChange} onClose={closeEditTag} onSave={() => handleSaveTag("update")} onDelete={handleDeleteTag} isDisabled={selectedMode === "add"} />
-                    ))}
-                  </Fragment>
-                </Container>
+                </Section>
+                <Section gap="unset">
+                  {selectedMode === "add" && <TagCard openState title={inputData.name} timeCreate="" timeUpdate="" inputData={inputData} setInputData={setInputData} onChange={handleInputChange} onClose={closeAddTag} onSave={() => handleSaveTag("add")} />}
+                  {tagsData.map((item, index) => (
+                    <TagCard key={index} title={item.nama_kategori_tag} timeCreate={item.created_at} timeUpdate={item.updated_at} onEdit={() => openEditTag(item.id, item.nama_kategori_tag)} inputData={inputData} setInputData={setInputData} onChange={handleInputChange} onClose={closeEditTag} onSave={() => handleSaveTag("update")} onDelete={handleDeleteTag} isDisabled={selectedMode === "add"} />
+                  ))}
+                </Section>
                 {isDataShown && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
               </Fragment>
             );
+          default:
+            return null;
+        }
+      case "event":
+        switch (slug) {
+          case "module":
+            modeSwitcher = [
+              { icon: <VList size="var(--pixel-20)" />, label: "Daftar Modul", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
+              { icon: <VPlus size="var(--pixel-20)" />, label: "Tambah Modul", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
+            ];
+
+            viewSwitcher = [
+              { icon: <VGrid size="var(--pixel-20)" />, onClick: () => setSelectedView("grid"), active: selectedView === "grid" },
+              { icon: <VList size="var(--pixel-20)" />, onClick: () => setSelectedView("list"), active: selectedView === "list" },
+            ];
+
+            return (
+              <Fragment>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    Modul Event
+                  </H1>
+                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                </Header>
+                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
+                  <Section isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
+                    <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                    {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
+                  </Section>
+                  <SwitchButton type={width >= 464 ? "reg" : "ico"} buttons={modeSwitcher} />
+                </Section>
+                {selectedMode === "view" && (
+                  <Fragment>
+                    <Grid gridTemplateRows={selectedView === "grid" ? "unset" : "repeat(2, auto)"} gridTemplateColumns={selectedView === "grid" ? "repeat(auto-fill, minmax(var(--pixel-300), 1fr))" : "repeat(auto-fill, minmax(var(--pixel-350), 1fr))"} gap="var(--pixel-10)">
+                      {moduleData.map((post, index) => (
+                        <Fragment key={index}>
+                          {selectedView === "grid" && <NewsCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} loc={post.info} date={post.tanggal} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
+                          {selectedView === "list" && <CatAdmCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
+                        </Fragment>
+                      ))}
+                    </Grid>
+                    {isDataShown && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+                  </Fragment>
+                )}
+                {selectedMode === "add" && (
+                  <Section isWrap gap="var(--pixel-10)">
+                    <Form minW="var(--pixel-350)" onSubmit={(e) => handleSubmit(e, "cudevent", "event")}>
+                      <Input id={`${id}-module-title`} type="text" labelText="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
+                      <Input id={`${id}-module-banner`} variant="upload" labelText="Thumbnail Modul" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
+                      <Fieldset>
+                        <Input id={`${id}-module-desc`} type="text" labelText="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
+                        <Input id={`${id}-module-date`} type="text" labelText="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errorContent={errors.tanggal} isRequired />
+                      </Fieldset>
+                      <Fieldset>
+                        <Input id={`${id}-module-hl`} type="text" labelText="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errorContent={errors.highlight} isRequired />
+                        <Input id={`${id}-module-info`} type="text" labelText="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errorContent={errors.info} isRequired />
+                      </Fieldset>
+                      <Input id={`${id}-module-syarat`} variant="textarea" rows={10} labelText="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errorContent={errors.syarat} isRequired />
+                      <EditorFooter>
+                        <Button type="submit" buttonText="Publish Modul" action="save" isLoading={isSubmitting} />
+                      </EditorFooter>
+                    </Form>
+                    <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} mssg="Hai, udah lihat event ini?" title={inputData.judul} desc={inputData.desc} scope="/event/" />
+                  </Section>
+                )}
+              </Fragment>
+            );
+          default:
+            return null;
         }
       default:
         return null;
     }
   };
+
+  useEffect(() => {
+    if (width < 464) {
+      setSelectedView("list");
+    }
+  }, [width]);
 
   useEffect(() => {
     restoreFormState();
@@ -565,7 +713,9 @@ const DashboardSlugPage = () => {
     <Fragment>
       <SEO title={pageTitle} route={`/dashboard/${scope}/${slug}`} isNoIndex />
       <Page pageid={id} type="private">
-        <DashboardContainer>{renderContent()}</DashboardContainer>
+        <Container alignItems="center" minHeight="80vh" gap="var(--pixel-20)">
+          {renderContent()}
+        </Container>
       </Page>
     </Fragment>
   );

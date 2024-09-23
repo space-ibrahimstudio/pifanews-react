@@ -2,19 +2,18 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useContent, useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
-import { useApi } from "../libs/plugins/apis";
+import useApi from "../libs/plugins/apis";
+import useGraph from "../components/content/graph";
 import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import Page from "../components/layout/frames";
-import { AdBanner } from "../components/media/image";
-import { FeedsSection } from "../sections/feeds-section";
-import { InlineadsSection } from "../sections/inlineads-section";
-import { TagsSection } from "../sections/tags-section";
-import { NewsSliderSection } from "../sections/news-slider-section";
+import Page, { Section, Header, Container } from "../components/layout/frames";
+import Slider from "../components/layout/slider";
+import Image, { AdBanner } from "../components/media/image";
+import { TagsButton } from "../components/formel/buttons";
 import { FeedsGroup } from "../components/layout/groups";
-import { Container } from "../components/layout/frames";
-import { PageTitle, TextHint } from "../components/feedback/markers";
 import { NewsFeedCard } from "../components/layout/cards";
+
+const imgdomain = process.env.REACT_APP_API_URL;
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -23,6 +22,7 @@ const SearchPage = () => {
   const { width } = useWindow();
   const { short } = useDocument();
   const { apiRead, apiGet } = useApi();
+  const { H1, Span } = useGraph();
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
   const [searchedData, setSearchedData] = useState([]);
@@ -88,22 +88,32 @@ const SearchPage = () => {
     <Fragment>
       <SEO title={`Pencarian "${query}"`} route={`/pencarian/${query}`} />
       <Page pageid={id}>
-        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={trendTagData} />
-        <PageTitle>
-          {`Hasil pencarian: `}
-          <TextHint>{query}</TextHint>
-        </PageTitle>
-        <FeedsSection>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        </Container>
+        <Container alignItems="center" padding={width <= 910 ? (width > 700 ? "0 var(--pixel-30)" : "0 var(--pixel-20)") : "0 var(--pixel-70)"}>
+          <Section isWrap justifyContent="center" padding="var(--pixel-10) 0" gap="var(--pixel-10)">
+            {trendTagData.map((tag, index) => (
+              <TagsButton key={index} text={tag.nama_kategori_tag} onClick={() => navigate(`/berita/tag/${tag.slug}`)} />
+            ))}
+          </Section>
+        </Container>
+        <Header>
+          <H1 align="center" color="var(--color-secondary)">
+            {`Hasil pencarian: `}
+            <Span color="var(--color-primary)">{query}</Span>
+          </H1>
+        </Header>
+        <Container isWrap justifyContent="center" gap="var(--pixel-10)">
           <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setLimit} loading={loading}>
             {searchedData.map((post, index) => (
-              <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </FeedsGroup>
-          <Container isasChild flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
-            <InlineadsSection label="" src="/img/inline-ads.webp" />
-          </Container>
-        </FeedsSection>
+          <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
+            <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+          </Section>
+        </Container>
       </Page>
     </Fragment>
   );

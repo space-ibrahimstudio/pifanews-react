@@ -1,14 +1,12 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { useContent } from "@ibrahimstudio/react";
-import { useDocument, formatToISO8601 } from "./helpers";
+import { useDocument, formatToISO8601, stripHtml } from "./helpers";
 
 export function SEO({ title, description, route, thumbSrc, extThumbSrc, thumbAlt = "", isPost = false, author = "Admin", datecreate = "2021-07-01 12:06:53", dateupdate = "2021-07-01 12:06:53", category, isNoIndex = false }) {
   const { company, domain } = useDocument();
-  const { stripContent } = useContent();
 
   const metatitle = `${title} | ${company}`;
-  const stripdesc = (description && stripContent(description).substring(0, 160)) || "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market";
+  const stripdesc = (description && stripHtml(description).substring(0, 160)) || "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market";
   const thumbnail = extThumbSrc ? extThumbSrc : thumbSrc ? `${domain}${thumbSrc}` : `${domain}/capture-wide.png`;
   const markers = process.env.REACT_APP_MARKERS;
   const pubdate = formatToISO8601(datecreate);

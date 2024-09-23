@@ -1,3 +1,5 @@
+import he from "he";
+
 export const getCurrentDate = () => {
   const today = new Date();
   const year = today.getFullYear();
@@ -54,8 +56,8 @@ export const useOptions = () => {
 };
 
 export const useInputSchema = () => {
-  const inputSch = { name: "", phone: "", address: "", tgl: "", judul: "", penulis: "", catberita: "", catdaerah: "", content: "", thumbnail: "", tag: [{ tag: "" }], desc: "", image: "" };
-  const errorSch = { name: "", phone: "", address: "", tgl: "", judul: "", penulis: "", catberita: "", catdaerah: "", content: "", thumbnail: "", tag: [{ tag: "" }], desc: "", image: "" };
+  const inputSch = { name: "", phone: "", address: "", tgl: "", judul: "", penulis: "", catberita: "", catdaerah: "", content: "", thumbnail: "", tag: [{ tag: "" }], desc: "", image: "", highlight: "", syarat: "", info: "", tanggal: "" };
+  const errorSch = { name: "", phone: "", address: "", tgl: "", judul: "", penulis: "", catberita: "", catdaerah: "", content: "", thumbnail: "", tag: [{ tag: "" }], desc: "", image: "", highlight: "", syarat: "", info: "", tanggal: "" };
 
   return { inputSch, errorSch };
 };
@@ -75,4 +77,17 @@ export const formatToISO8601 = (dateTimeStr) => {
   const [timeWithoutMs, msPart] = timePart.split(".");
 
   return `${datePart}T${timeWithoutMs}+07:00`;
+};
+
+export const stripHtml = (html) => {
+  const plainText = html.replace(/<[^>]+>/g, "");
+  return he.decode(plainText);
+};
+
+export const toPathname = (text) => {
+  let pathname = text.toLowerCase();
+  pathname = pathname.replace(/[^a-z0-9\s]/g, "");
+  pathname = pathname.replace(/\s+/g, "-");
+
+  return pathname;
 };

@@ -2,9 +2,9 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useContent, useFormat } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
-import { useDocument } from "../../libs/plugins/helpers";
-import { NewsTag } from "../feedback/markers";
+import { useDocument, stripHtml, toPathname } from "../../libs/plugins/helpers";
 import { Edit, Trash, Close } from "../content/icons";
+import { NewsTag } from "../feedback/markers";
 import imgcss from "./styles/image-card.module.css";
 import newcss from "./styles/news-card.module.css";
 import catcss from "./styles/cat-card.module.css";
@@ -16,10 +16,32 @@ import cadcss from "./styles/cat-admin-card.module.css";
 import ogscss from "./styles/og-card.module.css";
 import tagcss from "./styles/tag-card.module.css";
 
-const imgURL = process.env.REACT_APP_IMAGE_URL;
+export const ImageCard = ({ alt, src }) => {
+  const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
+  const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
+  const [imageSrc, setImageSrc] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(false);
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      setImageSrc(img.src);
+      setIsLoaded(true);
+    };
+    img.onerror = () => setImageSrc("/img/fallback.jpg");
+  }, [src]);
+
+  return (
+    <Fragment>
+      {!isLoaded && <div id={`${compid}-placeholder`} className={imgcss.skeleton} />}
+      <img id={compid} alt={`Foto: ${alt} | Pifa Net`} src={imageSrc} style={{ ...crdcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
+    </Fragment>
+  );
+};
 
 export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpdate, onEdit, inputData, setInputData, onChange, onClose, onSave, onDelete, isDisabled = false }) => {
-  const { toPathname } = useContent();
   const { newDate } = useFormat();
   const [editOpen, setEditOpen] = useState(openState);
   const compid = (title && `${id}-tag-card-${toPathname(title)}`) || `${id}-tag-card`;
@@ -60,9 +82,8 @@ export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpd
   );
 };
 
-export const OGCard = ({ id, image, title = "", scope = "/", desc = "" }) => {
+export const OGCard = ({ id, image, title = "", mssg, scope = "/", desc = "" }) => {
   const { company } = useDocument();
-  const { toPathname } = useContent();
   const compid = (title && `${id}-og-card-${toPathname(title)}`) || `${id}-og-card`;
 
   return (
@@ -71,11 +92,11 @@ export const OGCard = ({ id, image, title = "", scope = "/", desc = "" }) => {
       <header className={ogscss.cardContent}>
         <h1 className={ogscss.contentTitle}>{title === "" ? "Open Graph Protocol" : `${title} | ${company}`}</h1>
         <span className={`${ogscss.contentDesc} ${desc === "" ? ogscss.not : ""}`}>{desc === "" ? "How your content appears when it's shared on social media platforms like WhatsApp, Facebook, Twitter, and LinkedIn." : desc}</span>
-        <span className={ogscss.contentUrl}>{`pifa.co.id${scope}${toPathname(title)}`}</span>
+        <span className={ogscss.contentUrl}>pifa.co.id</span>
       </header>
       <section className={ogscss.cardMssg}>
         <p className={ogscss.mssgText}>
-          {`Hai, udah baca berita ini? `}
+          {`${mssg} `}
           <span style={{ color: "var(--color-primary)", textDecoration: "underline" }}>{`https://pifa.co.id${scope}${toPathname(title)}`}</span>
         </p>
       </section>
@@ -83,15 +104,17 @@ export const OGCard = ({ id, image, title = "", scope = "/", desc = "" }) => {
   );
 };
 
-export const CatAdmCard = ({ id, title, short, image, onEdit }) => {
-  const { toPathname } = useContent();
+export const CatAdmCard = ({ id, title, short, image, tag, onEdit }) => {
   const compid = (title && `${id}-category-admin-card-${toPathname(title)}`) || `${id}-category-admin-card`;
   const cardimg = image === "" ? "/img/fallback.jpg" : image;
   const cardshrt = short === "" ? "no description." : short;
 
   return (
     <section id={compid} className={cadcss.catAdmCard}>
-      <img className={cadcss.cardImage} loading="lazy" alt={title} src={cardimg} />
+      <section className={cadcss.cardImage}>
+        {tag && <NewsTag id={compid} name={tag} />}
+        <ImageCard alt={title} src={cardimg} />
+      </section>
       <section className={cadcss.cardContent}>
         <header className={cadcss.cardHead}>
           <h1 className={cadcss.cardTitle}>{title}</h1>
@@ -103,34 +126,7 @@ export const CatAdmCard = ({ id, title, short, image, onEdit }) => {
   );
 };
 
-export const ImageCard = ({ alt, src }) => {
-  const { toPathname } = useContent();
-  const compid = (alt && `pifa-image-${toPathname(alt)}`) || "pifa-image";
-  const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
-  const [imageSrc, setImageSrc] = useState("");
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(false);
-    const img = new Image();
-    img.src = `${imgURL}/${src}`;
-    img.onload = () => {
-      setImageSrc(img.src);
-      setIsLoaded(true);
-    };
-    img.onerror = () => setImageSrc("/img/fallback.jpg");
-  }, [src]);
-
-  return (
-    <Fragment>
-      {!isLoaded && <div id={`${compid}-placeholder`} className={imgcss.skeleton} />}
-      <img id={compid} alt={`Foto: ${alt} | Pifa Net`} src={imageSrc} style={{ ...crdcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
-    </Fragment>
-  );
-};
-
 export const CatCard = ({ id, catname, image, onClick }) => {
-  const { toPathname } = useContent();
   const compid = (catname && `${id}-category-card-${toPathname(catname)}`) || `${id}-category-card`;
   const cardstyle = { backgroundImage: (image && (image !== "" ? `url(${image})` : "url(/img/fallback.jpg)")) || "url(/img/fallback.jpg)" };
 
@@ -142,9 +138,9 @@ export const CatCard = ({ id, catname, image, onClick }) => {
 };
 
 export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
-  const { toTitleCase, toPathname, stripContent } = useContent();
+  const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-display-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-display-card`;
-  const carddesc = (short && stripContent(short)) || "No description";
+  const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
   const cardstyle = { alignSelf: align ? align : "unset", height: height ? height : "unset", flex: flex ? flex : "unset" };
 
@@ -171,7 +167,7 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
 };
 
 export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
-  const { toTitleCase, toPathname } = useContent();
+  const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-summary-card`;
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
@@ -207,9 +203,9 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
 };
 
 export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
-  const { toTitleCase, toPathname, stripContent } = useContent();
+  const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-feed-card`;
-  const carddesc = (short && stripContent(short)) || "No description";
+  const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
@@ -237,7 +233,6 @@ export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick 
 };
 
 export const InfographicCard = ({ id, title, image, count = "0", status, onClick }) => {
-  const { toPathname } = useContent();
   const compid = (title && `${id}-infographic-card-${toPathname(title)}`) || `${id}-infographic-card`;
   const cardimage = (image && image) || "/img/fallback.jpg";
 
@@ -254,9 +249,9 @@ export const InfographicCard = ({ id, title, image, count = "0", status, onClick
 };
 
 const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
-  const { toTitleCase, toPathname, stripContent } = useContent();
+  const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-news-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-news-card`;
-  const carddesc = (short && stripContent(short)) || "No description";
+  const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (

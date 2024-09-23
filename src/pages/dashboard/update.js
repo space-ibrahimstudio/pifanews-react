@@ -3,12 +3,12 @@ import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useDevmode } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
-import { useApi } from "../../libs/plugins/apis";
-import { useAuth } from "../../libs/guards/auth";
+import useApi from "../../libs/plugins/apis";
+import useAuth from "../../libs/guards/auth";
+import useGraph from "../../components/content/graph";
 import { SEO } from "../../libs/plugins/seo";
 import { inputValidator, useInputSchema, useDocument } from "../../libs/plugins/helpers";
-import Page, { Container } from "../../components/layout/frames";
-import { DashboardContainer, DashboardHead, DashboardToolbar } from "./index";
+import Page, { Container, Section, Header } from "../../components/layout/frames";
 import Fieldset from "../../components/formel/inputs";
 import { TagsButton } from "../../components/formel/buttons";
 import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/formel/text-editor";
@@ -26,6 +26,7 @@ const DashboardUpdatePage = () => {
   const { apiRead, apiGet, apiCrud } = useApi();
   const { short } = useDocument();
   const { inputSch, errorSch } = useInputSchema();
+  const { H1, P } = useGraph();
   const id = `${short}-${params}`;
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,6 +46,8 @@ const DashboardUpdatePage = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [initialContent, setInitialContent] = useState("");
   const [selectedCatType, setSelectedCatType] = useState("berita");
+  const [moduleData, setModuleData] = useState(null);
+  const [moduleDetData, setModuleDetData] = useState([]);
 
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -133,6 +136,22 @@ const DashboardUpdatePage = () => {
                 setPageTitle("404 NOT FOUND");
                 setInputData({ judul: "", desc: "", image: "" });
                 setSelectedCatType("berita");
+                navigate(-1);
+              }
+              break;
+            default:
+              break;
+          }
+          break;
+        case "event":
+          switch (uslug) {
+            case "module":
+              formData.append("data", JSON.stringify({ secret: userData.token_activation, idevent: params }));
+              data = await apiRead(formData, "event", "vieweventdetail");
+              if (data && data.data) {
+                setModuleDetData(data.data);
+              } else {
+                setModuleDetData([]);
                 navigate(-1);
               }
               break;
@@ -362,12 +381,17 @@ const DashboardUpdatePage = () => {
 
             return (
               <Fragment>
-                <DashboardHead title="Update Berita" desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
-                <DashboardToolbar>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    Update Berita
+                  </H1>
+                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                </Header>
+                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Button id={`${id}-back-button`} buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
                   <Button id={`${id}-delete-button`} variant="line" color="var(--color-red)" buttonText="Hapus Berita" onClick={() => handleDelete("delnews")} startContent={<Trash size="var(--pixel-25)" />} />
-                </DashboardToolbar>
-                <Container isasChild isWrap gap="var(--pixel-10)">
+                </Section>
+                <Section isWrap gap="var(--pixel-10)">
                   <TextEditor maxW="var(--pixel-700)" initialContent={initialContent} onSubmit={handleUpdate}>
                     <Input id={`${id}-post-title`} type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
                     <Input id={`${id}-post-banner`} variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" initialImage={inputData.image} onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
@@ -382,31 +406,27 @@ const DashboardUpdatePage = () => {
                     </Fieldset>
                     <EditorToolbar tools={tools} />
                     <EditorContent />
-                    <Fragment>
-                      {selectedTags.length > 0 && (
-                        <Fieldset>
-                          {selectedTags.map((item, index) => (
-                            <TagsButton key={index} id={`${id}-tag-${index}`} type="select" text={item.tag} onClick={() => handleRemoveTag(item.tag)} />
-                          ))}
-                        </Fieldset>
-                      )}
-                    </Fragment>
+                    {selectedTags.length > 0 && (
+                      <Fieldset>
+                        {selectedTags.map((item, index) => (
+                          <TagsButton key={index} id={`${id}-tag-${index}`} type="select" text={item.tag} onClick={() => handleRemoveTag(item.tag)} />
+                        ))}
+                      </Fieldset>
+                    )}
                     <Input id={`${id}-post-tag`} type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tagQuery" value={tagQuery} onChange={handleTagSearch} />
-                    <Fragment>
-                      {tagSuggests.length > 0 && (
-                        <Fieldset>
-                          {tagSuggests.map((item, index) => (
-                            <TagsButton key={index} id={`${id}-suggest-tag-${index}`} text={item.nama_kategori_tag} onClick={() => handleAddTag(item)} />
-                          ))}
-                        </Fieldset>
-                      )}
-                    </Fragment>
+                    {tagSuggests.length > 0 && (
+                      <Fieldset>
+                        {tagSuggests.map((item, index) => (
+                          <TagsButton key={index} id={`${id}-suggest-tag-${index}`} text={item.nama_kategori_tag} onClick={() => handleAddTag(item)} />
+                        ))}
+                      </Fieldset>
+                    )}
                     <EditorFooter>
                       <Button type="submit" buttonText="Simpan Perubahan" action="save" isLoading={isSubmitting} />
                     </EditorFooter>
                   </TextEditor>
-                  <OGCard image={selectedImageUrl ? selectedImageUrl : inputData.image && inputData.image !== "" ? inputData.image : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.thumbnail} scope="/berita/" />
-                </Container>
+                  <OGCard image={selectedImageUrl ? selectedImageUrl : inputData.image && inputData.image !== "" ? inputData.image : "/img/fallback.jpg"} mssg="Hai, udah baca berita ini?" title={inputData.judul} desc={inputData.thumbnail} scope="/berita/" />
+                </Section>
               </Fragment>
             );
           default:
@@ -417,12 +437,17 @@ const DashboardUpdatePage = () => {
           case "kategori":
             return (
               <Fragment>
-                <DashboardHead title={selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"} desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod." />
-                <DashboardToolbar>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    {selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"}
+                  </H1>
+                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                </Header>
+                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Button id={`${id}-back-button`} buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
                   <Button id={`${id}-delete-button`} variant="line" color="var(--color-red)" buttonText="Hapus Kategori" onClick={() => handleDelete("cudcatberita")} startContent={<Trash size="var(--pixel-25)" />} />
-                </DashboardToolbar>
-                <Container isasChild isWrap gap="var(--pixel-10)">
+                </Section>
+                <Section isWrap gap="var(--pixel-10)">
                   <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
                     <Input id={`${id}-cat-image`} variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" initialImage={inputData.image} onSelect={handleImageSelect} isRequired />
                     <Input id={`${id}-cat-title`} type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
@@ -431,8 +456,47 @@ const DashboardUpdatePage = () => {
                       <Button type="submit" buttonText="Simpan Perubahan" action="save" isLoading={isSubmitting} />
                     </EditorFooter>
                   </Form>
-                  <OGCard image={selectedImageUrl ? selectedImageUrl : inputData.image && inputData.image !== "" ? inputData.image : "/img/fallback.jpg"} title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
-                </Container>
+                  <OGCard image={selectedImageUrl ? selectedImageUrl : inputData.image && inputData.image !== "" ? inputData.image : "/img/fallback.jpg"} mssg="Hai, udah baca berita ini?" title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
+                </Section>
+              </Fragment>
+            );
+          default:
+            return null;
+        }
+      case "event":
+        switch (uslug) {
+          case "module":
+            return (
+              <Fragment>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    Modul Event
+                  </H1>
+                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                </Header>
+                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
+                  <Button id={`${id}-back-button`} buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
+                  <Button id={`${id}-delete-button`} variant="line" color="var(--color-red)" buttonText="Hapus Modul" onClick={() => handleDelete("cudcatberita")} startContent={<Trash size="var(--pixel-25)" />} />
+                </Section>
+                <Section isWrap gap="var(--pixel-10)">
+                  <Form minW="var(--pixel-350)" onSubmit={(e) => handleSubmit(e, "cudevent", "event")}>
+                    <Input id={`${id}-module-title`} type="text" labelText="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
+                    <Input id={`${id}-module-banner`} variant="upload" labelText="Thumbnail Modul" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
+                    <Fieldset>
+                      <Input id={`${id}-module-desc`} type="text" labelText="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
+                      <Input id={`${id}-module-date`} type="text" labelText="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errorContent={errors.tanggal} isRequired />
+                    </Fieldset>
+                    <Fieldset>
+                      <Input id={`${id}-module-hl`} type="text" labelText="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errorContent={errors.highlight} isRequired />
+                      <Input id={`${id}-module-info`} type="text" labelText="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errorContent={errors.info} isRequired />
+                    </Fieldset>
+                    <Input id={`${id}-module-syarat`} variant="textarea" rows={10} labelText="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errorContent={errors.syarat} isRequired />
+                    <EditorFooter>
+                      <Button type="submit" buttonText="Publish Modul" action="save" isLoading={isSubmitting} />
+                    </EditorFooter>
+                  </Form>
+                  <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} mssg="Hai, udah lihat event ini?" title={inputData.judul} desc={inputData.desc} scope="/event/" />
+                </Section>
               </Fragment>
             );
           default:
@@ -456,7 +520,9 @@ const DashboardUpdatePage = () => {
     <Fragment>
       <SEO title={`Update: ${pageTitle}`} route={`/dashboard/${uscope}/${uslug}/update/${params}`} isNoIndex />
       <Page pageid={id} type="private">
-        <DashboardContainer>{renderContent()}</DashboardContainer>
+        <Container alignItems="center" minHeight="80vh" gap="var(--pixel-20)">
+          {renderContent()}
+        </Container>
       </Page>
     </Fragment>
   );

@@ -2,20 +2,21 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
-import { useLoading } from "../components/feedback/loader";
-import { useApi } from "../libs/plugins/apis";
+import useLoading from "../components/feedback/loader";
+import useApi from "../libs/plugins/apis";
+import useGraph from "../components/content/graph";
 import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import Page from "../components/layout/frames";
-import PostdetSection, { PostdetContent, PostdetArticle, PostdetAside } from "../components/layouts/postdet";
-import { AdBanner } from "../components/media/image";
+import Page, { Container, Section } from "../components/layout/frames";
+import Slider from "../components/layout/slider";
+import Article from "../components/content/article";
+import Image, { AdBanner } from "../components/media/image";
 import NewsCard from "../components/layout/cards";
+import SectionHead from "../components/feedback/markers";
 import { NewsSummaryGroup } from "../components/layout/groups";
-import { NewsHscrollSection } from "../sections/news-hscroll-section";
-import { NewsSliderSection } from "../sections/news-slider-section";
-import { InlineadsSection } from "../sections/inlineads-section";
 
 const imgURL = process.env.REACT_APP_IMAGE_URL;
+const imgdomain = process.env.REACT_APP_API_URL;
 
 const PostPage = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const PostPage = () => {
   const { width } = useWindow();
   const { apiRead, apiGet } = useApi();
   const { setLoading } = useLoading();
+  const { H1, Span } = useGraph();
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
   const [trendLimit, setTrendLimit] = useState(10);
@@ -127,21 +129,35 @@ const PostPage = () => {
     <Fragment>
       <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category={catPostData && catPostData.nama_kategori_berita} author={postDetailData.penulis_berita} datecreate={postDetailData.created_at} dateupdate={postDetailData.updated_at} />
       <Page pageid={id}>
-        <PostdetSection>
-          <PostdetContent>
-            <PostdetArticle id={id} paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} thumbnail={postDetailData.thumnail_berita} image={postDetailData.img_berita && postDetailData.img_berita} content={postDetailData.isi_berita} />
-            <PostdetAside>
+        <Container gap="var(--pixel-10)" alignItems="center">
+          <Section direction={width > 930 ? "row" : "column"} justifyContent="center" gap="var(--pixel-10)" textAlign="left">
+            <Section flex="1" alignItems="center" gap="var(--pixel-10)">
+              <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={postDetailData.thumnail_berita} src={postDetailData.img_berita && `${imgURL}/${postDetailData.img_berita}`} />
+              <i style={{ position: "relative", color: "var(--color-secondary)", opacity: "0.5", fontFamily: "var(--font-inter)", fontSize: "var(--font-tiny)", fontWeight: "500", textAlign: "left", alignSelf: "stretch", marginLeft: "var(--pixel-20)", marginRight: "var(--pixel-20)" }}>{postDetailData.thumnail_berita}</i>
+              <Article paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
+            </Section>
+            <Section cwidth="100%" direction={width > 930 ? "column" : width <= 450 ? "column" : "row"} maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
               <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" posts={trendingPostData} setLimit={setTrendLimit} loading={trendLoading} />
-              <InlineadsSection label="" src="/img/inline-ads.webp" />
-            </PostdetAside>
-          </PostdetContent>
-        </PostdetSection>
-        <NewsHscrollSection scope="Terkait">
-          {relatedPostData.map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
-          ))}
-        </NewsHscrollSection>
-        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+              <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+            </Section>
+          </Section>
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <SectionHead>
+            <H1>
+              {`Berita `}
+              <Span color="var(--color-primary)">Terkait</Span>
+            </H1>
+          </SectionHead>
+          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+            {relatedPostData.map((post, index) => (
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            ))}
+          </Section>
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        </Container>
       </Page>
     </Fragment>
   );

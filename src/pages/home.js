@@ -1,21 +1,20 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
+import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
-import { useApi } from "../libs/plugins/apis";
-import { getInfographicPosts, getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import Page from "../components/layout/frames";
-import { News3Grid } from "../components/layouts/grids";
-import { Container } from "../components/layout/frames";
-import { AdBanner } from "../components/media/image";
+import { getInfographicPosts, getAdDatas } from "../libs/sources/datas";
+import useGraph from "../components/content/graph";
+import SectionHead from "../components/feedback/markers";
+import { TagsButton } from "../components/formel/buttons";
 import NewsCard, { InfographicCard, CatCard } from "../components/layout/cards";
-import { NewsSummaryGroup } from "../components/layout/groups";
-import { HeroSection } from "../sections/hero-section";
-import { TagsSection } from "../sections/tags-section";
-import { NewsHscrollSection } from "../sections/news-hscroll-section";
-import { NewsSliderSection } from "../sections/news-slider-section";
-import { NewsSection } from "../sections/news-section";
+import Page, { Container, Section } from "../components/layout/frames";
+import { NewsSummaryGroup, News3Group, SectionGroup } from "../components/layout/groups";
+import Slider from "../components/layout/slider";
+import { AdBanner } from "../components/media/image";
+
+const imgdomain = process.env.REACT_APP_API_URL;
 
 const HomePage = () => {
   const { width } = useWindow();
@@ -23,6 +22,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { apiRead, apiGet } = useApi();
+  const { H1, Span } = useGraph();
   const id = `${short}-home`;
   const [limit, setLimit] = useState(13);
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ const HomePage = () => {
   const [popularPostData, setPopularPostData] = useState([]);
 
   const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
-  const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.img} />;
+  const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.nama_kategori_daerah.toLowerCase().replace(" ", "")}.pifa.co.id`, "_blank")} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   const fetchCatNewsData = async () => {
@@ -167,30 +167,90 @@ const HomePage = () => {
     <Fragment>
       <SEO title="Beranda" route="/" />
       <Page pageid={id}>
-        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <TagsSection tags={trendTagData} />
-        <HeroSection>
-          <News3Grid id={id} posts={trendingPostData} />
-          <Container isasChild flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        </Container>
+        <Container alignItems="center" padding={width <= 910 ? (width > 700 ? "0 var(--pixel-30)" : "0 var(--pixel-20)") : "0 var(--pixel-70)"}>
+          <Section isWrap justifyContent="center" padding="var(--pixel-10) 0" gap="var(--pixel-10)">
+            {trendTagData.map((tag, index) => (
+              <TagsButton key={index} text={tag.nama_kategori_tag} onClick={() => navigate(`/berita/tag/${tag.slug}`)} />
+            ))}
+          </Section>
+        </Container>
+        <Container isWrap justifyContent="center" gap="var(--pixel-10)">
+          <News3Group posts={trendingPostData.slice(0, 3)} />
+          <Section flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3)} setLimit={setLimit} loading={loading} />
-          </Container>
-        </HeroSection>
-        <NewsSliderSection noSource title="Berita" scope="Infografis" content={graphicPosts} renderContent={renderInfographic} />
-        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <NewsHscrollSection scope="Terbaru">
-          {latestPostData.map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
-          ))}
-        </NewsHscrollSection>
-        <NewsSliderSection title="Berita" scope="Kabar Daerah" content={catLocalData} renderContent={renderLocalCat} />
-        <NewsSliderSection noHead content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
-        <NewsHscrollSection scope="Populer">
-          {popularPostData.map((post, index) => (
-            <NewsCard id={id} key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={post.img_berita} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
-          ))}
-        </NewsHscrollSection>
+          </Section>
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <SectionHead noSource>
+            <H1>
+              {`Berita `}
+              <Span color="var(--color-primary)">Infografis</Span>
+            </H1>
+          </SectionHead>
+          <Slider content={graphicPosts} renderContent={renderInfographic} />
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <SectionHead>
+            <H1>
+              {`Berita `}
+              <Span color="var(--color-primary)">Terbaru</Span>
+            </H1>
+          </SectionHead>
+          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+            {latestPostData.map((post, index) => (
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            ))}
+          </Section>
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <SectionHead noSource>
+            <H1>
+              {`Berita `}
+              <Span color="var(--color-primary)">Kabar Daerah</Span>
+            </H1>
+          </SectionHead>
+          <Slider content={catLocalData} renderContent={renderLocalCat} />
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+        </Container>
+        <Container alignItems="center" gap="var(--pixel-10)">
+          <SectionHead>
+            <H1>
+              {`Berita `}
+              <Span color="var(--color-primary)">Populer</Span>
+            </H1>
+          </SectionHead>
+          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+            {popularPostData.map((post, index) => (
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            ))}
+          </Section>
+        </Container>
         {combinedSections.map((section, index) => (
-          <Fragment key={index}>{section.type === "ad" ? <NewsSliderSection noHead content={section.data.content} renderContent={section.data.renderContent} contentStyle={section.data.style} /> : <NewsSection scope={section.data.nama_kategori_berita} catId={section.data.id} slug={section.data.slug} />}</Fragment>
+          <Fragment key={index}>
+            {section.type === "ad" ? (
+              <Container alignItems="center" gap="var(--pixel-10)">
+                <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
+              </Container>
+            ) : (
+              <Container alignItems="center" gap="var(--pixel-10)">
+                <SectionHead>
+                  <H1>
+                    {`Berita `}
+                    <Span color="var(--color-primary)">{section.data.nama_kategori_berita}</Span>
+                  </H1>
+                </SectionHead>
+                <SectionGroup catId={section.data.id} scope={section.data.nama_kategori_berita} slug={section.data.slug} />
+              </Container>
+            )}
+          </Fragment>
         ))}
       </Page>
     </Fragment>

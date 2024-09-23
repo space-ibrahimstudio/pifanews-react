@@ -2,20 +2,31 @@ import React, { useRef, useState, useEffect } from "react";
 import { useDevmode } from "@ibrahimstudio/react";
 import styles from "./styles/text-editor.module.css";
 
-const ToolButton = ({ isActive, children, onClick }) => {
+const ToolButton = ({ id, isActive, children, onClick }) => {
+  const compid = `${id}-editor-tool-button`;
   return (
-    <button className={`${styles.toolButton} ${isActive ? styles.active : ""}`} onClick={onClick}>
-      {children}
+    <button id={compid} className={`${styles.toolButton} ${isActive ? styles.active : ""}`} onClick={onClick}>
+      {React.Children.map(children, (child) => {
+        return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+      })}
     </button>
   );
 };
 
-const ToolGroup = ({ children }) => {
+const ToolGroup = ({ id, children }) => {
+  const compid = `${id}-editor-tool-group`;
   const groupstyles = { display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: "var(--pixel-10)", gap: "var(--pixel-5)" };
-  return <section style={groupstyles}>{children}</section>;
+  return (
+    <section id={compid} style={groupstyles}>
+      {React.Children.map(children, (child) => {
+        return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+      })}
+    </section>
+  );
 };
 
-const Tool = ({ name, size = "var(--pixel-25)", color }) => {
+const Tool = ({ id, name, size = "var(--pixel-25)", color }) => {
+  const compid = `${id}-${name}`;
   const fill = color ? color : "currentColor";
   const iconstyle = { width: size, height: size, overflow: "hidden", flexShrink: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", boxSizing: "border-box", color: "inherit" };
 
@@ -119,26 +130,35 @@ const Tool = ({ name, size = "var(--pixel-25)", color }) => {
     }
   };
   return (
-    <div className={styles.isIcon} style={iconstyle}>
+    <div id={compid} className={styles.isIcon} style={iconstyle}>
       {renderIcon()}
     </div>
   );
 };
 
-export const EditorFooter = ({ children }) => {
+export const EditorFooter = ({ id, children }) => {
+  const compid = `${id}-editor-footer`;
   const footerstyles = { alignSelf: "stretch", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: "var(--pixel-10)" };
-  return <footer style={footerstyles}>{children}</footer>;
-};
-
-export const EditorContent = ({ editorRef, handleInput, handlePaste }) => {
   return (
-    <div className={styles.editorContent}>
-      <div className={styles.contentArea} ref={editorRef} contentEditable={true} onInput={handleInput} onPaste={handlePaste}></div>
-    </div>
+    <footer id={compid} style={footerstyles}>
+      {React.Children.map(children, (child) => {
+        return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+      })}
+    </footer>
   );
 };
 
-export const EditorToolbar = ({ tools, formatText, toggleHeading, activeFormats }) => {
+export const EditorContent = ({ id, editorRef, handleInput, handlePaste }) => {
+  const compid = `${id}-editor-content`;
+  return (
+    <section id={compid} className={styles.editorContent}>
+      <div className={styles.contentArea} ref={editorRef} contentEditable={true} onInput={handleInput} onPaste={handlePaste}></div>
+    </section>
+  );
+};
+
+export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeFormats }) => {
+  const compid = `${id}-editor-toolbar`;
   const toolbarstyles = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" };
   const actionMap = {
     h1: () => toggleHeading("H1"),
@@ -162,7 +182,7 @@ export const EditorToolbar = ({ tools, formatText, toggleHeading, activeFormats 
   };
 
   return (
-    <header style={toolbarstyles}>
+    <header id={compid} style={toolbarstyles}>
       {tools.map((group, index) => (
         <ToolGroup key={index}>
           {group.map((tool, idx) => {
@@ -178,7 +198,8 @@ export const EditorToolbar = ({ tools, formatText, toggleHeading, activeFormats 
   );
 };
 
-const TextEditor = ({ children, minW = "unset", maxW = "unset", initialContent = "", onSubmit }) => {
+const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialContent = "", onSubmit }) => {
+  const compid = `${id}-text-editor`;
   const editorRef = useRef(null);
   const { log } = useDevmode();
   const editorstyles = { flex: "1", minWidth: minW, maxWidth: maxW, borderRadius: "var(--pixel-20)", backgroundColor: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "var(--pixel-20)", gap: "var(--pixel-15)" };
@@ -256,9 +277,9 @@ const TextEditor = ({ children, minW = "unset", maxW = "unset", initialContent =
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} style={editorstyles}>
+    <form id={compid} onSubmit={handleSubmit} style={editorstyles}>
       {React.Children.map(children, (child) => {
-        return React.cloneElement(child, { editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
+        return React.isValidElement(child) ? React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste }) : child;
       })}
     </form>
   );

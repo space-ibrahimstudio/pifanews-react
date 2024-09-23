@@ -63,4 +63,6 @@ export const ApiProvider = ({ children }) => {
   return <ApiContext.Provider value={{ apiCrud, apiRead, apiGet }}>{children}</ApiContext.Provider>;
 };
 
-export const useApi = () => useContext(ApiContext);
+const useApi = () => useContext(ApiContext);
+
+export default useApi;

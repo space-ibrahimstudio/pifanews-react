@@ -11,7 +11,7 @@ const apiURL = process.env.REACT_APP_API_URL;
 export const AuthProvider = ({ children }) => {
   const location = useLocation();
   const { log } = useDevmode();
-  const { rmvL, setLWithExp, getLWithExp } = useLocStorage();
+  const { setL, getL, rmvL } = useLocStorage();
   const [isLoggedin, setIsLoggedin] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,8 +47,8 @@ export const AuthProvider = ({ children }) => {
       const loginresponse = response.data;
       if (loginresponse.status) {
         const userdata = loginresponse.data[0];
-        setLWithExp("user_data", userdata);
-        setLWithExp("logged_in", "true");
+        setL("user_data", userdata);
+        setL("logged_in", "true");
         setIsLoggedin(true);
         alert(`Kamu berhasil login. Selamat datang kembali, ${userdata.name}!`);
         log("login credential:", userdata);
@@ -93,8 +93,8 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const loggedin = getLWithExp("logged_in");
-      const userdata = getLWithExp("user_data");
+      const loggedin = getL("logged_in");
+      const userdata = getL("user_data");
       if (loggedin === "true" && userdata) {
         setIsLoggedin(true);
         log("user logged in and ip-address matched");
@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const userData = getLWithExp("user_data");
+  const userData = getL("user_data");
 
   useEffect(() => {
     checkAuth();
@@ -122,4 +122,6 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={{ loading, isLoggedin, signup, login, logout, userData }}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => useContext(AuthContext);
+const useAuth = () => useContext(AuthContext);
+
+export default useAuth;

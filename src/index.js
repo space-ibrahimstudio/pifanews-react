@@ -8,7 +8,6 @@ import { LoadingProvider } from "./components/feedback/loader";
 import { AuthProvider } from "./libs/guards/auth";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "./index.css";
 
 const sendtoGA = ({ name, delta, id }) => {
@@ -46,8 +45,6 @@ root.render(
     </HelmetProvider>
   </React.StrictMode>
 );
-
-serviceWorkerRegistration.register();
 
 if (process.env.NODE_ENV === "production") {
   reportWebVitals(sendtoGA);

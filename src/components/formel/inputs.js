@@ -8,7 +8,11 @@ const Fieldset = ({ id, gap = "var(--pixel-10)", children }) => {
 
   return (
     <section id={compid} style={{ ...basestyles, ...wrapstyles }}>
-      <div style={{ ...basestyles, ...bodystyles }}>{children}</div>
+      <div style={{ ...basestyles, ...bodystyles }}>
+        {React.Children.map(children, (child) => {
+          return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+        })}
+      </div>
     </section>
   );
 };

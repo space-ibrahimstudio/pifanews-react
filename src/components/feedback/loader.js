@@ -1,9 +1,10 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { useContent } from "@ibrahimstudio/react";
+import { toPathname } from "../../libs/plugins/helpers";
 import styles from "./styles/loader.module.css";
 
+const LoadingContext = createContext();
+
 export const BlurUpImg = ({ className, style, alt, src }) => {
-  const { toPathname } = useContent();
   const compid = (alt && toPathname(alt)) || "";
   const [loaded, setLoaded] = useState(false);
   const [blurredSrc, setBlurredSrc] = useState("");
@@ -86,8 +87,6 @@ export const LoadingContent = () => {
   );
 };
 
-const LoadingContext = createContext();
-export const useLoading = () => useContext(LoadingContext);
 export const LoadingProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -102,3 +101,7 @@ export const LoadingProvider = ({ children }) => {
     </LoadingContext.Provider>
   );
 };
+
+const useLoading = () => useContext(LoadingContext);
+
+export default useLoading;
