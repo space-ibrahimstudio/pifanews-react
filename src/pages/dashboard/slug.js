@@ -83,7 +83,7 @@ const DashboardSlugPage = () => {
     const { name, value } = e.target;
     setInputData((prevState) => ({ ...prevState, [name]: value }));
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-    if (name === "tgl" && value !== "") {
+    if (name === "post_date" && value !== "") {
       const formattedDate = formatDate(value);
       setLocaleDate(formattedDate);
     }
@@ -97,7 +97,7 @@ const DashboardSlugPage = () => {
     setTagSuggests([]);
     setTagQuery("");
     setInitialContent("");
-    setInputData({ ...inputSch, tgl: getCurrentDate() });
+    setInputData({ ...inputSch, post_date: getCurrentDate() });
     setLocaleDate(formattedDate);
   };
 
@@ -355,7 +355,7 @@ const DashboardSlugPage = () => {
             };
 
             const handlePublish = async (content) => {
-              const requiredFields = ["tgl", "judul", "penulis", "catberita", "catdaerah", "thumbnail"];
+              const requiredFields = ["post_date", "judul", "penulis", "catberita", "catdaerah", "thumbnail"];
               const validationErrors = inputValidator(inputData, requiredFields);
               if (Object.keys(validationErrors).length > 0) {
                 setErrors(validationErrors);
@@ -424,7 +424,7 @@ const DashboardSlugPage = () => {
                         <Input id={`${id}-post-catlocal`} variant="select" isSearchable labelText="Kategori Daerah" placeholder="Pilih kategori daerah" name="catdaerah" value={inputData.catdaerah} options={localCatData.map((item) => ({ value: item.id, label: item.nama_kategori_daerah }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catdaerah", value: selectedValue } })} errorContent={errors.catdaerah} isRequired />
                       </Fieldset>
                       <Fieldset>
-                        <Input id={`${id}-post-date`} type="date" labelText="Tanggal Terbit" name="tgl" value={inputData.tgl} onChange={handleInputChange} errorContent={errors.tgl} isRequired />
+                        <Input id={`${id}-post-date`} type="date" labelText="Tanggal Terbit" name="post_date" value={inputData.post_date} onChange={handleInputChange} errorContent={errors.post_date} isRequired />
                         <Input id={`${id}-post-writer`} type="text" labelText="Penulis Berita" placeholder="Masukkan nama penulis" name="penulis" value={inputData.penulis} onChange={handleInputChange} errorContent={errors.penulis} isRequired />
                       </Fieldset>
                       <EditorToolbar tools={tools} />
@@ -648,7 +648,7 @@ const DashboardSlugPage = () => {
                     <Grid gridTemplateRows={selectedView === "grid" ? "unset" : "repeat(2, auto)"} gridTemplateColumns={selectedView === "grid" ? "repeat(auto-fill, minmax(var(--pixel-300), 1fr))" : "repeat(auto-fill, minmax(var(--pixel-350), 1fr))"} gap="var(--pixel-10)">
                       {moduleData.map((post, index) => (
                         <Fragment key={index}>
-                          {selectedView === "grid" && <NewsCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} loc={post.info} date={post.tanggal} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
+                          {selectedView === "grid" && <NewsCard title={post.title} short={`${post.descripiton} | ${post.highlight}`} image={`${imgdomain}/images/event/${post.img}`} loc={post.info} date={post.tanggal} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
                           {selectedView === "list" && <CatAdmCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
                         </Fragment>
                       ))}

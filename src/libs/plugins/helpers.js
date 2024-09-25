@@ -56,8 +56,62 @@ export const useOptions = () => {
 };
 
 export const useInputSchema = () => {
-  const inputSch = { name: "", phone: "", address: "", tgl: "", judul: "", penulis: "", catberita: "", catdaerah: "", content: "", thumbnail: "", tag: [{ tag: "" }], desc: "", image: "", highlight: "", syarat: "", info: "", tanggal: "" };
-  const errorSch = { name: "", phone: "", address: "", tgl: "", judul: "", penulis: "", catberita: "", catdaerah: "", content: "", thumbnail: "", tag: [{ tag: "" }], desc: "", image: "", highlight: "", syarat: "", info: "", tanggal: "" };
+  const inputSch = {
+    name: "",
+    phone: "",
+    address: "",
+    post_date: "",
+    judul: "",
+    penulis: "",
+    catberita: "",
+    catdaerah: "",
+    thumbnail: "",
+    tag: [{ tag: "" }],
+    desc: "",
+    image: "",
+    highlight: "",
+    syarat: "",
+    info: "",
+    tanggal: "",
+    event_id: "",
+    event_title: "",
+    event_image: "",
+    event_day: "",
+    event_loc: "",
+    event_info: "",
+    event_cost: "",
+    event_date: "",
+    event_guide: "",
+    event_coords: "",
+  };
+  const errorSch = {
+    name: "",
+    phone: "",
+    address: "",
+    post_date: "",
+    judul: "",
+    penulis: "",
+    catberita: "",
+    catdaerah: "",
+    thumbnail: "",
+    tag: [{ tag: "" }],
+    desc: "",
+    image: "",
+    highlight: "",
+    syarat: "",
+    info: "",
+    tanggal: "",
+    event_id: "",
+    event_title: "",
+    event_image: "",
+    event_day: "",
+    event_loc: "",
+    event_info: "",
+    event_cost: "",
+    event_date: "",
+    event_guide: "",
+    event_coords: "",
+  };
 
   return { inputSch, errorSch };
 };
@@ -65,7 +119,7 @@ export const useInputSchema = () => {
 export const useDocument = () => {
   const company = "Pifa Net";
   const short = "pifa";
-  const domain = process.env.REACT_APP_DOMAIN_URL;
+  const domain = process.env.REACT_APP_DOMAIN_MAIN;
 
   return { company, short, domain };
 };
@@ -90,4 +144,8 @@ export const toPathname = (text) => {
   pathname = pathname.replace(/\s+/g, "-");
 
   return pathname;
+};
+
+export const getNestedValue = (obj, path) => {
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 };

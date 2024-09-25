@@ -8,7 +8,7 @@ if (!process.env.CI) {
   require("dotenv").config({ path: ".env.development" });
 }
 
-const domainURL = process.env.REACT_APP_DOMAIN_URL;
+const domainURL = process.env.REACT_APP_DOMAIN_MAIN;
 const apiURL = process.env.REACT_APP_API_URL;
 
 async function fetchCatSlug() {

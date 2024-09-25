@@ -15,7 +15,6 @@ import NewsCard from "../components/layout/cards";
 import SectionHead from "../components/feedback/markers";
 import { NewsSummaryGroup } from "../components/layout/groups";
 
-const imgURL = process.env.REACT_APP_IMAGE_URL;
 const imgdomain = process.env.REACT_APP_API_URL;
 
 const PostPage = () => {
@@ -47,7 +46,7 @@ const PostPage = () => {
       if (postdetail && postdetail.data && postdetail.data.length > 0) {
         const selecteddata = postdetail.data[0];
         setPostDetailData(selecteddata);
-        setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgURL}/${selecteddata.img_berita}` });
+        setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}` });
         const catnews = await apiGet("main", "categorynew");
         if (catnews && catnews.data && catnews.data.length > 0) {
           const selectedcat = catnews.data.find((cat) => cat.id === selecteddata.nama_kategori_berita_id);
@@ -132,7 +131,7 @@ const PostPage = () => {
         <Container gap="var(--pixel-10)" alignItems="center">
           <Section direction={width > 930 ? "row" : "column"} justifyContent="center" gap="var(--pixel-10)" textAlign="left">
             <Section flex="1" alignItems="center" gap="var(--pixel-10)">
-              <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={postDetailData.thumnail_berita} src={postDetailData.img_berita && `${imgURL}/${postDetailData.img_berita}`} />
+              <Image style={{ width: "100%", height: width <= 700 ? "var(--pixel-250)" : "var(--pixel-400)", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={postDetailData.thumnail_berita} src={postDetailData.img_berita && `${imgdomain}/images/img_berita/${postDetailData.img_berita}`} />
               <i style={{ position: "relative", color: "var(--color-secondary)", opacity: "0.5", fontFamily: "var(--font-inter)", fontSize: "var(--font-tiny)", fontWeight: "500", textAlign: "left", alignSelf: "stretch", marginLeft: "var(--pixel-20)", marginRight: "var(--pixel-20)" }}>{postDetailData.thumnail_berita}</i>
               <Article paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
             </Section>

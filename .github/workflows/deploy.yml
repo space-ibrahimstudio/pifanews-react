@@ -28,10 +28,9 @@ jobs:
       - name: 3. Export environment variables
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_URL=${{ secrets.REACT_APP_DOMAIN_URL }}" >> $GITHUB_ENV
-          echo "REACT_APP_IMAGE_URL=${{ secrets.REACT_APP_IMAGE_URL }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
-          echo "REACT_APP_GTAG=${{ secrets.REACT_APP_GTAG }}" >> $GITHUB_ENV
+          echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
 
       - name: 4. Installing required packages
         run: npm install
@@ -39,7 +38,7 @@ jobs:
       - name: 5. Generate latest sitemap
         run: node update-slugs.js
         env:
-          REACT_APP_DOMAIN_URL: ${{ secrets.REACT_APP_DOMAIN_URL }}
+          REACT_APP_DOMAIN_MAIN: ${{ secrets.REACT_APP_DOMAIN_MAIN }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: 6. Builds the app for production
@@ -51,9 +50,9 @@ jobs:
       - name: 8. Sync files (excluding berita folder)
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ${{ secrets.FTP_HOST_PROD }}
-          username: ${{ secrets.FTP_USERNAME_PROD }}
-          password: ${{ secrets.FTP_PASSWORD_PROD }}
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME_MAIN }}
+          password: ${{ secrets.FTP_PASSWORD_MAIN }}
           local-dir: build/
           exclude: |
             **/.git*
@@ -66,8 +65,8 @@ jobs:
 
       - name: 9. Remove "berita" folder recursively
         run: |
-          echo "open ${{ secrets.FTP_HOST_PROD }}" >> ftp_commands_clean.txt
-          echo "user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}" >> ftp_commands_clean.txt
+          echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_clean.txt
+          echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_clean.txt
 
           echo "function delete_dir() {" >> ftp_commands_clean.txt
           echo "  local DIR=$1" >> ftp_commands_clean.txt
@@ -91,16 +90,16 @@ jobs:
       - name: 10. Sync "berita" folder
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ${{ secrets.FTP_HOST_PROD }}
-          username: ${{ secrets.FTP_USERNAME_PROD }}
-          password: ${{ secrets.FTP_PASSWORD_PROD }}
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME_MAIN }}
+          password: ${{ secrets.FTP_PASSWORD_MAIN }}
           local-dir: build/berita/
           server-dir: berita/
 
       - name: 11. Remove FTP sync state file
         run: |
-          echo "open ${{ secrets.FTP_HOST_PROD }}" >> ftp_commands_async.txt
-          echo "user ${{ secrets.FTP_USERNAME_PROD }} ${{ secrets.FTP_PASSWORD_PROD }}" >> ftp_commands_async.txt
+          echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
+          echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
 
           echo "cd /berita" >> ftp_commands_async.txt
           echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt

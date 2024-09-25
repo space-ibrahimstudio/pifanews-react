@@ -41,6 +41,23 @@ export const ImageCard = ({ alt, src }) => {
   );
 };
 
+export const EventDetailCard = ({ id, title, day, date, onEdit, onDelete }) => {
+  const compid = (title && `${id}-event-detail-card-${toPathname(title)}`) || `${id}-event-detail-card`;
+
+  return (
+    <section id={compid} className={tagcss.tagCard}>
+      <header className={tagcss.cardContent}>
+        <h1 className={tagcss.cardTitle}>{title}</h1>
+        <span className={tagcss.cardDate}>
+          {day} | {date}
+        </span>
+      </header>
+      <Button id={`${compid}-action-edit`} size="sm" color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={onEdit} />
+      <Button id={`${compid}-action-delete`} size="sm" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} />
+    </section>
+  );
+};
+
 export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpdate, onEdit, inputData, setInputData, onChange, onClose, onSave, onDelete, isDisabled = false }) => {
   const { newDate } = useFormat();
   const [editOpen, setEditOpen] = useState(openState);
@@ -83,7 +100,7 @@ export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpd
 };
 
 export const OGCard = ({ id, image, title = "", mssg, scope = "/", desc = "" }) => {
-  const { company } = useDocument();
+  const { company, domain } = useDocument();
   const compid = (title && `${id}-og-card-${toPathname(title)}`) || `${id}-og-card`;
 
   return (
@@ -97,7 +114,7 @@ export const OGCard = ({ id, image, title = "", mssg, scope = "/", desc = "" }) 
       <section className={ogscss.cardMssg}>
         <p className={ogscss.mssgText}>
           {`${mssg} `}
-          <span style={{ color: "var(--color-primary)", textDecoration: "underline" }}>{`https://pifa.co.id${scope}${toPathname(title)}`}</span>
+          <span style={{ color: "var(--color-primary)", textDecoration: "underline" }}>{`${domain}${scope}${toPathname(title)}`}</span>
         </p>
       </section>
     </section>
