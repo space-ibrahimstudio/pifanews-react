@@ -59,35 +59,8 @@ jobs:
             **/.git*/**
             **/node_modules/**
             **/berita/**
-            **/img/**
-            **/png/**
-            **/svg/**
 
-      - name: 9. Remove "berita" folder recursively
-        run: |
-          echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_clean.txt
-          echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_clean.txt
-
-          echo "function delete_dir() {" >> ftp_commands_clean.txt
-          echo "  local DIR=$1" >> ftp_commands_clean.txt
-          echo "  echo cd \$DIR" >> ftp_commands_clean.txt
-          echo "  mls" >> ftp_commands_clean.txt
-          echo "  for FILE in *; do" >> ftp_commands_clean.txt
-          echo "    if [[ -f \$FILE ]]; then" >> ftp_commands_clean.txt
-          echo "      echo delete \$FILE" >> ftp_commands_clean.txt
-          echo "    elif [[ -d \$FILE ]]; then" >> ftp_commands_clean.txt
-          echo "      delete_dir \$DIR/\$FILE" >> ftp_commands_clean.txt
-          echo "      echo rmdir \$DIR/\$FILE" >> ftp_commands_clean.txt
-          echo "    fi" >> ftp_commands_clean.txt
-          echo "  done" >> ftp_commands_clean.txt
-          echo "}" >> ftp_commands_clean.txt
-
-          echo "delete_dir /berita" >> ftp_commands_clean.txt
-          echo "bye" >> ftp_commands_clean.txt
-
-          ftp -inv < ftp_commands_clean.txt
-
-      - name: 10. Sync "berita" folder
+      - name: 9. Sync "berita" folder
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -96,7 +69,7 @@ jobs:
           local-dir: build/berita/
           server-dir: berita/
 
-      - name: 11. Remove FTP sync state file
+      - name: 10. Remove FTP sync state file
         run: |
           echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
           echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
