@@ -36,7 +36,7 @@ export const ImageCard = ({ alt, src }) => {
   return (
     <Fragment>
       {!isLoaded && <div id={`${compid}-placeholder`} className={imgcss.skeleton} />}
-      <img id={compid} alt={`Foto: ${alt} | Pifa Net`} src={imageSrc} style={{ ...crdcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
+      <img id={compid} alt={`Foto: ${alt} | Pifa Event`} src={imageSrc} style={{ ...crdcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
     </Fragment>
   );
 };

@@ -1,6 +1,6 @@
 {
-  "short_name": "Pifa Net",
-  "name": "Pifa Net Web App",
+  "short_name": "Pifa Event",
+  "name": "Pifa Event Web App",
   "description": "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market",
   "icons": [
     {
@@ -27,24 +27,24 @@
   "scope": "/",
   "shortcuts": [
     {
-      "name": "Berita Terbaru hari ini",
+      "name": "Event Terbaru hari ini",
       "short_name": "Terbaru",
       "description": "View weather information for today",
-      "url": "/berita/insight/terbaru",
+      "url": "/event/insight/terbaru",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Berita Terpopuler hari ini",
+      "name": "Event Terpopuler hari ini",
       "short_name": "Terpopuler",
       "description": "View weather information for tomorrow",
-      "url": "/berita/insight/populer",
+      "url": "/event/insight/populer",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Berita Rekomendasi hari ini",
+      "name": "Event Rekomendasi hari ini",
       "short_name": "Rekomendasi",
       "description": "View weather information for today",
-      "url": "/berita/insight/rekomendasi",
+      "url": "/event/insight/rekomendasi",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     }
   ],

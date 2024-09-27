@@ -43,6 +43,19 @@ export const getStaticPages = () => {
   return pages;
 };
 
+export const getEventMenus = () => {
+  const menus = [
+    { id: "1", title: "Seminar", slug: "seminar" },
+    { id: "2", title: "Konser", slug: "konser" },
+    { id: "3", title: "Horor", slug: "horor" },
+    { id: "4", title: "Komedi", slug: "komedi" },
+    { id: "5", title: "Olahraga", slug: "olahraga" },
+    { id: "6", title: "Pameran", slug: "pameran" },
+  ];
+
+  return menus;
+};
+
 export const getInfographicPosts = () => {
   const posts = [
     {

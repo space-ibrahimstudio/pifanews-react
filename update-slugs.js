@@ -8,32 +8,13 @@ if (!process.env.CI) {
   require("dotenv").config({ path: ".env.development" });
 }
 
-const domainURL = process.env.REACT_APP_DOMAIN_MAIN;
+const domainURL = process.env.REACT_APP_DOMAIN_EVENT;
 const apiURL = process.env.REACT_APP_API_URL;
 
-async function fetchCatSlug() {
+async function fetchEventSlug() {
   try {
-    const url = `${apiURL}/main/categorynew`;
-    const response = await axios.get(url);
-    const slugdata = response.data;
-    if (!slugdata.error) {
-      return slugdata.data;
-    } else {
-      return [];
-    }
-  } catch (error) {
-    console.error("Error fetching category slugs:", error);
-    process.exit(1);
-  }
-}
-
-async function fetchPostSlug() {
-  const formData = new FormData();
-  formData.append("limit", "20");
-  formData.append("hal", "0");
-  try {
-    const url = `${apiURL}/main/latestnew`;
-    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
+    const url = `${apiURL}/event/showevent`;
+    const response = await axios.get(url, {});
     const slugdata = response.data;
     if (!slugdata.error) {
       return slugdata.data;
@@ -46,34 +27,15 @@ async function fetchPostSlug() {
   }
 }
 
-// async function fetchPostSlug() {
-//   const formData = new FormData();
-//   try {
-//     formData.append("limit", "1000");
-//     formData.append("hal", "7000");
-//     const url = `${apiURL}/authapi/viewnews`;
-//     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
-//     const slugdata = response.data;
-//     if (!slugdata.error) {
-//       return slugdata.data;
-//     } else {
-//       return [];
-//     }
-//   } catch (error) {
-//     console.error("Error fetching post slugs:", error);
-//     process.exit(1);
-//   }
-// }
-
-async function updatePackageJson(catslugs, postslugs) {
-  const updatedInclude = ["/", "/login", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+async function updatePackageJson(eventslugs) {
+  const updatedInclude = ["/", ...eventslugs.map((item) => `/event/${item.slug}`)];
   packageJson.reactSnap.include = updatedInclude;
 
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
   console.log("package.json updated successfully");
 }
 
-async function generateSitemap(catslugs, postslugs) {
+async function generateSitemap(eventslugs) {
   const domain = domainURL;
   if (!domain) {
     console.error("DOMAIN environment variable is not set");
@@ -95,11 +57,8 @@ async function generateSitemap(catslugs, postslugs) {
     return node;
   };
 
-  const staticUrls = [
-    { loc: "/", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/login", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-  ];
-  const dynamicUrls = [...catslugs.map((item) => ({ loc: `/berita/kategori/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 })), ...postslugs.map((item) => ({ loc: `/berita/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 }))];
+  const staticUrls = [{ loc: "/", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 }];
+  const dynamicUrls = [...eventslugs.map((item) => ({ loc: `/event/${item.slug}`, lastmod: item.eventupdate ? moment(item.eventupdate).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 }))];
   let existingUrls = [];
 
   if (fs.existsSync(sitemapPath)) {
@@ -160,10 +119,9 @@ async function generateSitemap(catslugs, postslugs) {
 }
 
 async function main() {
-  const catslugs = await fetchCatSlug();
-  const postslugs = await fetchPostSlug();
-  await updatePackageJson(catslugs, postslugs);
-  await generateSitemap(catslugs, postslugs);
+  const eventslugs = await fetchEventSlug();
+  await updatePackageJson(eventslugs);
+  await generateSitemap(eventslugs);
 }
 
 main();

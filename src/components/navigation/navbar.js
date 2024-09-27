@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWindow, useContent } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
+import { getEventMenus } from "../../libs/sources/datas";
 import { ISHome, ISSearch } from "@ibrahimstudio/icons";
 import useApi from "../../libs/plugins/apis";
 import useAuth from "../../libs/guards/auth";
@@ -11,15 +12,12 @@ import TabButton, { TabButtonGen } from "../formel/buttons";
 import styles from "./styles/navbar.module.css";
 
 const Navbar = ({ id, parentType = "public" }) => {
-  const ref = useRef(null);
   const navigate = useNavigate();
-  const { apiGet, apiRead } = useApi();
+  const { apiRead } = useApi();
   const { toTitleCase, toPathname } = useContent();
   const { isLoggedin, logout, userData } = useAuth();
   const { width } = useWindow();
   const compid = `${id}-top-navigation`;
-  const [leftShadow, setLeftShadow] = useState(false);
-  const [rightShadow, setRightShadow] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -36,8 +34,8 @@ const Navbar = ({ id, parentType = "public" }) => {
 
   const getPublicMenus = async () => {
     try {
-      const publicmenus = await apiGet("main", "categorynew");
-      setPublicMenus(publicmenus && publicmenus.data && publicmenus.data.length > 0 ? publicmenus.data : []);
+      const publicmenus = await getEventMenus();
+      setPublicMenus(publicmenus);
     } catch (error) {
       console.log("error:", error);
     }
@@ -77,40 +75,21 @@ const Navbar = ({ id, parentType = "public" }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const onScroll = () => {
-  //     const { scrollWidth = 0, scrollLeft = 0, offsetWidth = 0 } = ref.current || {};
-  //     setLeftShadow(scrollLeft > 0);
-  //     setRightShadow(scrollLeft + offsetWidth < scrollWidth);
-  //   };
-  //   onScroll();
-  //   const node = ref.current;
-  //   node.addEventListener("scroll", onScroll);
-  //   return () => {
-  //     node.removeEventListener("scroll", onScroll);
-  //   };
-  // }, []);
-
   return (
     <header id={compid} className={`${styles.navbar} ${scrolled ? styles.scroll : ""} ${parentType === "private" ? "" : styles.pub}`}>
       <section className={styles.navTop}>
         <img className={styles.navLogoIcon} alt="" src="/png/pifa-logo.png" />
-        <div className={styles.navOption}>
-          <Button id={`${compid}-action`} variant="line" color="var(--color-primary)" size="sm" buttonText={isLoggedin ? (userData.level === "admin" ? "Dashboard" : "Posting Iklan") : "Beriklan Disini"} onClick={isLoggedin ? (userData.level === "admin" ? () => navigate("/dashboard") : () => alert("Add Post coming soon!")) : () => navigate("/login")} />
-          {isLoggedin ? <Button id={`${compid}-logout`} size="sm" buttonText="Keluar" onClick={handleLogout} /> : <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => navigate("/login")} />}
-        </div>
+        <div className={styles.navOption}>{isLoggedin ? <Button id={`${compid}-logout`} size="sm" buttonText="Keluar" onClick={handleLogout} /> : <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => window.open("https://pifa.co.id/login", "_blank")} />}</div>
       </section>
       <section className={`${styles.navBottom} ${parentType === "private" ? "" : styles.pub}`}>
         {searchOpen && width <= 580 ? (
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", margin: "0", flexShrink: "0", boxSizing: "border-box", flex: "1" }} onKeyDown={handleSearch}>
-            <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} startContent={<ISSearch />} />
+            <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Event Terdekat" onChange={(e) => setQuery(e.target.value)} startContent={<ISSearch />} />
           </div>
         ) : (
           <nav className={`${styles.navMenu} ${parentType === "private" ? "" : styles.pub}`}>
-            <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
+            <TabButtonGen id={`${compid}-beranda`} text="Semua" path="/" startContent={<ISHome />} />
             <div className={`${styles.navMenuHscroll} ${parentType === "private" ? "" : styles.pub}`}>
-              {/* <div className={`${styles.navMenuItems} ${leftShadow ? styles.leftShadow : ""} ${rightShadow ? styles.rightShadow : ""}`}> */}
-              {/* <div ref={ref} className={`${styles.navMenuHscroll} ${parentType === "private" ? "" : styles.nopriv}`}> */}
               <div className={styles.navMenuItems}>
                 {parentType === "private" ? (
                   <Fragment>
@@ -120,9 +99,8 @@ const Navbar = ({ id, parentType = "public" }) => {
                   </Fragment>
                 ) : (
                   <Fragment>
-                    <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-slider-news-section-berita-infografis" />
                     {publicMenus.map((menu, index) => (
-                      <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
+                      <TabButton key={index} id={`${compid}-${menu.id}`} path={`/event/kategori/${menu.slug}`} text={menu.title} />
                     ))}
                   </Fragment>
                 )}
@@ -133,7 +111,7 @@ const Navbar = ({ id, parentType = "public" }) => {
         {parentType !== "private" &&
           (width > 580 ? (
             <div className={styles.navSearch} onKeyDown={handleSearch}>
-              <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} endContent={<ISSearch />} />
+              <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Event Terdekat" onChange={(e) => setQuery(e.target.value)} endContent={<ISSearch />} />
             </div>
           ) : (
             <Button id={searchOpen ? `${compid}-close-search` : `${compid}-open-search`} size="sm" variant="hollow" subVariant="icon" color="var(--color-secondary)" iconContent={searchOpen ? <Close /> : <ISSearch />} onClick={() => setSearchOpen(!searchOpen)} />

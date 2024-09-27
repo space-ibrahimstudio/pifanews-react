@@ -3,13 +3,13 @@ name: PIFA v0.1.0
 on:
   push:
     branches:
-      - main
+      - event
   schedule:
     - cron: "0 0 */2 * *"
 
 jobs:
   web-deploy:
-    name: Deploy on Main
+    name: Deploy on Event
     runs-on: ubuntu-latest
 
     strategy:
@@ -28,9 +28,9 @@ jobs:
       - name: 3. Export environment variables
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_EVENT=${{ secrets.REACT_APP_DOMAIN_EVENT }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
-          echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
+          echo "REACT_APP_GTAG_EVENT=${{ secrets.REACT_APP_GTAG_EVENT }}" >> $GITHUB_ENV
 
       - name: 4. Installing required packages
         run: npm install
@@ -38,7 +38,7 @@ jobs:
       - name: 5. Generate latest sitemap
         run: node update-slugs.js
         env:
-          REACT_APP_DOMAIN_MAIN: ${{ secrets.REACT_APP_DOMAIN_MAIN }}
+          REACT_APP_DOMAIN_EVENT: ${{ secrets.REACT_APP_DOMAIN_EVENT }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: 6. Builds the app for production
@@ -51,8 +51,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME_MAIN }}
-          password: ${{ secrets.FTP_PASSWORD_MAIN }}
+          username: ${{ secrets.FTP_USERNAME_EVENT }}
+          password: ${{ secrets.FTP_PASSWORD_EVENT }}
           local-dir: build/
           exclude: |
             **/.git*
@@ -67,15 +67,15 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME_MAIN }}
-          password: ${{ secrets.FTP_PASSWORD_MAIN }}
+          username: ${{ secrets.FTP_USERNAME_EVENT }}
+          password: ${{ secrets.FTP_PASSWORD_EVENT }}
           local-dir: build/berita/
           server-dir: berita/
 
       - name: 10. Remove FTP sync state file
         run: |
           echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
-          echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
+          echo "user ${{ secrets.FTP_USERNAME_EVENT }} ${{ secrets.FTP_PASSWORD_EVENT }}" >> ftp_commands_async.txt
 
           echo "cd /berita" >> ftp_commands_async.txt
           echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
