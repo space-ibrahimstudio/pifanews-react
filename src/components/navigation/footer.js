@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { getContactInfo, getStaticPages, getSocialInfo } from "../../libs/sources/datas";
 import Image from "../media/image";
 import styles from "./styles/footer.module.css";
+
+const maindo = process.env.REACT_APP_DOMAIN_MAIN;
 
 const FooterMenu = ({ title, children }) => {
   return (
@@ -13,10 +14,9 @@ const FooterMenu = ({ title, children }) => {
   );
 };
 
-const FooterMenuLi = ({ children, to }) => {
-  const navigate = useNavigate();
+const FooterMenuLi = ({ children, onClick }) => {
   return (
-    <b className={styles.menuLi} onClick={() => navigate(to)}>
+    <b className={styles.menuLi} onClick={onClick}>
       {children}
     </b>
   );
@@ -80,7 +80,7 @@ const Footer = ({ id }) => {
         {staticPage.map((menu, index) => (
           <FooterMenu key={index} title={menu.title}>
             {menu.items.map((page, pageidx) => (
-              <FooterMenuLi key={pageidx} to={page.path}>
+              <FooterMenuLi key={pageidx} onClick={() => window.open(`${maindo}${page.path}`, "_blank")}>
                 {page.name}
               </FooterMenuLi>
             ))}

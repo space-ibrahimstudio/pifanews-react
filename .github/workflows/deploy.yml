@@ -27,9 +27,11 @@ jobs:
 
       - name: 3. Export environment variables
         run: |
-          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_EVENT=${{ secrets.REACT_APP_DOMAIN_EVENT }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_EVENT=${{ secrets.REACT_APP_DOMAIN_EVENT }}" >> $GITHUB_ENV
+          echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_EVENT=${{ secrets.REACT_APP_GTAG_EVENT }}" >> $GITHUB_ENV
 
       - name: 4. Installing required packages
@@ -47,7 +49,7 @@ jobs:
       - name: 7. List output files
         run: find build/ -print
 
-      - name: 8. Sync files (excluding berita folder)
+      - name: 8. Sync files (excluding event folder)
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -58,26 +60,23 @@ jobs:
             **/.git*
             **/.git*/**
             **/node_modules/**
-            **/berita/**
-            **/img/**
-            **/png/**
-            **/svg/**
+            **/event/**
 
-      - name: 9. Sync "berita" folder
+      - name: 9. Sync "event" folder
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME_EVENT }}
           password: ${{ secrets.FTP_PASSWORD_EVENT }}
-          local-dir: build/berita/
-          server-dir: berita/
+          local-dir: build/event/
+          server-dir: event/
 
       - name: 10. Remove FTP sync state file
         run: |
           echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
           echo "user ${{ secrets.FTP_USERNAME_EVENT }} ${{ secrets.FTP_PASSWORD_EVENT }}" >> ftp_commands_async.txt
 
-          echo "cd /berita" >> ftp_commands_async.txt
+          echo "cd /event" >> ftp_commands_async.txt
           echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
           echo "bye" >> ftp_commands_async.txt
 

@@ -11,6 +11,8 @@ import { Close } from "../content/icons";
 import TabButton, { TabButtonGen } from "../formel/buttons";
 import styles from "./styles/navbar.module.css";
 
+const maindo = process.env.REACT_APP_DOMAIN_MAIN;
+
 const Navbar = ({ id, parentType = "public" }) => {
   const navigate = useNavigate();
   const { apiRead } = useApi();
@@ -79,7 +81,7 @@ const Navbar = ({ id, parentType = "public" }) => {
     <header id={compid} className={`${styles.navbar} ${scrolled ? styles.scroll : ""} ${parentType === "private" ? "" : styles.pub}`}>
       <section className={styles.navTop}>
         <img className={styles.navLogoIcon} alt="" src="/png/pifa-logo.png" />
-        <div className={styles.navOption}>{isLoggedin ? <Button id={`${compid}-logout`} size="sm" buttonText="Keluar" onClick={handleLogout} /> : <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => window.open("https://pifa.co.id/login", "_blank")} />}</div>
+        <div className={styles.navOption}>{isLoggedin ? <Button id={`${compid}-logout`} size="sm" buttonText="Keluar" onClick={handleLogout} /> : <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => window.open(`${maindo}/login`, "_blank")} />}</div>
       </section>
       <section className={`${styles.navBottom} ${parentType === "private" ? "" : styles.pub}`}>
         {searchOpen && width <= 580 ? (
