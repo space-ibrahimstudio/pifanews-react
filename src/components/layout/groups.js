@@ -107,7 +107,32 @@ export const News3Group = ({ id, posts = [] }) => {
   );
 };
 
-export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title, posts = [], setLimit, loading = false, to = "/" }) => {
+export const CompanyGroup = ({ id, style, isPortrait = false, title, posts = [] }) => {
+  const navigate = useNavigate();
+  const { toPathname } = useContent();
+  const compid = (title && `${id}-company-group-${toPathname(title)}`) || `${id}-company-group`;
+
+  return (
+    <section id={compid} className={`${sumcss.newsSummaryGroup} ${isPortrait ? "" : sumcss.landscape}`} style={style}>
+      <header className={sumcss.groupHead}>
+        <div className={sumcss.groupHeadwrap}>
+          <div className={sumcss.groupTitlewrap}>
+            <h1 className={sumcss.groupTitle}>{title}</h1>
+          </div>
+        </div>
+      </header>
+      <section className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+        <div className={`${sumcss.groupBody} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+          {posts.map((post, index) => (
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+          ))}
+        </div>
+      </section>
+    </section>
+  );
+};
+
+export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, noSource = false, title, posts = [], setLimit, loading = false, to = "/" }) => {
   const navigate = useNavigate();
   const ref = useRef(null);
   const { toPathname } = useContent();
@@ -148,7 +173,7 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, title
           <div className={sumcss.groupTitlewrap}>
             <h1 className={sumcss.groupTitle}>{title}</h1>
           </div>
-          <SourceButton id={compid} to={to} />
+          {!noSource && <SourceButton id={compid} to={to} />}
         </div>
       </header>
       <section ref={isPortrait ? null : ref} className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>

@@ -66,7 +66,7 @@ async function fetchPostSlug() {
 // }
 
 async function updatePackageJson(catslugs, postslugs) {
-  const updatedInclude = ["/", "/login", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  const updatedInclude = ["/", "/login", "/syarat-ketentuan", "/tentang-pifa", "/kebijakan-privasi", "/faq", "/kode-etik-jurnalistik", "/pasang-iklan", "/pedoman-media-siber", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
   packageJson.reactSnap.include = updatedInclude;
 
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
@@ -97,7 +97,14 @@ async function generateSitemap(catslugs, postslugs) {
 
   const staticUrls = [
     { loc: "/", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/login", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/login", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/syarat-ketentuan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/tentang-pifa", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/kebijakan-privasi", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/faq", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/kode-etik-jurnalistik", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/pasang-iklan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/pedoman-media-siber", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
   ];
   const dynamicUrls = [...catslugs.map((item) => ({ loc: `/berita/kategori/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 })), ...postslugs.map((item) => ({ loc: `/berita/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 }))];
   let existingUrls = [];

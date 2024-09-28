@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import useAuth from "./libs/guards/auth";
 import HomePage from "./pages/home";
+import CompanyPage from "./pages/company";
 import CategoryPage from "./pages/category";
 import PostPage from "./pages/post";
 import LoginPage from "./pages/login";
@@ -21,6 +22,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/:cslug" element={<CompanyPage />} />
       <Route path="/berita/kategori/:category" element={<CategoryPage />} />
       <Route path="/berita/:slug" element={<PostPage />} />
       <Route path="/berita/tag/:slug" element={<TagPage />} />

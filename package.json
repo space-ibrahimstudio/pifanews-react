@@ -77,7 +77,14 @@
     "crawl": true,
     "include": [
       "/",
-      "/login"
+      "/login",
+      "/syarat-ketentuan",
+      "/tentang-pifa",
+      "/kebijakan-privasi",
+      "/faq",
+      "/kode-etik-jurnalistik",
+      "/pasang-iklan",
+      "/pedoman-media-siber"
     ],
     "minifyHtml": {
       "collapseWhitespace": true,

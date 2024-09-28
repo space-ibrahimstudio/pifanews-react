@@ -57,67 +57,67 @@
   <url>
     <loc>https://pifa.co.id/berita/kategori/politik</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/bantah-tuduhan-bullying-sma-binus-school-simprug-terpaksa-tampilkan-rekaman-cctv-</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/4-jenis-olahraga-yang-dilakukan-aurel-hermansyah-bikin-bb-turun-15-kg</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/binus-school-simprug-gelar-pertemuan-dengan-orangtua-terkait-dugaan-kasus-perundungan</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/mencicipi-pasta-cheese-wheel-di-hotel-golden-tulip-dimasak-di-atas-keju-raksasa</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/viral-video-mesum-guru-dan-siswi-di-gorontalo-orang-tua-lapor-polisi</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/polda-kalbar-turun-tangan-usut-kasus-pencabulan-anak-di-singkawang</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/resmi-bercerai-ini-alasan-ruben-onsu-pisah-dengan-sarawendah</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/octobeer-gtfest-sensai-nikmati-beer-hotel-golden-tulip-pontianak-jadi-pioner</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/kampanye-boleh-dilakukan-di-perguruan-tinggi-tapi-dengan-syarat-</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pifa.co.id/berita/universitas-tanjungpura-tuan-rumah-lokakarya-nasional-ui-green-metric-2024</loc>
     <changefreq>weekly</changefreq>
-    <lastmod>2024-09-26</lastmod>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
@@ -178,6 +178,108 @@
     <loc>https://pifa.co.id/berita/sma-binus-simprug-beberkan-fakta-fakta-kasus-dugaan-bullying-di-sekolah-ini-penjelasannya</loc>
     <changefreq>weekly</changefreq>
     <lastmod>2024-09-26</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/syarat-ketentuan</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/tentang-pifa</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/kebijakan-privasi</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/faq</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/kode-etik-jurnalistik</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/pasang-iklan</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/pedoman-media-siber</loc>
+    <changefreq>monthly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/petualangan-nmax-turbo-sampai-di-ranah-minang-taklukan-banyak-tanjakan-viral-</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-28</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/semakin-di-depan-di-tahun-ke-3-penyelenggaraan-shell-blu-cru-yamaha-enduro-challenge-sambangi-sintang-kalbar</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/namanya-dianggap-unik-ini-asal-usul-nama-bernadya-yang-jarang-diketahui</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/hari-pariwisata-sedunia-ini-5-wisata-alam-di-kalbar-yang-harus-dikunjungi</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/fitur-arsip-instagram-akan-dihapus-begini-cara-pindahkan-data-ke-gdrive</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/viral-duel-perkelahian-pengemudi-motor-dan-mobil-di-siantan-berujung-damai</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/jumlah-korban-tewas-di-lebanon-meningkat-menjadi-1-247-akibat-serangan-udara-israel</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/puan-maharani-megawati-dan-prabowo-akan-bertemu-di-tempat-yang-menyenangkan</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/polisi-panggil-vadel-badjideh-terkait-kasus-persetubuhan-anak</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/iriana-jokowi-pamit-menjelang-purnatugas-sebagai-ibu-negara-saya-minta-maaf</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-09-29</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>
