@@ -43,7 +43,7 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "", thumbnail: "" });
-            navigate(-1);
+            navigate("/404");
           }
           break;
         case "tentang-pifa":
@@ -55,7 +55,7 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate(-1);
+            navigate("/404");
           }
           break;
         case "kebijakan-privasi":
@@ -67,7 +67,7 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate(-1);
+            navigate("/404");
           }
           break;
         case "faq":
@@ -79,7 +79,7 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate(-1);
+            navigate("/404");
           }
           break;
         case "kode-etik-jurnalistik":
@@ -91,7 +91,7 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate(-1);
+            navigate("/404");
           }
           break;
         case "pasang-iklan":
@@ -103,7 +103,7 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate(-1);
+            navigate("/404");
           }
           break;
         case "pedoman-media-siber":
@@ -115,11 +115,11 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate(-1);
+            navigate("/404");
           }
           break;
         default:
-          navigate(-1);
+          navigate("/404");
           break;
       }
     } catch (error) {

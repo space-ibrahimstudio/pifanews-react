@@ -136,6 +136,7 @@ const DashboardSlugPage = () => {
               }
               break;
             default:
+              navigate("/404");
               break;
           }
           break;
@@ -169,6 +170,7 @@ const DashboardSlugPage = () => {
               }
               break;
             default:
+              navigate("/404");
               break;
           }
           break;
@@ -190,10 +192,12 @@ const DashboardSlugPage = () => {
               }
               break;
             default:
+              navigate("/404");
               break;
           }
           break;
         default:
+          navigate("/404");
           break;
       }
     } catch (error) {

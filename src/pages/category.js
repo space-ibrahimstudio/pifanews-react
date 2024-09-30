@@ -45,9 +45,14 @@ const CategoryPage = () => {
       if (response && response.data && response.data.length > 0) {
         const catnewsdata = response.data;
         const selectedcat = catnewsdata.filter((item) => item.slug === category);
-        setPageInfo({ id: selectedcat[0].id, title: selectedcat[0].nama_kategori_berita, desc: "", path: `/berita/kategori/${selectedcat[0].slug}`, thumbnail: "" });
+        if (selectedcat && selectedcat.length > 0) {
+          setPageInfo({ id: selectedcat[0].id, title: selectedcat[0].nama_kategori_berita, desc: "", path: `/berita/kategori/${selectedcat[0].slug}`, thumbnail: "" });
+        } else {
+          navigate("/404");
+        }
       } else {
         setPageInfo({ id: "", title: "", desc: "", path: "", thumbnail: "" });
+        navigate("/404");
       }
     } catch (error) {
       console.error("error:", error);

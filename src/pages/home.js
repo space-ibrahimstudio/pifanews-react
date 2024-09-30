@@ -241,7 +241,7 @@ const HomePage = () => {
               </Container>
             ) : (
               <Container alignItems="center" gap="var(--pixel-10)">
-                <SectionHead>
+                <SectionHead to={`berita/kategori/${section.data.slug}`}>
                   <H1>
                     {`Berita `}
                     <Span color="var(--color-primary)">{section.data.nama_kategori_berita}</Span>

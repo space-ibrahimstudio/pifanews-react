@@ -56,6 +56,7 @@ const TagPage = () => {
       } else {
         setTagPostData([]);
         setPageInfo({ title: "", desc: "", path: "", thumbnail: "" });
+        navigate("/404");
       }
     } catch (error) {
       console.error("error:", error);

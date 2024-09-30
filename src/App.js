@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import useAuth from "./libs/guards/auth";
 import HomePage from "./pages/home";
+import ErrorPage from "./pages/404";
 import CompanyPage from "./pages/company";
 import CategoryPage from "./pages/category";
 import PostPage from "./pages/post";
@@ -22,6 +23,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/404" element={<ErrorPage />} />
       <Route path="/:cslug" element={<CompanyPage />} />
       <Route path="/berita/kategori/:category" element={<CategoryPage />} />
       <Route path="/berita/:slug" element={<PostPage />} />
@@ -31,11 +33,7 @@ function App() {
       <Route path="/dashboard/:scope/:slug" element={isLoggedin ? <DashboardSlugPage /> : <Navigate to="/login" replace />} />
       <Route path="/dashboard/:uscope/:uslug/update/:params" element={isLoggedin ? <DashboardUpdatePage /> : <Navigate to="/login" replace />} />
       {/* no-index redirect */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-      <Route path="/berita" element={<Navigate to="/" replace />} />
-      <Route path="/berita/kategori" element={<Navigate to="/" replace />} />
-      <Route path="/berita/tag" element={<Navigate to="/" replace />} />
-      <Route path="/pencarian" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/404" replace />} />
       <Route path="/dashboard" element={isLoggedin ? <Navigate to="/dashboard/berita/isi-berita" replace /> : <Navigate to="/login" replace />} />
     </Routes>
   );

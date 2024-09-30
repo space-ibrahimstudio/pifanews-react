@@ -105,6 +105,7 @@ const DashboardUpdatePage = () => {
               }
               break;
             default:
+              navigate("/404");
               break;
           }
           break;
@@ -144,6 +145,7 @@ const DashboardUpdatePage = () => {
               }
               break;
             default:
+              navigate("/404");
               break;
           }
           break;
@@ -168,10 +170,12 @@ const DashboardUpdatePage = () => {
               }
               break;
             default:
+              navigate("/404");
               break;
           }
           break;
         default:
+          navigate("/404");
           break;
       }
     } catch (error) {
