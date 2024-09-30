@@ -4,7 +4,7 @@ import { useWindow, useFormat } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
 import useLoading, { LoadingScreen } from "../components/feedback/loader";
 import useApi from "../libs/plugins/apis";
-import { getAdDatas } from "../libs/sources/datas";
+import { getAdDatas, getStaticPosts } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
@@ -18,13 +18,11 @@ const CompanyPage = () => {
   const { short } = useDocument();
   const { width } = useWindow();
   const { newDate } = useFormat();
-  const { apiRead, apiGet } = useApi();
+  const { apiGet } = useApi();
   const { setLoading } = useLoading();
   const [pageData, setPageData] = useState(null);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", content: "", created: "", updated: "", path: "", thumbnail: "" });
-  const [trendLimit, setTrendLimit] = useState(10);
-  const [trendLoading, setTrendLoading] = useState(false);
-  const [trendingPostData, setTrendingPostData] = useState([]);
+  const [staticPostData, setStaticPostData] = useState([]);
   const [ads, setAds] = useState([]);
 
   const id = (cslug && `${short}-${cslug}`) || `${short}-slug`;
@@ -131,19 +129,14 @@ const CompanyPage = () => {
     }
   };
 
-  const fetchTrendingPosts = async (newLimit) => {
-    if (trendLoading) return;
-    setTrendLoading(true);
-    const formData = new FormData();
-    formData.append("limit", newLimit);
-    formData.append("hal", "0");
+  const fetchStaticData = async () => {
     try {
-      const trendingdata = await apiRead(formData, "main", "trendingnew");
-      setTrendingPostData(trendingdata && trendingdata.data && trendingdata.data.length > 0 ? trendingdata.data : []);
+      const adss = await getAdDatas();
+      const post = await getStaticPosts();
+      setAds(adss);
+      setStaticPostData(post);
     } catch (error) {
       console.error("error:", error);
-    } finally {
-      setTrendLoading(false);
     }
   };
 
@@ -156,24 +149,8 @@ const CompanyPage = () => {
 
   useEffect(() => {
     fetchData();
-    setTrendLimit(10);
+    fetchStaticData();
   }, [cslug]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const post = await getAdDatas();
-        setAds(post);
-      } catch (error) {
-        console.error("error getting ads:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
-
-  useEffect(() => {
-    fetchTrendingPosts(trendLimit);
-  }, [trendLimit]);
 
   if (pageData === null) {
     return <LoadingScreen />;
@@ -190,7 +167,7 @@ const CompanyPage = () => {
               <Article paths={paths} title={pageInfo.title} loc="Pontianak" date={`Diterbitkan pada ${newDate(pageInfo.created, "id")} - Diperbarui pada ${newDate(pageInfo.updated, "id")}`} content={pageInfo.content} />
             </Section>
             <Section cwidth="100%" direction={width > 930 ? "column" : width <= 450 ? "column" : "row"} maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
-              <CompanyGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Baca Juga" posts={trendingPostData.slice(0, 3)} />
+              <CompanyGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Baca Juga" posts={staticPostData.filter((item) => item.slug !== cslug)} />
               <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
             </Section>
           </Section>

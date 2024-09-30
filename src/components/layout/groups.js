@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useContent, useWindow } from "@ibrahimstudio/react";
+import { useContent, useWindow, useFormat } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
 import useApi from "../../libs/plugins/apis";
 import { LoadingContent } from "../feedback/loader";
@@ -110,6 +110,7 @@ export const News3Group = ({ id, posts = [] }) => {
 export const CompanyGroup = ({ id, style, isPortrait = false, title, posts = [] }) => {
   const navigate = useNavigate();
   const { toPathname } = useContent();
+  const { newDate } = useFormat();
   const compid = (title && `${id}-company-group-${toPathname(title)}`) || `${id}-company-group`;
 
   return (
@@ -124,7 +125,7 @@ export const CompanyGroup = ({ id, style, isPortrait = false, title, posts = [] 
       <section className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
         <div className={`${sumcss.groupBody} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.title} image={post.image} loc={post.author} date={newDate(post.date, "id")} onClick={() => navigate(`/${post.slug}`)} />
           ))}
         </div>
       </section>

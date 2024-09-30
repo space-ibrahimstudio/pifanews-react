@@ -192,9 +192,11 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
     <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`} onClick={onClick}>
       {isPortrait && (
         <section className={`${sumcss.cardImage} ${sumcss.portrait}`}>
-          <label className={sumcss.cardLabel}>
-            <p className={sumcss.cardLabelText}>{tag}</p>
-          </label>
+          {tag && (
+            <label className={sumcss.cardLabel}>
+              <p className={sumcss.cardLabelText}>{tag}</p>
+            </label>
+          )}
           <ImageCard alt={title} src={image} />
         </section>
       )}
@@ -209,9 +211,11 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
       </header>
       {!isPortrait && (
         <section className={`${sumcss.cardImage} ${sumcss.landscape}`}>
-          <label className={sumcss.cardLabel}>
-            <div className={sumcss.cardLabelText}>{tag}</div>
-          </label>
+          {tag && (
+            <label className={sumcss.cardLabel}>
+              <div className={sumcss.cardLabelText}>{tag}</div>
+            </label>
+          )}
           <ImageCard alt={title} src={image} />
         </section>
       )}
