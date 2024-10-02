@@ -22,11 +22,11 @@ const AdSense = () => {
     }
   }, [isCI, capub]);
 
-  if (isCI) {
+  if (!isCI) {
+    return <ins className="adsbygoogle" style={{ display: "block", width: "100%", height: "auto" }} data-ad-client={capub} data-ad-slot="1436038114" data-ad-format="auto" data-full-width-responsive="true"></ins>;
+  } else {
     return null;
   }
-
-  return <ins className="adsbygoogle" style={{ display: "block", width: "100%", height: "auto" }} data-ad-client={capub} data-ad-slot="1436038114" data-ad-format="auto" data-full-width-responsive="true"></ins>;
 };
 
 export default AdSense;
