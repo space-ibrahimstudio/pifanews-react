@@ -71,7 +71,6 @@
   },
   "reactSnap": {
     "userAgent": "IbrahimStudio",
-    "skipThirdPartyRequests": true,
     "puppeteerArgs": [
       "--no-sandbox",
       "--disable-setuid-sandbox"
