@@ -66,7 +66,7 @@ async function fetchPostSlug() {
 // }
 
 async function updatePackageJson(catslugs, postslugs) {
-  const updatedInclude = ["/", "/login", "/syarat-ketentuan", "/tentang-pifa", "/kebijakan-privasi", "/faq", "/kode-etik-jurnalistik", "/pasang-iklan", "/pedoman-media-siber", "/berita/insight/terbaru", "/berita/insight/populer", "/berita/insight/trending", "/berita/insight/rekomendasi", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  const updatedInclude = ["/", "/login", "/informasi/syarat-ketentuan", "/informasi/tentang-pifa", "/informasi/kebijakan-privasi", "/informasi/faq", "/informasi/kode-etik-jurnalistik", "/informasi/pasang-iklan", "/informasi/pedoman-media-siber", "/berita/insight/terbaru", "/berita/insight/populer", "/berita/insight/trending", "/berita/insight/rekomendasi", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
   packageJson.reactSnap.include = updatedInclude;
 
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
@@ -98,13 +98,13 @@ async function generateSitemap(catslugs, postslugs) {
   const staticUrls = [
     { loc: "/", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/login", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/syarat-ketentuan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/tentang-pifa", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/kebijakan-privasi", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/faq", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/kode-etik-jurnalistik", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/pasang-iklan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/pedoman-media-siber", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/informasi/syarat-ketentuan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/informasi/tentang-pifa", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/informasi/kebijakan-privasi", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/informasi/faq", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/informasi/kode-etik-jurnalistik", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/informasi/pasang-iklan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
+    { loc: "/informasi/pedoman-media-siber", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/berita/insight/terbaru", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/berita/insight/populer", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/berita/insight/trending", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },

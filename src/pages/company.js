@@ -38,7 +38,7 @@ const CompanyPage = () => {
           if (response && response.data && response.data.length > 0) {
             data = response.data[0];
             setPageData(data);
-            setPageInfo({ title: "Syarat & Ketentuan", content: data.syarat, created: data.created_at, updated: data.updated_at, path: `/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
+            setPageInfo({ title: "Syarat & Ketentuan", content: data.syarat, created: data.created_at, updated: data.updated_at, path: `/informasi/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "", thumbnail: "" });
@@ -49,7 +49,7 @@ const CompanyPage = () => {
           if (response && response.data && response.data.length > 0) {
             data = response.data[0];
             setPageData(data);
-            setPageInfo({ title: "Tentang Pifa", content: data.tentang, created: data.created_at, updated: data.updated_at, path: `/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
+            setPageInfo({ title: "Tentang Pifa", content: data.tentang, created: data.created_at, updated: data.updated_at, path: `/informasi/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
@@ -60,7 +60,7 @@ const CompanyPage = () => {
           if (response && response.data && response.data.length > 0) {
             data = response.data[0];
             setPageData(data);
-            setPageInfo({ title: "Kebijakan Privasi", content: data.kebijakan, created: data.created_at, updated: data.updated_at, path: `/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
+            setPageInfo({ title: "Kebijakan Privasi", content: data.kebijakan, created: data.created_at, updated: data.updated_at, path: `/informasi/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
@@ -71,7 +71,7 @@ const CompanyPage = () => {
           if (response && response.data && response.data.length > 0) {
             data = response.data[0];
             setPageData(data);
-            setPageInfo({ title: "Bantuan (FAQ)", content: data.bantuan, created: data.created_at, updated: data.updated_at, path: `/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
+            setPageInfo({ title: "Bantuan (FAQ)", content: data.bantuan, created: data.created_at, updated: data.updated_at, path: `/informasi/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
@@ -82,7 +82,7 @@ const CompanyPage = () => {
           if (response && response.data && response.data.length > 0) {
             data = response.data[0];
             setPageData(data);
-            setPageInfo({ title: "Kode Etik Jurnalistik", content: data.kode, created: data.created_at, updated: data.updated_at, path: `/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
+            setPageInfo({ title: "Kode Etik Jurnalistik", content: data.kode, created: data.created_at, updated: data.updated_at, path: `/informasi/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
@@ -93,7 +93,7 @@ const CompanyPage = () => {
           if (response && response.data && response.data.length > 0) {
             data = response.data[0];
             setPageData(data);
-            setPageInfo({ title: "Beriklan", content: data.beriklan, created: data.created_at, updated: data.updated_at, path: `/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
+            setPageInfo({ title: "Beriklan", content: data.beriklan, created: data.created_at, updated: data.updated_at, path: `/informasi/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
@@ -104,7 +104,7 @@ const CompanyPage = () => {
           if (response && response.data && response.data.length > 0) {
             data = response.data[0];
             setPageData(data);
-            setPageInfo({ title: "Pedoman Media Siber", content: data.pedoman, created: data.created_at, updated: data.updated_at, path: `/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
+            setPageInfo({ title: "Pedoman Media Siber", content: data.pedoman, created: data.created_at, updated: data.updated_at, path: `/informasi/${cslug}`, thumbnail: `/img/${cslug}.jpg` });
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });

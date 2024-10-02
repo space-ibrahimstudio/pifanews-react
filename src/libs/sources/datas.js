@@ -23,19 +23,19 @@ export const getStaticPages = () => {
       id: "1",
       title: "Navigasi",
       items: [
-        { itemid: "1", name: "Syarat & Ketentuan", path: "/syarat-ketentuan" },
-        { itemid: "2", name: "Tentang PIFA", path: "/tentang-pifa" },
-        { itemid: "3", name: "Kebijakan Privasi", path: "/kebijakan-privasi" },
-        { itemid: "4", name: "Bantuan (FAQ)", path: "/faq" },
+        { itemid: "1", name: "Syarat & Ketentuan", path: "/informasi/syarat-ketentuan" },
+        { itemid: "2", name: "Tentang PIFA", path: "/informasi/tentang-pifa" },
+        { itemid: "3", name: "Kebijakan Privasi", path: "/informasi/kebijakan-privasi" },
+        { itemid: "4", name: "Bantuan (FAQ)", path: "/informasi/faq" },
       ],
     },
     {
       id: "2",
       title: "Panduan",
       items: [
-        { itemid: "1", name: "Kode Etik Jurnalistik", path: "/kode-etik-jurnalistik" },
-        { itemid: "2", name: "Beriklan", path: "/pasang-iklan" },
-        { itemid: "3", name: "Pedoman Media Siber", path: "/pedoman-media-siber" },
+        { itemid: "1", name: "Kode Etik Jurnalistik", path: "/informasi/kode-etik-jurnalistik" },
+        { itemid: "2", name: "Beriklan", path: "/informasi/pasang-iklan" },
+        { itemid: "3", name: "Pedoman Media Siber", path: "/informasi/pedoman-media-siber" },
       ],
     },
   ];

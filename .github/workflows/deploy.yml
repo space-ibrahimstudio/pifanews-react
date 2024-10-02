@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    workflow_run:
+      if: github.actor != 'github-actions[bot]'
   schedule:
     - cron: "0 0 */2 * *"
 
@@ -80,3 +82,11 @@ jobs:
           echo "bye" >> ftp_commands_async.txt
 
           ftp -inv < ftp_commands_async.txt
+
+      - name: 11. Commit and push updated sitemap.xml
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add build/sitemap.xml
+          git commit -m "Update sitemap.xml from GitHub Actions"
+          git push origin main

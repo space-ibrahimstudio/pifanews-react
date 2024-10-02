@@ -70,6 +70,8 @@
     "shelljs": "^0.8.5"
   },
   "reactSnap": {
+    "userAgent": "IbrahimStudio",
+    "skipThirdPartyRequests": true,
     "puppeteerArgs": [
       "--no-sandbox",
       "--disable-setuid-sandbox"
@@ -78,13 +80,13 @@
     "include": [
       "/",
       "/login",
-      "/syarat-ketentuan",
-      "/tentang-pifa",
-      "/kebijakan-privasi",
-      "/faq",
-      "/kode-etik-jurnalistik",
-      "/pasang-iklan",
-      "/pedoman-media-siber",
+      "/informasi/syarat-ketentuan",
+      "/informasi/tentang-pifa",
+      "/informasi/kebijakan-privasi",
+      "/informasi/faq",
+      "/informasi/kode-etik-jurnalistik",
+      "/informasi/pasang-iklan",
+      "/informasi/pedoman-media-siber",
       "/berita/insight/terbaru",
       "/berita/insight/populer",
       "/berita/insight/trending",
