@@ -22,7 +22,7 @@ const AdSense = () => {
     }
   }, [isCI, capub]);
 
-  if (isCI === "true") {
+  if (isCI) {
     return null;
   }
 
