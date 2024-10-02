@@ -27,35 +27,38 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: 3. Export environment variables
+      - name: 3. Environment CI status
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        run: echo "REACT_APP_CI=true" >> $GITHUB_ENV
+
+      - name: 4. Export environment variables
         run: |
-          echo "REACT_APP_CI=true" >> $GITHUB_ENV
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
 
-      - name: 4. Installing required packages
+      - name: 5. Installing required packages
         run: npm install
 
-      - name: 5. Generate latest sitemap
+      - name: 6. Generate latest sitemap
         run: node update-slugs.js
         env:
           REACT_APP_DOMAIN_MAIN: ${{ secrets.REACT_APP_DOMAIN_MAIN }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
-      - name: 6. Kill any process using port 45678
+      - name: 7. Kill any process using port 45678
         run: |
           sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
 
-      - name: 7. Builds the app for production
+      - name: 8. Builds the app for production
         run: CI= npm run stagen
 
-      - name: 8. List output files
+      - name: 9. List output files
         run: find build/ -print
 
-      - name: 9. Sync files (excluding berita folder)
+      - name: 10. Sync files (excluding berita folder)
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -71,7 +74,7 @@ jobs:
             **/png/**
             **/svg/**
 
-      - name: 10. Sync "berita" folder
+      - name: 11. Sync "berita" folder
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -80,7 +83,7 @@ jobs:
           local-dir: build/berita/
           server-dir: berita/
 
-      - name: 11. Remove FTP sync state file
+      - name: 12. Remove FTP sync state file
         run: |
           echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
           echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
@@ -93,7 +96,7 @@ jobs:
 
           ftp -inv < ftp_commands_async.txt
 
-      - name: 12. Commit and push updated sitemap.xml
+      - name: 13. Commit and push updated sitemap.xml
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
