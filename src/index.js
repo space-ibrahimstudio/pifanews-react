@@ -33,13 +33,13 @@ root.render(
     <HelmetProvider>
       <IbrahimStudioProvider>
         <BrowserRouter>
-          <ApiProvider>
-            <LoadingProvider>
+          <LoadingProvider>
+            <ApiProvider>
               <AuthProvider>
                 <App />
               </AuthProvider>
-            </LoadingProvider>
-          </ApiProvider>
+            </ApiProvider>
+          </LoadingProvider>
         </BrowserRouter>
       </IbrahimStudioProvider>
     </HelmetProvider>
