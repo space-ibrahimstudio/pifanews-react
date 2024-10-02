@@ -185,14 +185,13 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug,
   );
 };
 
-export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, slug, onClick }) => {
+export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-summary-card`;
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
-    <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
-      <A slug={slug} onClick={onClick} />
+    <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`} onClick={onClick}>
       {isPortrait && (
         <section className={`${sumcss.cardImage} ${sumcss.portrait}`}>
           {tag && (
