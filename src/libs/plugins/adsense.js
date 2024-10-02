@@ -1,32 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Adsense } from "@ctrl/react-adsense";
 
 const capub = process.env.REACT_APP_CA_PUB_MAIN;
 
 const AdSense = () => {
-  const isCrawl = typeof window !== "undefined" && window.navigator.userAgent === "IbrahimStudio";
-
-  useEffect(() => {
-    if (!isCrawl && capub) {
-      const script = document.createElement("script");
-      script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${capub}`;
-      script.async = true;
-      script.crossOrigin = "anonymous";
-      document.body.appendChild(script);
-      const adsInitialized = document.querySelectorAll(".adsbygoogle[data-ad-status='done']").length === 0;
-      if (adsInitialized) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-      return () => {
-        document.body.removeChild(script);
-      };
-    }
-  }, [isCrawl, capub]);
-
-  if (isCrawl) {
-    return null;
-  }
-
-  return <ins className="adsbygoogle" style={{ display: "block", width: "100%", height: "auto" }} data-ad-client={capub} data-ad-slot="1436038114" data-ad-format="auto" data-full-width-responsive="true"></ins>;
+  return <Adsense className="pifaNetAd" client={capub} slot="1436038114" adTest="on" />;
 };
 
 export default AdSense;

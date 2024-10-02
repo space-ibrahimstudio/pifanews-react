@@ -169,6 +169,12 @@
   }
 }
 
+.pifaNetAd {
+  height: auto;
+  width: 100%;
+  display: block;
+}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
