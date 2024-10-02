@@ -17,8 +17,6 @@ import cadcss from "./styles/cat-admin-card.module.css";
 import ogscss from "./styles/og-card.module.css";
 import tagcss from "./styles/tag-card.module.css";
 
-const isCI = process.env.REACT_APP_CI;
-
 export const ImageCard = ({ alt, src }) => {
   const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
   const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
@@ -157,7 +155,7 @@ export const CatCard = ({ id, catname, image, onClick }) => {
   );
 };
 
-export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
+export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-display-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-display-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
@@ -165,7 +163,8 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
   const cardstyle = { alignSelf: align ? align : "unset", height: height ? height : "unset", flex: flex ? flex : "unset" };
 
   return (
-    <section id={compid} className={discss.newsDisplayCard} style={cardstyle} onClick={onClick}>
+    <section id={compid} className={discss.newsDisplayCard} style={cardstyle}>
+      <A slug={slug} onClick={onClick} />
       <section className={discss.cardContent}>
         <div style={{ display: "flex", flexDirection: "row", gap: "var(--pixel-10)", alignItems: "flex-start", justifyContent: "flex-start" }}>
           <NewsTag id={compid} name={tag} />
@@ -186,13 +185,14 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, align
   );
 };
 
-export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
+export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, slug, onClick }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-summary-card`;
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
-    <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`} onClick={onClick}>
+    <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+      <A slug={slug} onClick={onClick} />
       {isPortrait && (
         <section className={`${sumcss.cardImage} ${sumcss.portrait}`}>
           {tag && (
@@ -226,14 +226,15 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
   );
 };
 
-export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
+export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, slug, onClick }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-feed-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
-    <section id={compid} className={feecss.newsFeedCard} onClick={onClick}>
+    <section id={compid} className={feecss.newsFeedCard}>
+      <A slug={slug} onClick={onClick} />
       <section className={feecss.cardContent}>
         <header className={feecss.cardHead}>
           <h1 className={feecss.cardTitle}>{title}</h1>
@@ -280,7 +281,7 @@ const NewsCard = ({ id, title, short, tag, image, loc, date, slug, onClick }) =>
 
   return (
     <section id={compid} className={newcss.newsCard}>
-      {!isCI && <A slug={slug} onClick={onClick} />}
+      <A slug={slug} onClick={onClick} />
       <section className={newcss.cardImage}>
         {tag && <NewsTag id={compid} name={tag} />}
         <ImageCard alt={title} src={image} />

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
+import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
 import { getInfographicPosts, getAdDatas } from "../libs/sources/datas";
 import useGraph from "../components/content/graph";
@@ -202,7 +203,7 @@ const HomePage = () => {
               <Span color="var(--color-primary)">Terbaru</Span>
             </H1>
           </SectionHead>
-          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+          <Section direction="row" gap="var(--pixel-10)" overflow="x-open">
             {latestPostData.map((post, index) => (
               <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
@@ -227,11 +228,14 @@ const HomePage = () => {
               <Span color="var(--color-primary)">Populer</Span>
             </H1>
           </SectionHead>
-          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+          <Section direction="row" gap="var(--pixel-10)" overflow="x-open">
             {popularPostData.map((post, index) => (
               <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
+        </Container>
+        <Container alignItems="center" justifyContent="center" gap="var(--pixel-10)">
+          <AdSense />
         </Container>
         {combinedSections.map((section, index) => (
           <Fragment key={index}>

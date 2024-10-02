@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useContent, useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
+import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
 import { getAdDatas } from "../libs/sources/datas";
@@ -27,7 +28,6 @@ const SearchPage = () => {
   const [limit, setLimit] = useState(12);
   const [searchedData, setSearchedData] = useState([]);
   const [ads, setAds] = useState([]);
-  const [postsFilter, setPostsFilter] = useState("update");
   const [trendTagData, setTrendTagData] = useState([]);
 
   const id = `${short}-${toPathname(query)}`;
@@ -108,13 +108,14 @@ const SearchPage = () => {
         <Container isWrap justifyContent="center" gap="var(--pixel-10)" minHeight={searchedData.length > 0 ? "unset" : "80vh"}>
           {searchedData.length > 0 && (
             <Fragment>
-              <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setLimit} loading={loading}>
+              <FeedsGroup id={id} noFilter setLimit={setLimit} loading={loading}>
                 {searchedData.map((post, index) => (
-                  <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+                  <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
                 ))}
               </FeedsGroup>
               <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
                 <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+                <AdSense />
               </Section>
             </Fragment>
           )}

@@ -17,12 +17,32 @@ export const Header = ({ id, isasChild = false, display = "flex", flex = "unset"
   );
 };
 
-export const Section = ({ id, display = "flex", flex = "unset", cwidth = "unset", maxWidth = "unset", minWidth = "unset", cheight = "unset", maxHeight = "unset", minHeight = "unset", alignSelf = "stretch", overflow = "hidden", overflowX = "unset", padding = "unset", gap = "var(--pixel-25)", direction = "column", alignItems = "flex-start", justifyContent = "flex-start", isWrap = false, isWrapReverse = false, backgroundColor = "transparent", textAlign = "unset", margin = "unset", children }) => {
+export const Section = ({ id, display = "flex", flex = "unset", cwidth = "unset", maxWidth = "unset", minWidth = "unset", cheight = "unset", maxHeight = "unset", minHeight = "unset", alignSelf = "stretch", overflow = "hidden", padding = "unset", gap = "var(--pixel-25)", direction = "column", alignItems = "flex-start", justifyContent = "flex-start", isWrap = false, isWrapReverse = false, backgroundColor = "transparent", textAlign = "unset", margin = "unset", children }) => {
   const sectionid = `${id}-section`;
-  const sectionstyles = { alignSelf, overflow: overflowX === "auto" ? "unset" : overflow, display, flex, width: cwidth, minWidth, maxWidth, height: cheight, minHeight, maxHeight, flexDirection: isWrap ? "row" : direction, flexWrap: isWrap ? (isWrapReverse ? "wrap-reverse" : "wrap") : "unset", alignItems, justifyContent, padding, gap, backgroundColor, textAlign, margin };
+  const sectionstyles = { alignSelf, display, flex, width: cwidth, minWidth, maxWidth, height: cheight, minHeight, maxHeight, flexDirection: isWrap ? "row" : direction, flexWrap: isWrap ? (isWrapReverse ? "wrap-reverse" : "wrap") : "unset", alignItems, justifyContent, padding, gap, backgroundColor, textAlign, margin };
+  const getOverflow = () => {
+    let styles;
+    switch (overflow) {
+      case "x-open":
+        styles = { overflowX: "auto" };
+        break;
+      case "y-open":
+        styles = { overflowY: "auto" };
+        break;
+      case "xy-open":
+        styles = { overflow: "auto" };
+        break;
+      case "hidden":
+        styles = { overflow: "hidden" };
+        break;
+      default:
+        break;
+    }
+    return styles;
+  };
 
   return (
-    <section id={sectionid} style={sectionstyles}>
+    <section id={sectionid} style={{ ...sectionstyles, ...getOverflow() }}>
       {React.Children.map(children, (child) => {
         return React.isValidElement(child) ? React.cloneElement(child, { id: sectionid }) : child;
       })}

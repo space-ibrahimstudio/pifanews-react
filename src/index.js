@@ -29,21 +29,19 @@ const sendtoLog = ({ name, delta, id }) => {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <HelmetProvider>
-      <IbrahimStudioProvider>
-        <BrowserRouter>
-          <ApiProvider>
-            <LoadingProvider>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
-            </LoadingProvider>
-          </ApiProvider>
-        </BrowserRouter>
-      </IbrahimStudioProvider>
-    </HelmetProvider>
-  </React.StrictMode>
+  <HelmetProvider>
+    <IbrahimStudioProvider>
+      <BrowserRouter>
+        <ApiProvider>
+          <LoadingProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </LoadingProvider>
+        </ApiProvider>
+      </BrowserRouter>
+    </IbrahimStudioProvider>
+  </HelmetProvider>
 );
 
 if (process.env.NODE_ENV === "production") {

@@ -119,6 +119,7 @@
 }
 
 .newsSummaryCard {
+  position: relative;
   align-self: stretch;
   cursor: pointer;
   border-radius: 0;

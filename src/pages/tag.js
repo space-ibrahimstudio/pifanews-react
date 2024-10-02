@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
+import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
 import { getAdDatas } from "../libs/sources/datas";
@@ -28,7 +29,6 @@ const TagPage = () => {
   const [tagPostData, setTagPostData] = useState([]);
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
-  const [postsFilter, setPostsFilter] = useState("update");
 
   const id = (slug && `${short}-${slug}`) || `${short}-tag`;
 
@@ -111,13 +111,14 @@ const TagPage = () => {
         <Container isWrap justifyContent="center" gap="var(--pixel-10)" minHeight={tagPostData.length > 0 ? "unset" : "80vh"}>
           {tagPostData.length > 0 && (
             <Fragment>
-              <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setLimit} loading={loading}>
+              <FeedsGroup id={id} noFilter setLimit={setLimit} loading={loading}>
                 {tagPostData.map((post, index) => (
-                  <NewsFeedCard key={index} id={id} title={post["berita"][0].judul_berita} short={post["berita"][0].isi_berita} tag={post["berita"][0].nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post["berita"][0].img_berita}`} loc={post["berita"][0].penulis_berita} date={post["berita"][0].tanggal_berita} onClick={() => navigate(`/berita/${post["berita"][0].slug}`)} />
+                  <NewsFeedCard key={index} id={id} title={post["berita"][0].judul_berita} short={post["berita"][0].isi_berita} tag={post["berita"][0].nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post["berita"][0].img_berita}`} loc={post["berita"][0].penulis_berita} date={post["berita"][0].tanggal_berita} slug={`/berita/${post["berita"][0].slug}`} onClick={() => navigate(`/berita/${post["berita"][0].slug}`)} />
                 ))}
               </FeedsGroup>
               <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
                 <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+                <AdSense />
               </Section>
             </Fragment>
           )}

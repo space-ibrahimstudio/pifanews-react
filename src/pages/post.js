@@ -4,6 +4,7 @@ import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
 import useLoading from "../components/feedback/loader";
 import useApi from "../libs/plugins/apis";
+import AdSense from "../libs/plugins/adsense";
 import useGraph from "../components/content/graph";
 import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
@@ -25,7 +26,7 @@ const PostPage = () => {
   const { width } = useWindow();
   const { apiRead, apiGet } = useApi();
   const { setLoading } = useLoading();
-  const { H1, Span } = useGraph();
+  const { H1, Span, P } = useGraph();
   const [pageInfo, setPageInfo] = useState({ title: "", cat: "", desc: "", path: "", cat_path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
   const [trendLimit, setTrendLimit] = useState(10);
@@ -140,12 +141,17 @@ const PostPage = () => {
           <Section direction={width > 930 ? "row" : "column"} justifyContent="center" gap="var(--pixel-10)" textAlign="left">
             <Section flex="1" alignItems="center" gap="var(--pixel-10)">
               <Image style={{ width: "100%", height: "auto", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={postDetailData.thumnail_berita} src={postDetailData.img_berita && `${imgdomain}/images/img_berita/${postDetailData.img_berita}`} />
-              <i style={{ position: "relative", color: "var(--color-secondary)", opacity: "0.5", fontFamily: "var(--font-inter)", fontSize: "var(--font-tiny)", fontWeight: "500", textAlign: "left", alignSelf: "stretch", marginLeft: "var(--pixel-20)", marginRight: "var(--pixel-20)" }}>{postDetailData.thumnail_berita}</i>
+              <Section padding="0 var(--pixel-20) 0 var(--pixel-20)">
+                <P flex="unset" size="tiny" opacity="0.5" style="italic">
+                  {postDetailData.thumnail_berita}
+                </P>
+              </Section>
               <Article paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
             </Section>
             <Section cwidth="100%" direction={width > 930 ? "column" : width <= 450 ? "column" : "row"} maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
               <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" to="/berita/insight/rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />
               <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+              <AdSense />
             </Section>
           </Section>
         </Container>
@@ -156,7 +162,7 @@ const PostPage = () => {
               <Span color="var(--color-primary)">Terkait</Span>
             </H1>
           </SectionHead>
-          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+          <Section direction="row" gap="var(--pixel-10)" overflow="x-open">
             {relatedPostData.map((post, index) => (
               <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}

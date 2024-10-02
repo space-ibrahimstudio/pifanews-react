@@ -76,7 +76,9 @@ export const SectionGroup = ({ id, catId, scope, slug }) => {
   return (
     <Section isWrap justifyContent="center" gap="var(--pixel-10)">
       <Section flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
-        {latestPostData.length > 0 && <NewsDisplayCard id={compid} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={`${imgdomain}/images/img_berita/${latestPostData[0].img_berita}`} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" onClick={() => navigate(`/berita/${latestPostData[0].slug}`)} />}
+        {latestPostData.length > 0 && (
+          <NewsDisplayCard id={compid} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={`${imgdomain}/images/img_berita/${latestPostData[0].img_berita}`} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} slug={`/berita/${latestPostData[0].slug}`} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" onClick={() => navigate(`/berita/${latestPostData[0].slug}`)} />
+        )}
       </Section>
       <Section flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
         <NewsGroup id={`${compid}-newest`} isPortrait={width < 464 ? true : false} title="Terbaru" scope={scope} posts={latestPostData.slice(1)} setLimit={setLatestLimit} loading={latestLoading} />
@@ -95,11 +97,11 @@ export const News3Group = ({ id, posts = [] }) => {
 
   return (
     <section id={compid} style={{ ...basestyles, flex: "1", flexDirection: "column", minWidth: "var(--pixel-300)", overflow: "hidden", gap: "var(--pixel-10)" }}>
-      {posts.length > 0 && <NewsDisplayCard id={compid} title={posts[0].judul_berita} short={posts[0].isi_berita.substring(0, 160)} tag={posts[0].nama_kategori_berita} count={posts[0].counter} image={`${imgdomain}/images/img_berita/${posts[0].img_berita}`} loc={posts[0].penulis_berita} date={posts[0].tanggal_berita} align="stretch" height="var(--pixel-270)" onClick={() => navigate(`/berita/${posts[0].slug}`)} />}
+      {posts.length > 0 && <NewsDisplayCard id={compid} title={posts[0].judul_berita} short={posts[0].isi_berita.substring(0, 160)} tag={posts[0].nama_kategori_berita} count={posts[0].counter} image={`${imgdomain}/images/img_berita/${posts[0].img_berita}`} loc={posts[0].penulis_berita} date={posts[0].tanggal_berita} slug={`/berita/${posts[0].slug}`} align="stretch" height="var(--pixel-270)" onClick={() => navigate(`/berita/${posts[0].slug}`)} />}
       <aside style={{ ...basestyles, alignSelf: "stretch", flexDirection: "row", flexWrap: "wrap", overflow: "hidden", gap: "var(--pixel-10)" }}>
         {posts.slice(1).map((post, index) => (
           <div key={index} style={{ ...basestyles, flex: "1", flexDirection: "column", minWidth: "var(--pixel-200)" }}>
-            <NewsDisplayCard id={compid} title={post.judul_berita} short={post.isi_berita.substring(0, 160)} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} align="stretch" height="var(--pixel-270)" onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsDisplayCard id={compid} title={post.judul_berita} short={post.isi_berita.substring(0, 160)} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} align="stretch" height="var(--pixel-270)" onClick={() => navigate(`/berita/${post.slug}`)} />
           </div>
         ))}
       </aside>
@@ -125,7 +127,7 @@ export const CompanyGroup = ({ id, style, isPortrait = false, title, posts = [] 
       <section className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
         <div className={`${sumcss.groupBody} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.title} image={post.image} loc={post.author} date={newDate(post.date, "id")} onClick={() => navigate(`/${post.slug}`)} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.title} image={post.image} loc={post.author} date={newDate(post.date, "id")} slug={`/informasi/${post.slug}`} onClick={() => navigate(`/informasi/${post.slug}`)} />
           ))}
         </div>
       </section>
@@ -180,7 +182,7 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, noSou
       <section ref={isPortrait ? null : ref} className={`${sumcss.groupBodyVscroll} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
         <div ref={isPortrait ? ref : null} className={`${sumcss.groupBody} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
           {loading && <LoadingContent />}
         </div>
@@ -189,12 +191,13 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, noSou
   );
 };
 
-export const FeedsGroup = ({ id, postsFilter, setPostsFilter, setLimit, loading = false, children }) => {
+export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, setLimit, loading = false, children }) => {
   const ref = useRef(null);
   const compid = `${id}-feeds-group`;
 
   const switchFilter = [
-    { label: "Terbaru", value: "update" },
+    { label: "Terbaru", value: "latest" },
+    { label: "Populer", value: "popular" },
     { label: "Trending", value: "hot" },
   ];
 
@@ -226,7 +229,7 @@ export const FeedsGroup = ({ id, postsFilter, setPostsFilter, setLimit, loading 
         <div className={feecss.feedsTitlewrap}>
           <h1 className={feecss.feedsTitle}>Feeds</h1>
         </div>
-        <Input id={`${compid}-switch-filter`} variant="select" noEmptyValue isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />
+        {!noFilter && <Input id={`${compid}-switch-filter`} variant="select" noEmptyValue isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />}
       </header>
       <div ref={ref} className={feecss.feedsBody}>
         {React.Children.map(children, (child) => {
@@ -286,7 +289,7 @@ const NewsGroup = ({ id, isPortrait = false, title = "Terbaru", scope = "", post
       <section ref={isPortrait ? null : ref} className={`${newcss.groupBodyVscroll} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
         <div ref={isPortrait ? ref : null} className={`${newcss.groupBody} ${isPortrait ? newcss.portrait : newcss.landscape}`}>
           {posts.map((post, index) => (
-            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+            <NewsSummaryCard key={index} isPortrait={isPortrait} id={`${compid}-${index}`} title={post.judul_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
           ))}
           {loading && <LoadingContent />}
         </div>

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
+import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
 import useLoading from "../components/feedback/loader";
 import useGraph from "../components/content/graph";
@@ -28,7 +29,7 @@ const CategoryPage = () => {
   const [pageInfo, setPageInfo] = useState({ id: "", title: "", desc: "", path: "", thumbnail: "" });
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
-  const [postsFilter, setPostsFilter] = useState("update");
+  const [postsFilter, setPostsFilter] = useState("latest");
   const [feedLimit, setFeedLimit] = useState(10);
   const [feedPostData, setFeedPostData] = useState([]);
   const [trendLimit, setTrendLimit] = useState(11);
@@ -112,12 +113,16 @@ const CategoryPage = () => {
     let data;
     try {
       switch (postsFilter) {
-        case "update":
+        case "latest":
           data = await apiRead(formData, "main", "categorynew");
           setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         case "hot":
           data = await apiRead(formData, "main", "cattrendingnew");
+          setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
+          break;
+        case "popular":
+          data = await apiRead(formData, "main", "popularcatnew");
           setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         default:
@@ -193,7 +198,19 @@ const CategoryPage = () => {
         <Container isWrap justifyContent="center" gap="var(--pixel-10)">
           {trendingPostData.length > 0 && (
             <Section flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
-              <NewsDisplayCard id={`${id}-${trendingPostData[0].id}`} title={trendingPostData[0].judul_berita} short={trendingPostData[0].isi_berita} tag={trendingPostData[0].nama_kategori_berita} image={`${imgdomain}/images/img_berita/${trendingPostData[0].img_berita}`} loc={trendingPostData[0].penulis_berita} date={trendingPostData[0].tanggal_berita} height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"} flex="1" onClick={() => navigate(`/berita/${trendingPostData[0].slug}`)} />
+              <NewsDisplayCard
+                id={`${id}-${trendingPostData[0].id}`}
+                title={trendingPostData[0].judul_berita}
+                short={trendingPostData[0].isi_berita}
+                tag={trendingPostData[0].nama_kategori_berita}
+                image={`${imgdomain}/images/img_berita/${trendingPostData[0].img_berita}`}
+                loc={trendingPostData[0].penulis_berita}
+                date={trendingPostData[0].tanggal_berita}
+                slug={`/berita/${trendingPostData[0].slug}`}
+                height={width < 464 ? "var(--pixel-350)" : "var(--pixel-550)"}
+                flex="1"
+                onClick={() => navigate(`/berita/${trendingPostData[0].slug}`)}
+              />
             </Section>
           )}
           <Section flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
@@ -210,7 +227,7 @@ const CategoryPage = () => {
               <Span color="var(--color-primary)">Terbaru</Span>
             </H1>
           </SectionHead>
-          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+          <Section direction="row" gap="var(--pixel-10)" overflow="x-open">
             {latestPostData.slice(0, 3).map((post, index) => (
               <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
@@ -223,20 +240,21 @@ const CategoryPage = () => {
               <Span color="var(--color-primary)">Populer</Span>
             </H1>
           </SectionHead>
-          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+          <Section direction="row" gap="var(--pixel-10)" overflow="x-open">
             {trendingPostData.slice(0, 3).map((post, index) => (
               <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
         </Container>
-        <Container isWrap justifyContent="center" gap="var(--pixel-10)">
+        <Container isWrap justifyContent="center" gap="var(--pixel-10)" overflow="unset">
           <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setFeedLimit} loading={feedsLoading}>
             {feedPostData.map((post, index) => (
-              <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </FeedsGroup>
           <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+            <AdSense />
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
@@ -246,7 +264,7 @@ const CategoryPage = () => {
               <Span color="var(--color-primary)">Rekomendasi</Span>
             </H1>
           </SectionHead>
-          <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
+          <Section direction="row" gap="var(--pixel-10)" overflow="x-open">
             {trendingPostData.slice(0, 3).map((post, index) => (
               <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}

@@ -130,6 +130,7 @@
 }
 
 .newsFeedCard {
+  position: relative;
   cursor: pointer;
   align-self: stretch;
   border-radius: 0;

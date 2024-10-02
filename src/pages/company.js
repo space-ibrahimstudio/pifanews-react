@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { useWindow, useFormat } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
+import AdSense from "../libs/plugins/adsense";
 import useLoading from "../components/feedback/loader";
 import useApi from "../libs/plugins/apis";
 import { getAdDatas, getStaticPosts } from "../libs/sources/datas";
@@ -161,6 +162,7 @@ const CompanyPage = () => {
             <Section cwidth="100%" direction={width > 930 ? "column" : width <= 450 ? "column" : "row"} maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
               <CompanyGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Baca Juga" posts={staticPostData.filter((item) => item.slug !== cslug)} />
               <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+              <AdSense />
             </Section>
           </Section>
         </Container>

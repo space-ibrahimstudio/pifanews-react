@@ -67,6 +67,9 @@ jobs:
             **/.git*/**
             **/node_modules/**
             **/berita/**
+            **/img/**
+            **/png/**
+            **/svg/**
 
       - name: 10. Sync "berita" folder
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
@@ -82,6 +85,8 @@ jobs:
           echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
           echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
 
+          echo "delete 400.html" >> ftp_commands_async.txt
+          echo "delete 200.html" >> ftp_commands_async.txt
           echo "cd /berita" >> ftp_commands_async.txt
           echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
           echo "bye" >> ftp_commands_async.txt
