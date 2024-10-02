@@ -17,7 +17,7 @@ import cadcss from "./styles/cat-admin-card.module.css";
 import ogscss from "./styles/og-card.module.css";
 import tagcss from "./styles/tag-card.module.css";
 
-const isCI = process.env.CI;
+const isCI = process.env.REACT_APP_CI;
 
 export const ImageCard = ({ alt, src }) => {
   const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";

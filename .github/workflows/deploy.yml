@@ -29,6 +29,7 @@ jobs:
 
       - name: 3. Export environment variables
         run: |
+          echo "REACT_APP_CI=$CI" >> $GITHUB_ENV
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
