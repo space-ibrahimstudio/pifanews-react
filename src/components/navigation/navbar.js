@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWindow, useContent } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
@@ -11,15 +11,12 @@ import TabButton, { TabButtonGen } from "../formel/buttons";
 import styles from "./styles/navbar.module.css";
 
 const Navbar = ({ id, parentType = "public" }) => {
-  const ref = useRef(null);
   const navigate = useNavigate();
   const { apiGet, apiRead } = useApi();
   const { toTitleCase, toPathname } = useContent();
   const { isLoggedin, logout, userData } = useAuth();
   const { width } = useWindow();
   const compid = `${id}-top-navigation`;
-  const [leftShadow, setLeftShadow] = useState(false);
-  const [rightShadow, setRightShadow] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -77,20 +74,6 @@ const Navbar = ({ id, parentType = "public" }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const onScroll = () => {
-  //     const { scrollWidth = 0, scrollLeft = 0, offsetWidth = 0 } = ref.current || {};
-  //     setLeftShadow(scrollLeft > 0);
-  //     setRightShadow(scrollLeft + offsetWidth < scrollWidth);
-  //   };
-  //   onScroll();
-  //   const node = ref.current;
-  //   node.addEventListener("scroll", onScroll);
-  //   return () => {
-  //     node.removeEventListener("scroll", onScroll);
-  //   };
-  // }, []);
-
   return (
     <header id={compid} className={`${styles.navbar} ${scrolled ? styles.scroll : ""} ${parentType === "private" ? "" : styles.pub}`}>
       <section className={styles.navTop}>
@@ -109,8 +92,6 @@ const Navbar = ({ id, parentType = "public" }) => {
           <nav className={`${styles.navMenu} ${parentType === "private" ? "" : styles.pub}`}>
             <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
             <div className={`${styles.navMenuHscroll} ${parentType === "private" ? "" : styles.pub}`}>
-              {/* <div className={`${styles.navMenuItems} ${leftShadow ? styles.leftShadow : ""} ${rightShadow ? styles.rightShadow : ""}`}> */}
-              {/* <div ref={ref} className={`${styles.navMenuHscroll} ${parentType === "private" ? "" : styles.nopriv}`}> */}
               <div className={styles.navMenuItems}>
                 {parentType === "private" ? (
                   <Fragment>

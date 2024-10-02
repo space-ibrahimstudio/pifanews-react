@@ -10,7 +10,7 @@ const Article = ({ id, paths = [], title, loc, date, content }) => {
   const { H1, P } = useGraph();
   const compid = `${id}-article-board`;
   const postloc = loc ? toTitleCase(loc) : "N/A";
-  const basestyles = { flex: "1", borderRadius: "var(--pixel-20)", backgroundColor: "var(--color-secondlight)", overflow: "hidden", padding: "var(--pixel-20)", gap: "var(--pixel-20)", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start" };
+  const basestyles = { flex: "1", borderRadius: "var(--pixel-20)", backgroundColor: "var(--color-secondlight)", overflow: "hidden", padding: "var(--pixel-20)", gap: "var(--pixel-20)", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start", width: "100%" };
 
   return (
     <article id={compid} style={basestyles}>

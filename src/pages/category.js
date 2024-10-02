@@ -46,13 +46,14 @@ const CategoryPage = () => {
         const catnewsdata = response.data;
         const selectedcat = catnewsdata.filter((item) => item.slug === category);
         if (selectedcat && selectedcat.length > 0) {
-          setPageInfo({ id: selectedcat[0].id, title: selectedcat[0].nama_kategori_berita, desc: "", path: `/berita/kategori/${selectedcat[0].slug}`, thumbnail: "" });
+          setPageInfo({ id: selectedcat[0].id, title: selectedcat[0].nama_kategori_berita, desc: selectedcat[0].desc, path: `/berita/kategori/${selectedcat[0].slug}`, thumbnail: `${imgdomain}/images/img_berita/${selectedcat[0].img_berita}` });
         } else {
-          navigate("/404");
+          setPageInfo({ id: "", title: "404 NOT FOUND", desc: "", path: "", thumbnail: "" });
+          navigate("404-not-found");
         }
       } else {
-        setPageInfo({ id: "", title: "", desc: "", path: "", thumbnail: "" });
-        navigate("/404");
+        setPageInfo({ id: "", title: "404 NOT FOUND", desc: "", path: "", thumbnail: "" });
+        navigate("404-not-found");
       }
     } catch (error) {
       console.error("error:", error);
@@ -177,7 +178,7 @@ const CategoryPage = () => {
 
   return (
     <Fragment>
-      <SEO title={pageInfo.title} route={pageInfo.path} />
+      <SEO title={pageInfo.title} description={pageInfo.desc} extThumbSrc={pageInfo.thumbnail} route={pageInfo.path} />
       <Page pageid={id}>
         <Container alignItems="center" gap="var(--pixel-10)">
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
@@ -196,14 +197,14 @@ const CategoryPage = () => {
             </Section>
           )}
           <Section flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
-            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" posts={trendingPostData.slice(1)} setLimit={setTrendLimit} loading={trendLoading} />
+            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} title="Trending" to="/berita/insight/trending" posts={trendingPostData.slice(1)} setLimit={setTrendLimit} loading={trendLoading} />
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
-          <SectionHead>
+          <SectionHead to="/berita/insight/terbaru">
             <H1>
               {`Berita `}
               <Span color="var(--color-primary)">Terbaru</Span>
@@ -211,12 +212,12 @@ const CategoryPage = () => {
           </SectionHead>
           <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
             {latestPostData.slice(0, 3).map((post, index) => (
-              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
-          <SectionHead>
+          <SectionHead to="/berita/insight/populer">
             <H1>
               {`Berita `}
               <Span color="var(--color-primary)">Populer</Span>
@@ -224,7 +225,7 @@ const CategoryPage = () => {
           </SectionHead>
           <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
             {trendingPostData.slice(0, 3).map((post, index) => (
-              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
         </Container>
@@ -239,7 +240,7 @@ const CategoryPage = () => {
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
-          <SectionHead>
+          <SectionHead to="/berita/insight/rekomendasi">
             <H1>
               {`Berita `}
               <Span color="var(--color-primary)">Rekomendasi</Span>
@@ -247,7 +248,7 @@ const CategoryPage = () => {
           </SectionHead>
           <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
             {trendingPostData.slice(0, 3).map((post, index) => (
-              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
         </Container>

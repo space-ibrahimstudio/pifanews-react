@@ -196,7 +196,7 @@ const HomePage = () => {
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
-          <SectionHead>
+          <SectionHead to="/berita/insight/terbaru">
             <H1>
               {`Berita `}
               <Span color="var(--color-primary)">Terbaru</Span>
@@ -204,7 +204,7 @@ const HomePage = () => {
           </SectionHead>
           <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
             {latestPostData.map((post, index) => (
-              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
         </Container>
@@ -221,7 +221,7 @@ const HomePage = () => {
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
-          <SectionHead>
+          <SectionHead to="/berita/insight/populer">
             <H1>
               {`Berita `}
               <Span color="var(--color-primary)">Populer</Span>
@@ -229,7 +229,7 @@ const HomePage = () => {
           </SectionHead>
           <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
             {popularPostData.map((post, index) => (
-              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
         </Container>
@@ -241,7 +241,7 @@ const HomePage = () => {
               </Container>
             ) : (
               <Container alignItems="center" gap="var(--pixel-10)">
-                <SectionHead to={`berita/kategori/${section.data.slug}`}>
+                <SectionHead to={`/berita/kategori/${section.data.slug}`}>
                   <H1>
                     {`Berita `}
                     <Span color="var(--color-primary)">{section.data.nama_kategori_berita}</Span>

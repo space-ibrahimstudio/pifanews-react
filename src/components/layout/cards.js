@@ -4,6 +4,7 @@ import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
 import { useDocument, stripHtml, toPathname } from "../../libs/plugins/helpers";
 import { Edit, Trash, Close } from "../content/icons";
+import A from "../feedback/anchor";
 import { NewsTag } from "../feedback/markers";
 import imgcss from "./styles/image-card.module.css";
 import newcss from "./styles/news-card.module.css";
@@ -269,14 +270,15 @@ export const InfographicCard = ({ id, title, image, count = "0", status, onClick
   );
 };
 
-const NewsCard = ({ id, title, short, tag, image, loc, date, onClick }) => {
+const NewsCard = ({ id, title, short, tag, image, loc, date, slug, onClick }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-news-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-news-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
-    <section id={compid} className={newcss.newsCard} onClick={onClick}>
+    <section id={compid} className={newcss.newsCard}>
+      <A slug={slug} onClick={onClick} />
       <section className={newcss.cardImage}>
         {tag && <NewsTag id={compid} name={tag} />}
         <ImageCard alt={title} src={image} />

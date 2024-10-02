@@ -27,23 +27,30 @@
   "scope": "/",
   "shortcuts": [
     {
-      "name": "Berita Terbaru hari ini",
-      "short_name": "Terbaru",
-      "description": "View weather information for today",
+      "name": "Berita Terbaru hari ini di Pifa Net",
+      "short_name": "Pifa Net: Terbaru",
+      "description": "Dapatkan informasi Terbaru seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
       "url": "/berita/insight/terbaru",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Berita Terpopuler hari ini",
-      "short_name": "Terpopuler",
-      "description": "View weather information for tomorrow",
+      "name": "Berita Terpopuler hari ini di Pifa Net",
+      "short_name": "Pifa Net: Terpopuler",
+      "description": "Dapatkan informasi Terpopuler seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
       "url": "/berita/insight/populer",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Berita Rekomendasi hari ini",
-      "short_name": "Rekomendasi",
-      "description": "View weather information for today",
+      "name": "Berita Trending hari ini di Pifa Net",
+      "short_name": "Pifa Net: Trending",
+      "description": "Dapatkan informasi Trending seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
+      "url": "/berita/insight/trending",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Berita Rekomendasi hari ini di Pifa Net",
+      "short_name": "Pifa Net: Rekomendasi",
+      "description": "Dapatkan informasi Rekomendasi seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
       "url": "/berita/insight/rekomendasi",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     }

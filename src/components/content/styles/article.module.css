@@ -21,6 +21,7 @@
 .articleBoard ol {
   margin-left: var(--pixel-20);
   padding-left: var(--pixel-20);
+  margin-bottom: 0.5em;
 }
 
 .articleBoard ul {
@@ -39,6 +40,16 @@
 .articleBoard h2 {
   font-size: 2em;
   margin-bottom: 0.5em;
+}
+
+.articleBoard h1,
+.articleBoard h2,
+.articleBoard p,
+.articleBoard ul,
+.articleBoard ol,
+.articleBoard strong {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .articleBoard img,

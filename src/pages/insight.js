@@ -6,31 +6,31 @@ import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
 import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
-import Page, { Section, Header, Container } from "../components/layout/frames";
-import Slider from "../components/layout/slider";
-import Image, { AdBanner } from "../components/media/image";
 import { TagsButton } from "../components/formel/buttons";
+import Page, { Container, Section, Header } from "../components/layout/frames";
 import { FeedsGroup } from "../components/layout/groups";
 import { NewsFeedCard } from "../components/layout/cards";
+import Slider from "../components/layout/slider";
+import Image, { AdBanner } from "../components/media/image";
 
 const imgdomain = process.env.REACT_APP_API_URL;
 
-const TagPage = () => {
+const InsightPage = () => {
   const navigate = useNavigate();
-  const { slug } = useParams();
+  const { islug } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
-  const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
-  const [tagPostData, setTagPostData] = useState([]);
+  const [pageData, setPageData] = useState([]);
+  const [pageInfo, setPageInfo] = useState({ title: "", desc: "", content: "", created: "", updated: "", path: "", thumbnail: "" });
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
   const [postsFilter, setPostsFilter] = useState("update");
 
-  const id = (slug && `${short}-${slug}`) || `${short}-tag`;
+  const id = (islug && `${short}-${islug}`) || `${short}-slug`;
 
   const fetchTrendTagData = async () => {
     try {
@@ -41,24 +41,67 @@ const TagPage = () => {
     }
   };
 
-  const fetchTagPosts = async (newLimit) => {
+  const fetchData = async (newLimit) => {
+    const errormsg = "Terjadi kesalahan saat memuat halaman. Mohon periksa koneksi internet anda dan coba lagi.";
+    let response;
+    let data;
     if (loading) return;
     setLoading(true);
     const formData = new FormData();
-    formData.append("tag", slug);
     formData.append("limit", newLimit);
+    formData.append("hal", "0");
     try {
-      const tagdata = await apiRead(formData, "main", "tagnew");
-      if (tagdata && tagdata.data && tagdata.data.length > 0) {
-        const firstidxdata = tagdata.data[0];
-        setTagPostData(tagdata.data);
-        setPageInfo({ title: firstidxdata.name, desc: "", path: `/berita/tag/${firstidxdata.tag}`, thumbnail: "" });
-      } else {
-        setTagPostData([]);
-        setPageInfo({ title: "", desc: "", path: "", thumbnail: "" });
+      switch (islug) {
+        case "terbaru":
+          response = await apiRead(formData, "main", "latestnew");
+          if (response && response.data && response.data.length > 0) {
+            data = response.data;
+            setPageData(data);
+            setPageInfo({ title: "Berita Terbaru", path: `/berita/insight/${islug}`, thumbnail: "" });
+          } else {
+            setPageData(null);
+            setPageInfo({ title: "404 NOT FOUND", path: "", thumbnail: "" });
+          }
+          break;
+        case "populer":
+          response = await apiRead(formData, "main", "popularnew");
+          if (response && response.data && response.data.length > 0) {
+            data = response.data;
+            setPageData(data);
+            setPageInfo({ title: "Berita Populer", path: `/berita/insight/${islug}`, thumbnail: "" });
+          } else {
+            setPageData(null);
+            setPageInfo({ title: "404 NOT FOUND", path: "", thumbnail: "" });
+          }
+          break;
+        case "trending":
+          response = await apiRead(formData, "main", "trendingnew");
+          if (response && response.data && response.data.length > 0) {
+            data = response.data;
+            setPageData(data);
+            setPageInfo({ title: "Berita Trending", path: `/berita/insight/${islug}`, thumbnail: "" });
+          } else {
+            setPageData(null);
+            setPageInfo({ title: "404 NOT FOUND", path: "", thumbnail: "" });
+          }
+          break;
+        case "rekomendasi":
+          response = await apiRead(formData, "main", "relatednew");
+          if (response && response.data && response.data.length > 0) {
+            data = response.data;
+            setPageData(data);
+            setPageInfo({ title: "Berita Rekomendasi", path: `/berita/insight/${islug}`, thumbnail: "" });
+          } else {
+            setPageData(null);
+            setPageInfo({ title: "404 NOT FOUND", path: "", thumbnail: "" });
+          }
+          break;
+        default:
+          setPageData(null);
+          break;
       }
     } catch (error) {
-      console.error("error:", error);
+      console.error(errormsg, error);
     } finally {
       setLoading(false);
     }
@@ -69,7 +112,7 @@ const TagPage = () => {
   useEffect(() => {
     setLimit(12);
     fetchTrendTagData();
-  }, [slug]);
+  }, [islug]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -84,8 +127,8 @@ const TagPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchTagPosts(limit);
-  }, [slug, limit]);
+    fetchData(limit);
+  }, [islug, limit]);
 
   return (
     <Fragment>
@@ -103,17 +146,17 @@ const TagPage = () => {
         </Container>
         <Header>
           <H1 align="center" color="var(--color-secondary)">
-            {`Topik berita: `}
+            {pageData.length > 0 && `Menampilkan `}
             <Span color="var(--color-primary)">{pageInfo.title}</Span>
-            {tagPostData.length <= 0 && ` tidak ditemukan.`}
+            {pageData.length <= 0 && ` tidak ditemukan.`}
           </H1>
         </Header>
-        <Container isWrap justifyContent="center" gap="var(--pixel-10)" minHeight={tagPostData.length > 0 ? "unset" : "80vh"}>
-          {tagPostData.length > 0 && (
+        <Container isWrap justifyContent="center" gap="var(--pixel-10)" minHeight={pageData.length > 0 ? "unset" : "80vh"}>
+          {pageData.length > 0 && (
             <Fragment>
               <FeedsGroup id={id} postsFilter={postsFilter} setPostsFilter={setPostsFilter} setLimit={setLimit} loading={loading}>
-                {tagPostData.map((post, index) => (
-                  <NewsFeedCard key={index} id={id} title={post["berita"][0].judul_berita} short={post["berita"][0].isi_berita} tag={post["berita"][0].nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post["berita"][0].img_berita}`} loc={post["berita"][0].penulis_berita} date={post["berita"][0].tanggal_berita} onClick={() => navigate(`/berita/${post["berita"][0].slug}`)} />
+                {pageData.map((post, index) => (
+                  <NewsFeedCard key={index} id={id} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
                 ))}
               </FeedsGroup>
               <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
@@ -127,4 +170,4 @@ const TagPage = () => {
   );
 };
 
-export default TagPage;
+export default InsightPage;

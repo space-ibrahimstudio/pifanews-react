@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { useWindow, useFormat } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
-import useLoading, { LoadingScreen } from "../components/feedback/loader";
+import useLoading from "../components/feedback/loader";
 import useApi from "../libs/plugins/apis";
 import { getAdDatas, getStaticPosts } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
@@ -13,14 +13,13 @@ import Image, { AdBanner } from "../components/media/image";
 import { CompanyGroup } from "../components/layout/groups";
 
 const CompanyPage = () => {
-  const navigate = useNavigate();
   const { cslug } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();
   const { newDate } = useFormat();
   const { apiGet } = useApi();
   const { setLoading } = useLoading();
-  const [pageData, setPageData] = useState(null);
+  const [pageData, setPageData] = useState([]);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", content: "", created: "", updated: "", path: "", thumbnail: "" });
   const [staticPostData, setStaticPostData] = useState([]);
   const [ads, setAds] = useState([]);
@@ -43,7 +42,6 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "", thumbnail: "" });
-            navigate("/404");
           }
           break;
         case "tentang-pifa":
@@ -55,7 +53,6 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate("/404");
           }
           break;
         case "kebijakan-privasi":
@@ -67,7 +64,6 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate("/404");
           }
           break;
         case "faq":
@@ -79,7 +75,6 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate("/404");
           }
           break;
         case "kode-etik-jurnalistik":
@@ -91,7 +86,6 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate("/404");
           }
           break;
         case "pasang-iklan":
@@ -103,7 +97,6 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate("/404");
           }
           break;
         case "pedoman-media-siber":
@@ -115,11 +108,10 @@ const CompanyPage = () => {
           } else {
             setPageData(null);
             setPageInfo({ title: "404 NOT FOUND", content: "", created: "", updated: "", path: "" });
-            navigate("/404");
           }
           break;
         default:
-          navigate("/404");
+          setPageData(null);
           break;
       }
     } catch (error) {
@@ -153,12 +145,12 @@ const CompanyPage = () => {
   }, [cslug]);
 
   if (pageData === null) {
-    return <LoadingScreen />;
+    return <Navigate to="404-not-found" replace />;
   }
 
   return (
     <Fragment>
-      <SEO title={pageInfo.title} description={pageInfo.content} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category="Company" author="Admin" datecreate={pageData.created_at} dateupdate={pageData.updated_at} />
+      <SEO title={pageInfo.title} description={pageInfo.content} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category="Company" author="Admin" />
       <Page pageid={id}>
         <Container gap="var(--pixel-10)" alignItems="center">
           <Section direction={width > 930 ? "row" : "column"} justifyContent="center" gap="var(--pixel-10)" textAlign="left">

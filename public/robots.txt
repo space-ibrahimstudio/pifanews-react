@@ -1,5 +1,3 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow: /dashboard/
-Disallow: /404.html
-Disallow: /200.html

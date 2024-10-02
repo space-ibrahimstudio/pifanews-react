@@ -84,7 +84,11 @@
       "/faq",
       "/kode-etik-jurnalistik",
       "/pasang-iklan",
-      "/pedoman-media-siber"
+      "/pedoman-media-siber",
+      "/berita/insight/terbaru",
+      "/berita/insight/populer",
+      "/berita/insight/trending",
+      "/berita/insight/rekomendasi"
     ],
     "minifyHtml": {
       "collapseWhitespace": true,

@@ -109,6 +109,7 @@
 }
 
 .newsCard {
+  position: relative;
   border-radius: var(--pixel-20);
   cursor: pointer;
   background-color: var(--color-secondlight);

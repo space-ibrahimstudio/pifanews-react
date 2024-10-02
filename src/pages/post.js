@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
 import useLoading from "../components/feedback/loader";
@@ -26,12 +26,11 @@ const PostPage = () => {
   const { apiRead, apiGet } = useApi();
   const { setLoading } = useLoading();
   const { H1, Span } = useGraph();
-  const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
+  const [pageInfo, setPageInfo] = useState({ title: "", cat: "", desc: "", path: "", cat_path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
   const [trendLimit, setTrendLimit] = useState(10);
   const [trendLoading, setTrendLoading] = useState(false);
   const [trendingPostData, setTrendingPostData] = useState([]);
-  const [catPostData, setCatPostData] = useState(null);
   const [ads, setAds] = useState([]);
   const [relatedPostData, setRelatedPostData] = useState([]);
 
@@ -46,16 +45,20 @@ const PostPage = () => {
       if (postdetail && postdetail.data && postdetail.data.length > 0) {
         const selecteddata = postdetail.data[0];
         setPostDetailData(selecteddata);
-        setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}` });
         const catnews = await apiGet("main", "categorynew");
         if (catnews && catnews.data && catnews.data.length > 0) {
           const selectedcat = catnews.data.find((cat) => cat.id === selecteddata.nama_kategori_berita_id);
-          setCatPostData(selectedcat ? selectedcat : null);
+          if (selectedcat) {
+            setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}`, cat: selectedcat.nama_kategori_berita, cat_path: `/berita/kategori/${selectedcat.slug}` });
+          } else {
+            setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}`, cat: "N/A", cat_path: "/" });
+          }
+        } else {
+          setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}`, cat: "N/A", cat_path: "/" });
         }
       } else {
         setPostDetailData(null);
-        setPageInfo({ title: "", desc: "", path: "", thumbnail: "" });
-        navigate("/404");
+        setPageInfo({ title: "", desc: "", path: "", thumbnail: "", cat: "", cat_path: "" });
       }
     } catch (error) {
       console.error("error:", error);
@@ -94,8 +97,8 @@ const PostPage = () => {
 
   const paths = [
     { label: "Beranda", url: "/" },
-    { label: catPostData && catPostData.nama_kategori_berita, url: catPostData && `/berita/kategori/${catPostData.slug}` },
-    { label: pageInfo.title, url: `/berita/${postDetailData.slug}` },
+    { label: pageInfo.cat, url: pageInfo.cat_path },
+    { label: pageInfo.title, url: pageInfo.path },
   ];
 
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
@@ -125,9 +128,13 @@ const PostPage = () => {
     fetchDetailPost();
   }, [slug, location.pathname]);
 
+  if (postDetailData === null) {
+    return <Navigate to="404-not-found" replace />;
+  }
+
   return (
     <Fragment>
-      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category={catPostData && catPostData.nama_kategori_berita} author={postDetailData.penulis_berita} datecreate={postDetailData.created_at} dateupdate={postDetailData.updated_at} />
+      <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category={pageInfo.cat} author={postDetailData.penulis_berita} datecreate={postDetailData.created_at} dateupdate={postDetailData.updated_at} />
       <Page pageid={id}>
         <Container gap="var(--pixel-10)" alignItems="center">
           <Section direction={width > 930 ? "row" : "column"} justifyContent="center" gap="var(--pixel-10)" textAlign="left">
@@ -137,13 +144,13 @@ const PostPage = () => {
               <Article paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
             </Section>
             <Section cwidth="100%" direction={width > 930 ? "column" : width <= 450 ? "column" : "row"} maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
-              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />
+              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" to="/berita/insight/rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />
               <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
             </Section>
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">
-          <SectionHead>
+          <SectionHead noSource>
             <H1>
               {`Berita `}
               <Span color="var(--color-primary)">Terkait</Span>
@@ -151,7 +158,7 @@ const PostPage = () => {
           </SectionHead>
           <Section direction="row" gap="var(--pixel-10)" overflowX="auto">
             {relatedPostData.map((post, index) => (
-              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} onClick={() => navigate(`/berita/${post.slug}`)} />
+              <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
         </Container>

@@ -17,7 +17,7 @@ export const NewsTag = ({ id, name }) => {
 
 const SectionHead = ({ id, noSource = false, to, children }) => {
   const compid = `${id}-section-head`;
-  const headto = to ? `/${to}` : "/";
+  const headto = to ? to : "/";
 
   return (
     <section id={compid} className={heacss.sectionHead}>

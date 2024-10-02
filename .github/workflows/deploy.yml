@@ -31,6 +31,7 @@ jobs:
           echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
+          echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
 
       - name: 4. Installing required packages
         run: npm install
