@@ -234,9 +234,9 @@ const HomePage = () => {
             ))}
           </Section>
         </Container>
-        <Container alignItems="center" justifyContent="center" gap="var(--pixel-10)">
+        {/* <Container alignItems="center" justifyContent="center" gap="var(--pixel-10)">
           <AdSense />
-        </Container>
+        </Container> */}
         {combinedSections.map((section, index) => (
           <Fragment key={index}>
             {section.type === "ad" ? (
