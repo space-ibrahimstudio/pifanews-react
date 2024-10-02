@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 const capub = process.env.REACT_APP_CA_PUB_MAIN;
 
 const AdSense = () => {
-  const isCI = process.env.REACT_APP_CI === "true" || false;
+  const isCrawl = typeof window !== "undefined" && window.navigator.userAgent === "IbrahimStudio";
 
   useEffect(() => {
-    if (!isCI) {
+    if (!isCrawl && capub) {
       const script = document.createElement("script");
       script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${capub}`;
       script.async = true;
@@ -20,13 +20,13 @@ const AdSense = () => {
         document.body.removeChild(script);
       };
     }
-  }, [isCI, capub]);
+  }, [isCrawl, capub]);
 
-  if (!isCI) {
-    return <ins className="adsbygoogle" style={{ display: "block", width: "100%", height: "auto" }} data-ad-client={capub} data-ad-slot="1436038114" data-ad-format="auto" data-full-width-responsive="true"></ins>;
-  } else {
+  if (isCrawl) {
     return null;
   }
+
+  return <ins className="adsbygoogle" style={{ display: "block", width: "100%", height: "auto" }} data-ad-client={capub} data-ad-slot="1436038114" data-ad-format="auto" data-full-width-responsive="true"></ins>;
 };
 
 export default AdSense;
