@@ -17,6 +17,8 @@ import cadcss from "./styles/cat-admin-card.module.css";
 import ogscss from "./styles/og-card.module.css";
 import tagcss from "./styles/tag-card.module.css";
 
+const isCI = process.env.CI;
+
 export const ImageCard = ({ alt, src }) => {
   const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
   const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
@@ -278,7 +280,7 @@ const NewsCard = ({ id, title, short, tag, image, loc, date, slug, onClick }) =>
 
   return (
     <section id={compid} className={newcss.newsCard}>
-      <A slug={slug} onClick={onClick} />
+      {!isCI && <A slug={slug} onClick={onClick} />}
       <section className={newcss.cardImage}>
         {tag && <NewsTag id={compid} name={tag} />}
         <ImageCard alt={title} src={image} />
