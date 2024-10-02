@@ -3,28 +3,26 @@ import React, { useEffect } from "react";
 const capub = process.env.REACT_APP_CA_PUB_MAIN;
 
 const AdSense = () => {
-  const cistatus = process.env.REACT_APP_CI;
+  const isCI = process.env.REACT_APP_CI === "true" || false;
 
   useEffect(() => {
-    if (cistatus !== "true") {
+    if (!isCI) {
       const script = document.createElement("script");
       script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${capub}`;
       script.async = true;
       script.crossOrigin = "anonymous";
       document.body.appendChild(script);
-
       const adsInitialized = document.querySelectorAll(".adsbygoogle[data-ad-status='done']").length === 0;
       if (adsInitialized) {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
-
       return () => {
         document.body.removeChild(script);
       };
     }
-  }, [cistatus, capub]);
+  }, [isCI, capub]);
 
-  if (cistatus === "true") {
+  if (isCI === "true") {
     return null;
   }
 
