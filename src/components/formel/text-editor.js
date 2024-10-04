@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { Fragment, useRef, useState, useEffect } from "react";
 import { useDevmode } from "@ibrahimstudio/react";
 import styles from "./styles/text-editor.module.css";
 
@@ -7,7 +7,13 @@ const ToolButton = ({ id, isActive, children, onClick }) => {
   return (
     <button id={compid} className={`${styles.toolButton} ${isActive ? styles.active : ""}`} onClick={onClick}>
       {React.Children.map(children, (child) => {
-        return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+          }
+          return React.cloneElement(child, { id: compid });
+        }
+        return child;
       })}
     </button>
   );
@@ -19,7 +25,13 @@ const ToolGroup = ({ id, children }) => {
   return (
     <section id={compid} style={groupstyles}>
       {React.Children.map(children, (child) => {
-        return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+          }
+          return React.cloneElement(child, { id: compid });
+        }
+        return child;
       })}
     </section>
   );
@@ -142,7 +154,13 @@ export const EditorFooter = ({ id, children }) => {
   return (
     <footer id={compid} style={footerstyles}>
       {React.Children.map(children, (child) => {
-        return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+          }
+          return React.cloneElement(child, { id: compid });
+        }
+        return child;
       })}
     </footer>
   );
@@ -279,7 +297,13 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
   return (
     <form id={compid} onSubmit={handleSubmit} style={editorstyles}>
       {React.Children.map(children, (child) => {
-        return React.isValidElement(child) ? React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste }) : child;
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
+          }
+          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
+        }
+        return child;
       })}
     </form>
   );

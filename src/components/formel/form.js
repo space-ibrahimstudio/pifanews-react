@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 const Form = ({ id, as = "submission", minW = "unset", maxW = "unset", onSubmit, children }) => {
   const compid = `${id}-${as}-form`;
@@ -8,7 +8,13 @@ const Form = ({ id, as = "submission", minW = "unset", maxW = "unset", onSubmit,
   return (
     <form id={compid} style={as === "portal" ? prtlstyles : subsstyles} onSubmit={onSubmit}>
       {React.Children.map(children, (child) => {
-        return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+          }
+          return React.cloneElement(child, { id: compid });
+        }
+        return child;
       })}
     </form>
   );

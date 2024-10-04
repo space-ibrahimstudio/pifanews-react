@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { toPathname } from "../../libs/plugins/helpers";
 import { SourceButton } from "../formel/buttons";
 import heacss from "./styles/section-head.module.css";
@@ -23,7 +23,13 @@ const SectionHead = ({ id, noSource = false, to, children }) => {
     <section id={compid} className={heacss.sectionHead}>
       <header className={heacss.sectionTitlewrap}>
         {React.Children.map(children, (child) => {
-          return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
+          }
+          return child;
         })}
       </header>
       {!noSource && <SourceButton id={compid} to={headto} />}

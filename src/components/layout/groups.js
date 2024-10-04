@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContent, useWindow, useFormat } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
@@ -233,7 +233,13 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
       </header>
       <div ref={ref} className={feecss.feedsBody}>
         {React.Children.map(children, (child) => {
-          return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
+          }
+          return child;
         })}
         {loading && <LoadingContent />}
       </div>

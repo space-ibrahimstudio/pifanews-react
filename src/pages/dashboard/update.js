@@ -38,6 +38,7 @@ const DashboardUpdatePage = () => {
   const [selectedImg, setSelectedImg] = useState(null);
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [selectedID, setSelectedID] = useState("");
+  const [selectedSlug, setSelectedSlug] = useState("");
   const [pageTitle, setPageTitle] = useState("");
 
   const [inputData, setInputData] = useState({ ...inputSch });
@@ -156,11 +157,13 @@ const DashboardUpdatePage = () => {
               if (data && data.data && data.data.length > 0) {
                 const selecteddata = data.data[0];
                 setSelectedID(selecteddata.idevent);
+                setSelectedSlug(selecteddata.slug);
                 setPageTitle(selecteddata.title);
                 setInputData({ judul: selecteddata.title, image: `${imgdomain}/images/event/${selecteddata.img}`, desc: selecteddata.descripiton, tanggal: selecteddata.tanggal, highlight: selecteddata.highlight, info: selecteddata.info, syarat: selecteddata.syarat });
                 setModuleDetData(detaildata && detaildata.data && detaildata.data.length > 0 ? detaildata.data : []);
               } else {
                 setSelectedID("");
+                setSelectedSlug("");
                 setPageTitle("404 NOT FOUND");
                 setInputData({ judul: "", image: "", desc: "", tanggal: "", highlight: "", info: "", syarat: "" });
                 setModuleDetData([]);
@@ -584,7 +587,7 @@ const DashboardUpdatePage = () => {
               }
               setIsSubmitting(true);
               try {
-                const submittedData = { secret: userData.token_activation, idevent: selectedID, judul: inputData.event_title, hari: inputData.event_day, info: inputData.event_info, biaya: inputData.event_cost, tanggal: inputData.event_date, alamat: inputData.event_loc, koordinat: inputData.event_coords, panduan: inputData.event_guide };
+                const submittedData = { secret: userData.token_activation, idevent: selectedID, judul: inputData.event_title, hari: inputData.event_day, info: inputData.event_info, biaya: inputData.event_cost, tanggal: inputData.event_date, alamat: inputData.event_loc, koordinat: inputData.event_coords, panduan: inputData.event_guide, slug: selectedSlug };
                 const formData = new FormData();
                 formData.append("data", JSON.stringify(submittedData));
                 if (selectedState === "exist") {
@@ -619,7 +622,7 @@ const DashboardUpdatePage = () => {
               }
               setIsSubmitting(true);
               try {
-                const submittedData = { secret: userData.token_activation, idevent: "", judul: "", hari: "", info: "", biaya: "", tanggal: "", alamat: "", koordinat: "", panduan: "" };
+                const submittedData = { secret: userData.token_activation, idevent: "", judul: "", hari: "", info: "", biaya: "", tanggal: "", alamat: "", koordinat: "", panduan: "", slug: "" };
                 const formData = new FormData();
                 formData.append("data", JSON.stringify(submittedData));
                 formData.append("iddel", params);

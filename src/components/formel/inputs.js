@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 const Fieldset = ({ id, gap = "var(--pixel-10)", children }) => {
   const compid = `${id}-fieldset`;
@@ -10,7 +10,13 @@ const Fieldset = ({ id, gap = "var(--pixel-10)", children }) => {
     <section id={compid} style={{ ...basestyles, ...wrapstyles }}>
       <div style={{ ...basestyles, ...bodystyles }}>
         {React.Children.map(children, (child) => {
-          return React.isValidElement(child) ? React.cloneElement(child, { id: compid }) : child;
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
+          }
+          return child;
         })}
       </div>
     </section>

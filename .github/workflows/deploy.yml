@@ -6,8 +6,8 @@ on:
       - main
     workflow_run:
       if: github.actor != 'github-actions[bot]'
-  schedule:
-    - cron: "0 0 */2 * *"
+  # schedule:
+  #   - cron: "0 0 */2 * *"
 
 jobs:
   web-deploy:
