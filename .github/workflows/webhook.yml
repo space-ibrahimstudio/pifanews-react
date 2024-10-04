@@ -1,0 +1,103 @@
+name: PIFA v0.1.0 (hook)
+
+on:
+  repository_dispatch:
+    types: [pifa-render-static]
+
+jobs:
+  web-deploy:
+    name: Render Static Site
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.12.1]
+
+    steps:
+      - name: 1. Get latest code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.client_payload.branch || 'main' }}
+
+      - name: 2. Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 3. Export environment variables
+        run: |
+          echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
+          echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
+          echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
+          echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
+
+      - name: 4. Installing required packages
+        run: npm install
+
+      - name: 5. Generate latest sitemap
+        run: node update-slugs.js
+        env:
+          REACT_APP_DOMAIN_MAIN: ${{ secrets.REACT_APP_DOMAIN_MAIN }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
+      - name: 6. Kill any process using port 45678
+        run: |
+          sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
+
+      - name: 7. Builds the app for production
+        run: CI= npm run stagen
+
+      - name: 8. List output files
+        run: find build/ -print
+
+      - name: 9. Sync files (excluding berita folder)
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME_MAIN }}
+          password: ${{ secrets.FTP_PASSWORD_MAIN }}
+          local-dir: build/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/berita/**
+            **/img/**
+            **/png/**
+            **/svg/**
+
+      - name: 10. Sync "berita" folder
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME_MAIN }}
+          password: ${{ secrets.FTP_PASSWORD_MAIN }}
+          local-dir: build/berita/
+          server-dir: berita/
+
+      - name: 11. Remove FTP sync state file
+        run: |
+          echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
+          echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
+
+          echo "delete 404.html" >> ftp_commands_async.txt
+          echo "delete 200.html" >> ftp_commands_async.txt
+          echo "cd /berita" >> ftp_commands_async.txt
+          echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
+          echo "bye" >> ftp_commands_async.txt
+
+          ftp -inv < ftp_commands_async.txt
+
+      - name: 12. Commit and push updated sitemap.xml
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet public/sitemap.xml; then
+            echo "No changes detected in sitemap.xml. Skipping commit."
+          else
+            git add public/sitemap.xml
+            git commit -m "Update sitemap.xml from GitHub Actions"
+            git push origin main
+          fi

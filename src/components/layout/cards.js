@@ -155,7 +155,7 @@ export const CatCard = ({ id, catname, image, onClick }) => {
   );
 };
 
-export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug, align = "stretch", height = "var(--pixel-270)", flex, onClick }) => {
+export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug, align = "stretch", height = "var(--pixel-270)", flex }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-display-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-display-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
@@ -164,7 +164,7 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug,
 
   return (
     <section id={compid} className={discss.newsDisplayCard} style={cardstyle}>
-      <A slug={slug} onClick={onClick} />
+      <A slug={slug} />
       <section className={discss.cardContent}>
         <div style={{ display: "flex", flexDirection: "row", gap: "var(--pixel-10)", alignItems: "flex-start", justifyContent: "flex-start" }}>
           <NewsTag id={compid} name={tag} />
@@ -185,13 +185,14 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug,
   );
 };
 
-export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, onClick }) => {
+export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, slug }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-summary-card`;
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
   return (
-    <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`} onClick={onClick}>
+    <section id={compid} className={`${sumcss.newsSummaryCard} ${isPortrait ? sumcss.portrait : sumcss.landscape}`}>
+      <A slug={slug} />
       {isPortrait && (
         <section className={`${sumcss.cardImage} ${sumcss.portrait}`}>
           {tag && (
@@ -225,7 +226,7 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
   );
 };
 
-export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, slug, onClick }) => {
+export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, slug }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-feed-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
@@ -233,7 +234,7 @@ export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, slug, on
 
   return (
     <section id={compid} className={feecss.newsFeedCard}>
-      <A slug={slug} onClick={onClick} />
+      <A slug={slug} />
       <section className={feecss.cardContent}>
         <header className={feecss.cardHead}>
           <h1 className={feecss.cardTitle}>{title}</h1>
@@ -272,7 +273,7 @@ export const InfographicCard = ({ id, title, image, count = "0", status, onClick
   );
 };
 
-const NewsCard = ({ id, title, short, tag, image, loc, date, slug, onClick }) => {
+const NewsCard = ({ id, title, short, tag, image, loc, date, slug }) => {
   const { toTitleCase } = useContent();
   const compid = (title && tag && `${id}-news-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-news-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
@@ -280,7 +281,7 @@ const NewsCard = ({ id, title, short, tag, image, loc, date, slug, onClick }) =>
 
   return (
     <section id={compid} className={newcss.newsCard}>
-      <A slug={slug} onClick={onClick} />
+      <A slug={slug} />
       <section className={newcss.cardImage}>
         {tag && <NewsTag id={compid} name={tag} />}
         <ImageCard alt={title} src={image} />
