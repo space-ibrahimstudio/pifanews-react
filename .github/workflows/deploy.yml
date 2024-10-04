@@ -49,7 +49,10 @@ jobs:
           sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
 
       - name: 7. Builds the app for production
-        run: CI= npm run stagen
+        # spa generator
+        run: CI= npm run spagen
+        # static generator
+        # run: CI= npm run stagen
 
       - name: 8. List output files
         run: find build/ -print
