@@ -72,6 +72,7 @@
   },
   "reactSnap": {
     "userAgent": "IbrahimStudio",
+    "asyncScriptTags": true,
     "puppeteerArgs": [
       "--no-sandbox",
       "--disable-setuid-sandbox",
@@ -100,7 +101,11 @@
       "removeEmptyAttributes": true
     },
     "puppeteer": {
-      "timeout": 60000
+      "cache": false
+    },
+    "viewport": {
+      "width": 1024,
+      "height": 768
     }
   }
 }

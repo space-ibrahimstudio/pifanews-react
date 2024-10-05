@@ -29,7 +29,7 @@ async function fetchCatSlug() {
 
 async function fetchPostSlug() {
   const formData = new FormData();
-  formData.append("limit", "30");
+  formData.append("limit", "10");
   formData.append("hal", "0");
   try {
     const url = `${apiURL}/main/latestnew`;
