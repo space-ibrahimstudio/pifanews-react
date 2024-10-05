@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getContactInfo, getStaticPages, getSocialInfo } from "../../libs/sources/datas";
-import Image from "../media/image";
+import Img from "../media/image";
 import styles from "./styles/footer.module.css";
 
 const FooterMenu = ({ title, children }) => {
@@ -68,11 +68,11 @@ const Footer = ({ id }) => {
     <footer id={compid} className={styles.footer}>
       <div className={styles.footerTop}>
         <div className={styles.footerInfo}>
-          <Image className={styles.infoLogo} alt="PIFA Logo Footer" src="/png/pifa-logo.png" />
+          <Img className={styles.infoLogo} alt="PIFA Logo Footer" src="/png/pifa-logo.png" />
           <h6 className={styles.infoTitle}>Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market</h6>
           {contacts.map((contact) => (
             <div key={contact.id} className={styles.infoContact}>
-              <Image className={styles.contactIcon} alt={contact.label} src={contact.icon} />
+              <Img className={styles.contactIcon} alt={contact.label} src={contact.icon} />
               <h6 className={styles.contactText}>{contact.label}</h6>
             </div>
           ))}
@@ -90,7 +90,7 @@ const Footer = ({ id }) => {
           <h6 className={styles.socialTitle}>Ikuti Kami</h6>
           <div className={styles.socialUl}>
             {socials.map((social) => (
-              <Image key={social.id} className={styles.socialIcon} alt={social.label} src={social.icon} onClick={() => window.open(social.value, "_blank")} />
+              <Img key={social.id} className={styles.socialIcon} alt={social.label} src={social.icon} onClick={() => window.open(social.value, "_blank")} />
             ))}
           </div>
         </div>

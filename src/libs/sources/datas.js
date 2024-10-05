@@ -152,14 +152,16 @@ export const getInfographicPosts = () => {
 
 export const getAdDatas = () => {
   const ads = [
-    { label: "SPACE AVAILABLE!!!", image: "/img/ad/1.png" },
-    { label: "PANTENGIN INFOGRAFIS DUNIA TERKINI", image: "/img/ad/2.png" },
-    { label: "LAPORKAN KEJADIAN PENTING DISEKITARMU", image: "/img/ad/3.png" },
-    { label: "BERITA TERUPDATE SETIAP HARI", image: "/img/ad/4.png" },
-    { label: "SPACE AVAILABLE!!!", image: "/img/ad/1.png" },
-    { label: "PANTENGIN INFOGRAFIS DUNIA TERKINI", image: "/img/ad/2.png" },
-    { label: "LAPORKAN KEJADIAN PENTING DISEKITARMU", image: "/img/ad/3.png" },
-    { label: "BERITA TERUPDATE SETIAP HARI", image: "/img/ad/4.png" },
+    { label: "COBLOS NO 1", image: "/img/ad/wide-5.png" },
+    { label: "SPACE AVAILABLE!!!", image: "/img/ad/wide-1.png" },
+    { label: "PANTENGIN INFOGRAFIS DUNIA TERKINI", image: "/img/ad/wide-2.png" },
+    { label: "LAPORKAN KEJADIAN PENTING DISEKITARMU", image: "/img/ad/wide-3.png" },
+    { label: "BERITA TERUPDATE SETIAP HARI", image: "/img/ad/wide-4.png" },
+    { label: "SPACE AVAILABLE!!!", image: "/img/ad/wide-1.png" },
+    { label: "COBLOS NO 1", image: "/img/ad/wide-5.png" },
+    { label: "PANTENGIN INFOGRAFIS DUNIA TERKINI", image: "/img/ad/wide-2.png" },
+    { label: "LAPORKAN KEJADIAN PENTING DISEKITARMU", image: "/img/wide-ad/3.png" },
+    { label: "BERITA TERUPDATE SETIAP HARI", image: "/img/ad/wide-4.png" },
   ];
 
   return ads;

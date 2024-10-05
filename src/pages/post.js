@@ -11,7 +11,7 @@ import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
 import Article from "../components/content/article";
-import Image, { AdBanner } from "../components/media/image";
+import Img, { AdBanner, PostImage } from "../components/media/image";
 import NewsCard from "../components/layout/cards";
 import SectionHead from "../components/feedback/markers";
 import { NewsSummaryGroup } from "../components/layout/groups";
@@ -140,7 +140,7 @@ const PostPage = () => {
         <Container gap="var(--pixel-10)" alignItems="center">
           <Section direction={width > 930 ? "row" : "column"} justifyContent="center" gap="var(--pixel-10)" textAlign="left">
             <Section flex="1" alignItems="center" gap="var(--pixel-10)">
-              <Image style={{ width: "100%", height: "auto", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={postDetailData.thumnail_berita} src={postDetailData.img_berita && `${imgdomain}/images/img_berita/${postDetailData.img_berita}`} />
+              <PostImage width="100%" height="auto" alt={postDetailData.thumnail_berita} src={postDetailData.img_berita && `${imgdomain}/images/img_berita/${postDetailData.img_berita}`} />
               <Section padding="0 var(--pixel-20) 0 var(--pixel-20)">
                 <P flex="unset" size="tiny" opacity="0.5" style="italic">
                   {postDetailData.thumnail_berita}
@@ -148,9 +148,9 @@ const PostPage = () => {
               </Section>
               <Article paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
             </Section>
-            <Section cwidth="100%" direction={width > 930 ? "column" : width <= 450 ? "column" : "row"} maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
-              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Rekomendasi" to="/berita/insight/rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />
-              <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+            <Section cwidth="100%" maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
+              <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 930} title="Rekomendasi" to="/berita/insight/rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />
+              <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="COBLOS NO 1" src={width <= 930 ? "/img/ad/wide-5.png" : "/img/ad/narrow-1.png"} />
               <AdSense />
             </Section>
           </Section>

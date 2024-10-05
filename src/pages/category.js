@@ -9,7 +9,7 @@ import useLoading from "../components/feedback/loader";
 import useGraph from "../components/content/graph";
 import { getAdDatas } from "../libs/sources/datas";
 import Page, { Container, Section } from "../components/layout/frames";
-import Image, { AdBanner } from "../components/media/image";
+import Img, { AdBanner } from "../components/media/image";
 import Slider from "../components/layout/slider";
 import SectionHead from "../components/feedback/markers";
 import NewsCard, { NewsDisplayCard, NewsFeedCard } from "../components/layout/cards";
@@ -253,7 +253,7 @@ const CategoryPage = () => {
             ))}
           </FeedsGroup>
           <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
-            <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+            <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
             <AdSense />
           </Section>
         </Container>

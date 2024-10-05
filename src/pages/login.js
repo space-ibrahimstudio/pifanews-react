@@ -8,7 +8,7 @@ import useGraph from "../components/content/graph";
 import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section, Header } from "../components/layout/frames";
 import Form from "../components/formel/form";
-import Image from "../components/media/image";
+import Img from "../components/media/image";
 
 const LoginPage = () => {
   const { short } = useDocument();
@@ -68,8 +68,8 @@ const LoginPage = () => {
               <Button id={`${id}-submit-forgot`} isFullwidth variant="hollow" color="var(--color-primary)" buttonText="Lupa Password?" />
             </Section>
             <Section alignItems="center" gap="var(--pixel-10)">
-              <Button id={`${id}-fb-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Facebook" startContent={<Image style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/fb-auth.svg" />} onClick={() => {}} />
-              <Button id={`${id}-g-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Google" startContent={<Image style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/gm-auth.svg" />} onClick={() => {}} />
+              <Button id={`${id}-fb-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Facebook" startContent={<Img style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/fb-auth.svg" />} onClick={() => {}} />
+              <Button id={`${id}-g-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Google" startContent={<Img style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/gm-auth.svg" />} onClick={() => {}} />
             </Section>
             <Section alignItems="center" gap="var(--pixel-10)">
               <P size="xsm" align="center">

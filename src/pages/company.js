@@ -10,7 +10,7 @@ import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
 import Article from "../components/content/article";
-import Image, { AdBanner } from "../components/media/image";
+import Img, { AdBanner } from "../components/media/image";
 import { CompanyGroup } from "../components/layout/groups";
 
 const CompanyPage = () => {
@@ -156,12 +156,12 @@ const CompanyPage = () => {
         <Container gap="var(--pixel-10)" alignItems="center">
           <Section direction={width > 930 ? "row" : "column"} justifyContent="center" gap="var(--pixel-10)" textAlign="left">
             <Section flex="1" alignItems="center" gap="var(--pixel-10)">
-              <Image style={{ width: "100%", height: "auto", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={pageInfo.title} src={`/img/${cslug}.jpg`} />
+              <Img style={{ width: "100%", height: "auto", position: "relative", borderRadius: "var(--pixel-20)", overflow: "hidden" }} alt={pageInfo.title} src={`/img/${cslug}.jpg`} />
               <Article paths={paths} title={pageInfo.title} loc="Pontianak" date={`Diterbitkan pada ${newDate(pageInfo.created, "id")} - Diperbarui pada ${newDate(pageInfo.updated, "id")}`} content={pageInfo.content} />
             </Section>
             <Section cwidth="100%" direction={width > 930 ? "column" : width <= 450 ? "column" : "row"} maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
               <CompanyGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 450 ? true : false} title="Baca Juga" posts={staticPostData.filter((item) => item.slug !== cslug)} />
-              <Image style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
+              <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
               <AdSense />
             </Section>
           </Section>

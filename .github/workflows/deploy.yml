@@ -6,8 +6,6 @@ on:
       - main
     workflow_run:
       if: github.actor != 'github-actions[bot]'
-  # schedule:
-  #   - cron: "0 0 */2 * *"
 
 jobs:
   web-deploy:
@@ -49,9 +47,7 @@ jobs:
           sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
 
       - name: 7. Builds the app for production
-        # spa generator
         run: CI= npm run spagen
-        # static generator
         # run: CI= npm run stagen
 
       - name: 8. List output files
@@ -70,27 +66,27 @@ jobs:
             **/node_modules/**
             **/berita/**
 
-      - name: 10. Sync "berita" folder
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME_MAIN }}
-          password: ${{ secrets.FTP_PASSWORD_MAIN }}
-          local-dir: build/berita/
-          server-dir: berita/
+      # - name: 10. Sync "berita" folder
+      #   uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      #   with:
+      #     server: ${{ secrets.FTP_HOST }}
+      #     username: ${{ secrets.FTP_USERNAME_MAIN }}
+      #     password: ${{ secrets.FTP_PASSWORD_MAIN }}
+      #     local-dir: build/berita/
+      #     server-dir: berita/
 
-      - name: 11. Remove FTP sync state file
-        run: |
-          echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
-          echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
+      # - name: 11. Remove FTP sync state file
+      #   run: |
+      #     echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
+      #     echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
 
-          echo "delete 404.html" >> ftp_commands_async.txt
-          echo "delete 200.html" >> ftp_commands_async.txt
-          echo "cd /berita" >> ftp_commands_async.txt
-          echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
-          echo "bye" >> ftp_commands_async.txt
+      #     echo "delete 404.html" >> ftp_commands_async.txt
+      #     echo "delete 200.html" >> ftp_commands_async.txt
+      #     echo "cd /berita" >> ftp_commands_async.txt
+      #     echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
+      #     echo "bye" >> ftp_commands_async.txt
 
-          ftp -inv < ftp_commands_async.txt
+      #     ftp -inv < ftp_commands_async.txt
 
       - name: 12. Commit and push updated sitemap.xml
         run: |
