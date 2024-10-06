@@ -3,7 +3,7 @@ import { useContent, useFormat } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
 import { useDocument, stripHtml, toPathname } from "../../libs/plugins/helpers";
-import { Edit, Trash, Close } from "../content/icons";
+import useIcons from "../content/icons";
 import A from "../feedback/anchor";
 import { NewsTag } from "../feedback/markers";
 import imgcss from "./styles/image-card.module.css";
@@ -43,6 +43,7 @@ export const ImageCard = ({ alt, src }) => {
 };
 
 export const EventDetailCard = ({ id, title, day, date, onEdit, onDelete }) => {
+  const { Trash, Edit } = useIcons();
   const compid = (title && `${id}-event-detail-card-${toPathname(title)}`) || `${id}-event-detail-card`;
 
   return (
@@ -61,6 +62,7 @@ export const EventDetailCard = ({ id, title, day, date, onEdit, onDelete }) => {
 
 export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpdate, onEdit, inputData, setInputData, onChange, onClose, onSave, onDelete, isDisabled = false }) => {
   const { newDate } = useFormat();
+  const { Close, Trash, Edit } = useIcons();
   const [editOpen, setEditOpen] = useState(openState);
   const compid = (title && `${id}-tag-card-${toPathname(title)}`) || `${id}-tag-card`;
 
@@ -123,6 +125,7 @@ export const OGCard = ({ id, image, title = "", mssg, scope = "/", desc = "" }) 
 };
 
 export const CatAdmCard = ({ id, title, short, image, tag, onEdit }) => {
+  const { Edit } = useIcons();
   const compid = (title && `${id}-category-admin-card-${toPathname(title)}`) || `${id}-category-admin-card`;
   const cardimg = image === "" ? "/img/fallback.jpg" : image;
   const cardshrt = short === "" ? "no description." : short;

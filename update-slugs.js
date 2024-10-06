@@ -66,7 +66,28 @@ async function fetchPostSlug() {
 // }
 
 async function updatePackageJson(catslugs, postslugs) {
-  const updatedInclude = ["/", "/login", "/informasi/syarat-ketentuan", "/informasi/tentang-pifa", "/informasi/kebijakan-privasi", "/informasi/faq", "/informasi/kode-etik-jurnalistik", "/informasi/pasang-iklan", "/informasi/pedoman-media-siber", "/berita/insight/terbaru", "/berita/insight/populer", "/berita/insight/trending", "/berita/insight/rekomendasi", ...catslugs.map((item) => `/berita/kategori/${item.slug}`), ...postslugs.map((item) => `/berita/${item.slug}`)];
+  const updatedInclude = [
+    "/",
+    "/login",
+    "/informasi",
+    "/informasi/syarat-ketentuan",
+    "/informasi/tentang-pifa",
+    "/informasi/kebijakan-privasi",
+    "/informasi/faq",
+    "/informasi/kode-etik-jurnalistik",
+    "/informasi/pasang-iklan",
+    "/informasi/pedoman-media-siber",
+    "/berita",
+    "/berita/kategori",
+    "/berita/tag",
+    "/berita/insight",
+    "/berita/insight/terbaru",
+    "/berita/insight/populer",
+    "/berita/insight/trending",
+    "/berita/insight/rekomendasi",
+    ...catslugs.map((item) => `/berita/kategori/${item.slug}`),
+    ...postslugs.map((item) => `/berita/${item.slug}`),
+  ];
   packageJson.reactSnap.include = updatedInclude;
 
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));

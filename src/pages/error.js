@@ -98,7 +98,7 @@ const ErrorPage = () => {
             </H1>
             <P align="center">Mungkin kamu menuliskan URL yang tidak valid, atau halaman yang kamu tuju telah dialihkan.</P>
           </Section>
-          <Button buttonText="Kembali ke Beranda" onClick={() => navigate("/")} startContent={<ISHome />} />
+          <Button id="back" buttonText="Kembali ke Beranda" onClick={() => navigate("/")} startContent={<ISHome />} />
         </Container>
       </Page>
     </Fragment>

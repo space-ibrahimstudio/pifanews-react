@@ -6,16 +6,18 @@ import { Input } from "@ibrahimstudio/input";
 import { ISHome, ISSearch } from "@ibrahimstudio/icons";
 import useApi from "../../libs/plugins/apis";
 import useAuth from "../../libs/guards/auth";
-import { Close } from "../content/icons";
+import { toPathname } from "../../libs/plugins/helpers";
+import useIcons from "../content/icons";
 import TabButton, { TabButtonGen } from "../formel/buttons";
 import styles from "./styles/navbar.module.css";
 
 const Navbar = ({ id, parentType = "public" }) => {
   const navigate = useNavigate();
   const { apiGet, apiRead } = useApi();
-  const { toTitleCase, toPathname } = useContent();
+  const { toTitleCase } = useContent();
   const { isLoggedin, logout, userData } = useAuth();
   const { width } = useWindow();
+  const { Close } = useIcons();
   const compid = `${id}-top-navigation`;
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
@@ -101,7 +103,7 @@ const Navbar = ({ id, parentType = "public" }) => {
                   </Fragment>
                 ) : (
                   <Fragment>
-                    <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-slider-news-section-berita-infografis" />
+                    <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-infographic-post-container" />
                     {publicMenus.map((menu, index) => (
                       <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
                     ))}

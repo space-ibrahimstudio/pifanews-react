@@ -9,9 +9,20 @@ const Grid = ({ id, gridTemplateRows = "unset", gridTemplateColumns = "unset", f
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: sectionid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${sectionid}-${fragmentChild.props.id}` : sectionid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: sectionid });
+          const combinedId = child.props.id ? `${sectionid}-${child.props.id}` : sectionid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}

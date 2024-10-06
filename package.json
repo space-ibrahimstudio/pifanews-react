@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ctrl/react-adsense": "^1.7.0",
     "@ibrahimstudio/button": "^1.3.0",
     "@ibrahimstudio/icons": "^1.0.8",
     "@ibrahimstudio/input": "^1.4.5",
@@ -83,6 +82,7 @@
     "include": [
       "/",
       "/login",
+      "/informasi",
       "/informasi/syarat-ketentuan",
       "/informasi/tentang-pifa",
       "/informasi/kebijakan-privasi",
@@ -90,6 +90,10 @@
       "/informasi/kode-etik-jurnalistik",
       "/informasi/pasang-iklan",
       "/informasi/pedoman-media-siber",
+      "/berita",
+      "/berita/kategori",
+      "/berita/tag",
+      "/berita/insight",
       "/berita/insight/terbaru",
       "/berita/insight/populer",
       "/berita/insight/trending",

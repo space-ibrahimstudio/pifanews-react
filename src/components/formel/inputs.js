@@ -12,9 +12,20 @@ const Fieldset = ({ id, gap = "var(--pixel-10)", children }) => {
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
-              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+              return (
+                <Fragment>
+                  {React.Children.map(child.props.children, (fragmentChild) => {
+                    if (React.isValidElement(fragmentChild)) {
+                      const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
+                      return React.cloneElement(fragmentChild, { id: combinedId });
+                    }
+                    return fragmentChild;
+                  })}
+                </Fragment>
+              );
             }
-            return React.cloneElement(child, { id: compid });
+            const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
+            return React.cloneElement(child, { id: combinedId });
           }
           return child;
         })}

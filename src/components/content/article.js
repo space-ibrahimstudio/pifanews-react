@@ -14,12 +14,12 @@ const Article = ({ id, paths = [], title, loc, date, content }) => {
 
   return (
     <article id={compid} style={basestyles}>
-      <BreadCrumbs paths={paths} />
-      <Header isasChild gap="var(--pixel-20)">
-        <H1 size="lg" weight="600">
+      <BreadCrumbs id={compid} paths={paths} />
+      <Header id={compid} isasChild gap="var(--pixel-20)">
+        <H1 id="title" size="lg" weight="600">
           {title}
         </H1>
-        <P align="justify" opacity="0.5">{`${postloc} | ${date}`}</P>
+        <P id="location-date" align="justify" opacity="0.5">{`${postloc} | ${date}`}</P>
       </Header>
       <div className={styles.articleBoard} dangerouslySetInnerHTML={{ __html: content }}></div>
     </article>

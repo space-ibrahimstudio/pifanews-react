@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useContent } from "@ibrahimstudio/react";
+import { toPathname } from "../../libs/plugins/helpers";
 import styles from "./styles/slider.module.css";
 
 const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50, slideInterval = 3000, contentStyle }) => {
   const ref = useRef(null);
   const contentRef = useRef([]);
-  const { toPathname } = useContent();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [contentGap, setContentGap] = useState(0);
@@ -56,33 +55,39 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
         setCurrentIndex((prevIndex) => (prevIndex + 1) % (totalContent + 1));
       }
     }, slideInterval);
-    const mobiletouchevent = "ontouchstart" in window;
     window.addEventListener("resize", updateDimensions);
     window.addEventListener("scroll", handleVisible);
-    if (mobiletouchevent && ref.current) {
+    return () => {
+      clearInterval(intervalId);
+      window.removeEventListener("resize", updateDimensions);
+      window.removeEventListener("scroll", handleVisible);
+    };
+  }, [visible, hover]);
+
+  useEffect(() => {
+    const mobileTouchEvent = "ontouchstart" in window;
+    if (mobileTouchEvent && ref.current) {
       ref.current.addEventListener("touchstart", handleTouchStart);
       ref.current.addEventListener("touchmove", handleTouchMove);
       ref.current.addEventListener("touchend", handleTouchEnd);
     }
     return () => {
-      clearInterval(intervalId);
-      window.removeEventListener("resize", updateDimensions);
-      window.removeEventListener("scroll", handleVisible);
-      if (mobiletouchevent && ref.current) {
+      if (mobileTouchEvent && ref.current) {
         ref.current.removeEventListener("touchstart", handleTouchStart);
         ref.current.removeEventListener("touchmove", handleTouchMove);
         ref.current.removeEventListener("touchend", handleTouchEnd);
       }
     };
-  }, [totalContent, visible, hover]);
+  }, []);
 
   useEffect(() => {
+    let resetTimeout;
     if (ref.current && contentWidth > 0 && contentGap > 0) {
       const totalWidth = contentWidth + contentGap;
       if (currentIndex === totalContent) {
         ref.current.style.transition = "transform 0.5s ease-in-out";
         ref.current.style.transform = `translateX(-${currentIndex * totalWidth}px)`;
-        setTimeout(() => {
+        resetTimeout = setTimeout(() => {
           ref.current.style.transition = "none";
           ref.current.style.transform = `translateX(0)`;
           setCurrentIndex(0);
@@ -92,13 +97,14 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
         ref.current.style.transform = `translateX(-${currentIndex * totalWidth}px)`;
       }
     }
-  }, [currentIndex, totalContent, contentWidth, contentGap]);
+    return () => clearTimeout(resetTimeout);
+  }, [content, currentIndex, totalContent, contentWidth, contentGap]);
 
   return (
     <section id={compid} className={styles.sectionBody}>
       <section className={styles.sectionSlider} ref={ref}>
         {mockedContent.map((item, index) => (
-          <section key={index} ref={(el) => (contentRef.current[index] = el)} className={styles.contentWrapper} style={contentStyle} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+          <section key={index} ref={(el) => (contentRef.current[index] = el)} className={styles.contentWrapper} style={{ ...contentStyle }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             {renderContent(item)}
           </section>
         ))}

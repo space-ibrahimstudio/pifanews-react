@@ -1,9 +1,11 @@
 import React from "react";
-import { HChevron } from "../content/icons";
+import useIcons from "../content/icons";
 import styles from "./styles/pagination.module.css";
 
 const Pagination = ({ id, currentPage, totalPages, onPageChange }) => {
+  const { HChevron } = useIcons();
   const compid = `${id}-pagination-${currentPage}`;
+
   const prevPage = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Route, Routes, useLocation, Navigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import useAuth from "./libs/guards/auth";
+import RedirectPage from "./libs/guards/routes";
 import HomePage from "./pages/home";
 import ErrorPage from "./pages/error";
 import InsightPage from "./pages/insight";
@@ -31,22 +32,22 @@ function App() {
       <Route path="/berita/:slug" element={<PostPage />} />
       <Route path="/berita/tag/:slug" element={<TagPage />} />
       <Route path="/pencarian/:query" element={<SearchPage />} />
-      <Route path="/login" element={isLoggedin ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
-      <Route path="/dashboard/:scope/:slug" element={isLoggedin ? <DashboardSlugPage /> : <Navigate to="/login" replace />} />
-      <Route path="/dashboard/:uscope/:uslug/update/:params" element={isLoggedin ? <DashboardUpdatePage /> : <Navigate to="/login" replace />} />
+      <Route path="/login" element={isLoggedin ? <RedirectPage destination="/dashboard" /> : <LoginPage />} />
+      <Route path="/dashboard/:scope/:slug" element={isLoggedin ? <DashboardSlugPage /> : <RedirectPage destination="/login" />} />
+      <Route path="/dashboard/:uscope/:uslug/update/:params" element={isLoggedin ? <DashboardUpdatePage /> : <RedirectPage destination="/login" />} />
       {/* no-index redirect */}
-      <Route path="/informasi" element={<Navigate to="/informasi/pedoman-media-siber" replace />} />
-      <Route path="/berita" element={<Navigate to="/berita/insight/trending" replace />} />
-      <Route path="/berita/kategori" element={<Navigate to="/berita/kategori/pifabiz" replace />} />
-      <Route path="/berita/tag" element={<Navigate to="/berita/tag/indonesia" replace />} />
-      <Route path="/berita/insight" element={<Navigate to="/berita/insight/trending" replace />} />
-      <Route path="/pencarian" element={<Navigate to="/" replace />} />
-      <Route path="/about" element={<Navigate to="/informasi/tentang-pifa" replace />} />
-      <Route path="/tentang" element={<Navigate to="/informasi/tentang-pifa" replace />} />
-      <Route path="/help" element={<Navigate to="/informasi/faq" replace />} />
-      <Route path="/bantuan" element={<Navigate to="/informasi/faq" replace />} />
-      <Route path="/masuk" element={<Navigate to="/login" replace />} />
-      <Route path="/dashboard" element={isLoggedin ? <Navigate to="/dashboard/berita/isi-berita" replace /> : <Navigate to="/login" replace />} />
+      <Route path="/informasi" element={<RedirectPage destination="/informasi/pedoman-media-siber" />} />
+      <Route path="/berita" element={<RedirectPage destination="/berita/insight/trending" />} />
+      <Route path="/berita/kategori" element={<RedirectPage destination="/berita/kategori/pifabiz" />} />
+      <Route path="/berita/tag" element={<RedirectPage destination="/berita/tag/indonesia" />} />
+      <Route path="/berita/insight" element={<RedirectPage destination="/berita/insight/trending" />} />
+      <Route path="/pencarian" element={<RedirectPage destination="/" />} />
+      <Route path="/about" element={<RedirectPage destination="/informasi/tentang-pifa" />} />
+      <Route path="/tentang" element={<RedirectPage destination="/informasi/tentang-pifa" />} />
+      <Route path="/help" element={<RedirectPage destination="/informasi/faq" />} />
+      <Route path="/bantuan" element={<RedirectPage destination="/informasi/faq" />} />
+      <Route path="/masuk" element={<RedirectPage destination="/login" />} />
+      <Route path="/dashboard" element={isLoggedin ? <RedirectPage destination="/dashboard/berita/isi-berita" /> : <RedirectPage destination="/login" />} />
     </Routes>
   );
 }

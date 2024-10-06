@@ -13,9 +13,20 @@ export const Header = ({ id, isasChild = false, display = "flex", flex = "unset"
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: sectionid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${sectionid}-${fragmentChild.props.id}` : sectionid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: sectionid });
+          const combinedId = child.props.id ? `${sectionid}-${child.props.id}` : sectionid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}
@@ -52,9 +63,20 @@ export const Section = ({ id, display = "flex", flex = "unset", cwidth = "unset"
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: sectionid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${sectionid}-${fragmentChild.props.id}` : sectionid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: sectionid });
+          const combinedId = child.props.id ? `${sectionid}-${child.props.id}` : sectionid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}
@@ -72,9 +94,20 @@ export const Container = ({ id, display = "flex", flex = "unset", cwidth = "unse
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: sectionid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${sectionid}-${fragmentChild.props.id}` : sectionid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: sectionid });
+          const combinedId = child.props.id ? `${sectionid}-${child.props.id}` : sectionid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}
@@ -90,9 +123,20 @@ const Page = ({ pageid, isFullscreen = false, type = "public", children }) => {
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: pageid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${pageid}-${fragmentChild.props.id}` : pageid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: pageid });
+          const combinedId = child.props.id ? `${pageid}-${child.props.id}` : pageid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}

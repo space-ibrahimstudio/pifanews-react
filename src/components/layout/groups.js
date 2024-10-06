@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useContent, useWindow, useFormat } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
 import useApi from "../../libs/plugins/apis";
+import { toPathname } from "../../libs/plugins/helpers";
 import { LoadingContent } from "../feedback/loader";
 import { SourceButton } from "../formel/buttons";
 import { NewsSummaryCard, NewsDisplayCard } from "./cards";
@@ -111,7 +112,6 @@ export const News3Group = ({ id, posts = [] }) => {
 
 export const CompanyGroup = ({ id, style, isPortrait = false, title, posts = [] }) => {
   const navigate = useNavigate();
-  const { toPathname } = useContent();
   const { newDate } = useFormat();
   const compid = (title && `${id}-company-group-${toPathname(title)}`) || `${id}-company-group`;
 
@@ -235,9 +235,20 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
-              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+              return (
+                <Fragment>
+                  {React.Children.map(child.props.children, (fragmentChild) => {
+                    if (React.isValidElement(fragmentChild)) {
+                      const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
+                      return React.cloneElement(fragmentChild, { id: combinedId });
+                    }
+                    return fragmentChild;
+                  })}
+                </Fragment>
+              );
             }
-            return React.cloneElement(child, { id: compid });
+            const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
+            return React.cloneElement(child, { id: combinedId });
           }
           return child;
         })}

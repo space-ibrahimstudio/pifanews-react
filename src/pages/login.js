@@ -60,22 +60,22 @@ const LoginPage = () => {
               <P align="center">Login dulu biar bisa komen, bikin konten dan atur notifikasi konten favoritmu. Yuk!</P>
             </Header>
             <Section alignItems="center" gap="var(--pixel-10)">
-              <Input id={`${id}-username`} isLabeled={false} type="text" name="username" value={inputData.username} placeholder="Telepon atau Email" isRequired onChange={handleInputChange} errorContent={errors.username} />
-              <Input id={`${id}-password`} isLabeled={false} type="password" name="password" value={inputData.password} placeholder="Password" isRequired onChange={handleInputChange} errorContent={errors.password} />
+              <Input id="username" isLabeled={false} type="text" name="username" value={inputData.username} placeholder="Telepon atau Email" isRequired onChange={handleInputChange} errorContent={errors.username} />
+              <Input id="password" isLabeled={false} type="password" name="password" value={inputData.password} placeholder="Password" isRequired onChange={handleInputChange} errorContent={errors.password} />
             </Section>
             <Section alignItems="center" gap="var(--pixel-10)">
-              <Button id={`${id}-submit-login`} type="submit" isFullwidth buttonText="Login" isLoading={loading} />
-              <Button id={`${id}-submit-forgot`} isFullwidth variant="hollow" color="var(--color-primary)" buttonText="Lupa Password?" />
+              <Button id="submit-login" type="submit" isFullwidth buttonText="Login" isLoading={loading} />
+              <Button id="submit-forgot" isFullwidth variant="hollow" color="var(--color-primary)" buttonText="Lupa Password?" />
             </Section>
             <Section alignItems="center" gap="var(--pixel-10)">
-              <Button id={`${id}-fb-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Facebook" startContent={<Img style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/fb-auth.svg" />} onClick={() => {}} />
-              <Button id={`${id}-g-oauth`} isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Google" startContent={<Img style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/gm-auth.svg" />} onClick={() => {}} />
+              <Button id="fb-oauth" isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Facebook" startContent={<Img style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/fb-auth.svg" />} onClick={() => {}} />
+              <Button id="g-oauth" isFullwidth variant="line" color="var(--color-secondary)" buttonText="Masuk dengan Google" startContent={<Img style={{ width: "var(--pixel-20)", height: "auto", position: "relative" }} src="/svg/gm-auth.svg" />} onClick={() => {}} />
             </Section>
             <Section alignItems="center" gap="var(--pixel-10)">
               <P size="xsm" align="center">
                 Belum Punya Akun?
               </P>
-              <Button id={`${id}-signup`} isFullwidth variant="line" color="var(--color-primary)" buttonText="Daftar Sekarang" onClick={() => {}} />
+              <Button id="signup" isFullwidth variant="line" color="var(--color-primary)" buttonText="Daftar Sekarang" onClick={() => {}} />
             </Section>
           </Form>
         </Container>

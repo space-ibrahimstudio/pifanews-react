@@ -15,7 +15,7 @@ import Fieldset from "../../components/formel/inputs";
 import { TagsButton, SwitchButton } from "../../components/formel/buttons";
 import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/formel/text-editor";
 import Form from "../../components/formel/form";
-import { VGrid, VList, VPlus } from "../../components/content/icons";
+import useIcons from "../../components/content/icons";
 import NewsCard, { CatAdmCard, OGCard, TagCard } from "../../components/layout/cards";
 
 const imgdomain = process.env.REACT_APP_API_URL;
@@ -31,6 +31,7 @@ const DashboardSlugPage = () => {
   const { limitopt } = useOptions();
   const { inputSch, errorSch } = useInputSchema();
   const { H1, P } = useGraph();
+  const { VGrid, VList, VPlus } = useIcons();
   const id = `${short}-${scope}-${slug}`;
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -395,7 +396,7 @@ const DashboardSlugPage = () => {
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-                    <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                    <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                     {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
                   </Section>
                   <SwitchButton type={width >= 464 ? "reg" : "ico"} buttons={modeSwitcher} />
@@ -416,16 +417,16 @@ const DashboardSlugPage = () => {
                 {selectedMode === "add" && (
                   <Section isWrap gap="var(--pixel-10)">
                     <TextEditor minW="var(--pixel-350)" initialContent={initialContent} onSubmit={handlePublish}>
-                      <Input id={`${id}-post-title`} type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                      <Input id={`${id}-post-banner`} variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
-                      <Input id={`${id}-post-alt`} type="text" labelText="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errorContent={errors.thumbnail} isRequired />
+                      <Input id="post-title" type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
+                      <Input id="post-banner" variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
+                      <Input id="post-alt" type="text" labelText="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errorContent={errors.thumbnail} isRequired />
                       <Fieldset>
-                        <Input id={`${id}-post-catnews`} variant="select" isSearchable labelText="Kategori Berita" placeholder="Pilih kategori berita" name="catberita" value={inputData.catberita} options={newsCatData.map((item) => ({ value: item.id, label: item.nama_kategori_berita }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catberita", value: selectedValue } })} errorContent={errors.catberita} isRequired />
-                        <Input id={`${id}-post-catlocal`} variant="select" isSearchable labelText="Kategori Daerah" placeholder="Pilih kategori daerah" name="catdaerah" value={inputData.catdaerah} options={localCatData.map((item) => ({ value: item.id, label: item.nama_kategori_daerah }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catdaerah", value: selectedValue } })} errorContent={errors.catdaerah} isRequired />
+                        <Input id="post-catnews" variant="select" isSearchable labelText="Kategori Berita" placeholder="Pilih kategori berita" name="catberita" value={inputData.catberita} options={newsCatData.map((item) => ({ value: item.id, label: item.nama_kategori_berita }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catberita", value: selectedValue } })} errorContent={errors.catberita} isRequired />
+                        <Input id="post-catlocal" variant="select" isSearchable labelText="Kategori Daerah" placeholder="Pilih kategori daerah" name="catdaerah" value={inputData.catdaerah} options={localCatData.map((item) => ({ value: item.id, label: item.nama_kategori_daerah }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catdaerah", value: selectedValue } })} errorContent={errors.catdaerah} isRequired />
                       </Fieldset>
                       <Fieldset>
-                        <Input id={`${id}-post-date`} type="date" labelText="Tanggal Terbit" name="post_date" value={inputData.post_date} onChange={handleInputChange} errorContent={errors.post_date} isRequired />
-                        <Input id={`${id}-post-writer`} type="text" labelText="Penulis Berita" placeholder="Masukkan nama penulis" name="penulis" value={inputData.penulis} onChange={handleInputChange} errorContent={errors.penulis} isRequired />
+                        <Input id="post-date" type="date" labelText="Tanggal Terbit" name="post_date" value={inputData.post_date} onChange={handleInputChange} errorContent={errors.post_date} isRequired />
+                        <Input id="post-writer" type="text" labelText="Penulis Berita" placeholder="Masukkan nama penulis" name="penulis" value={inputData.penulis} onChange={handleInputChange} errorContent={errors.penulis} isRequired />
                       </Fieldset>
                       <EditorToolbar tools={tools} />
                       <EditorContent />
@@ -436,7 +437,7 @@ const DashboardSlugPage = () => {
                           ))}
                         </Fieldset>
                       )}
-                      <Input id={`${id}-post-tag`} type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tagQuery" value={tagQuery} onChange={handleTagSearch} />
+                      <Input id="post-tag" type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tagQuery" value={tagQuery} onChange={handleTagSearch} />
                       {tagSuggests.length > 0 && (
                         <Fieldset>
                           {tagSuggests.map((item, index) => (
@@ -445,7 +446,7 @@ const DashboardSlugPage = () => {
                         </Fieldset>
                       )}
                       <EditorFooter>
-                        <Button type="submit" buttonText="Publish Berita" action="save" isLoading={isSubmitting} />
+                        <Button id="submit-action" type="submit" buttonText="Publish Berita" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
                     </TextEditor>
                     <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} mssg="Hai, udah baca berita ini?" title={inputData.judul} desc={inputData.thumbnail} scope="/berita/" />
@@ -491,11 +492,11 @@ const DashboardSlugPage = () => {
                 {selectedMode === "add" && (
                   <Section isWrap gap="var(--pixel-10)">
                     <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
-                      <Input id={`${id}-cat-image`} variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" onSelect={handleImageSelect} isRequired />
-                      <Input id={`${id}-cat-title`} type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                      <Input id={`${id}-cat-desc`} type="text" labelText="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
+                      <Input id="cat-image" variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" onSelect={handleImageSelect} isRequired />
+                      <Input id="cat-title" type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
+                      <Input id="cat-desc" type="text" labelText="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
                       <EditorFooter>
-                        <Button type="submit" buttonText="Publish Kategori" action="save" isLoading={isSubmitting} />
+                        <Button id="submit-action" type="submit" buttonText="Publish Kategori" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
                     </Form>
                     <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} mssg="Hai, udah baca berita ini?" title={inputData.judul} desc={inputData.desc} scope="/berita/kategori/" />
@@ -597,9 +598,9 @@ const DashboardSlugPage = () => {
                   </H1>
                   <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
                 </Header>
-                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
-                  <Section isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-                    <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
+                  <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
+                    <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                   </Section>
                   <SwitchButton buttons={modeSwitcher} />
                 </Section>
@@ -636,9 +637,9 @@ const DashboardSlugPage = () => {
                   </H1>
                   <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
                 </Header>
-                <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
-                  <Section isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-                    <Input id={`limit-data-${id}`} isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
+                  <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
+                    <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                     {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
                   </Section>
                   <SwitchButton type={width >= 464 ? "reg" : "ico"} buttons={modeSwitcher} />
@@ -659,19 +660,19 @@ const DashboardSlugPage = () => {
                 {selectedMode === "add" && (
                   <Section isWrap gap="var(--pixel-10)">
                     <Form minW="var(--pixel-350)" onSubmit={(e) => handleSubmit(e, "cudevent", "event")}>
-                      <Input id={`${id}-module-title`} type="text" labelText="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                      <Input id={`${id}-module-banner`} variant="upload" labelText="Thumbnail Modul" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
+                      <Input id="module-title" type="text" labelText="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
+                      <Input id="module-banner" variant="upload" labelText="Thumbnail Modul" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
                       <Fieldset>
-                        <Input id={`${id}-module-desc`} type="text" labelText="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
-                        <Input id={`${id}-module-date`} type="text" labelText="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errorContent={errors.tanggal} isRequired />
+                        <Input id="module-desc" type="text" labelText="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
+                        <Input id="module-date" type="text" labelText="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errorContent={errors.tanggal} isRequired />
                       </Fieldset>
                       <Fieldset>
-                        <Input id={`${id}-module-hl`} type="text" labelText="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errorContent={errors.highlight} isRequired />
-                        <Input id={`${id}-module-info`} type="text" labelText="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errorContent={errors.info} isRequired />
+                        <Input id="module-hl" type="text" labelText="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errorContent={errors.highlight} isRequired />
+                        <Input id="module-info" type="text" labelText="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errorContent={errors.info} isRequired />
                       </Fieldset>
-                      <Input id={`${id}-module-syarat`} variant="textarea" rows={10} labelText="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errorContent={errors.syarat} isRequired />
+                      <Input id="module-syarat" variant="textarea" rows={10} labelText="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errorContent={errors.syarat} isRequired />
                       <EditorFooter>
-                        <Button type="submit" buttonText="Publish Modul" action="save" isLoading={isSubmitting} />
+                        <Button id="submit-action" type="submit" buttonText="Publish Modul" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
                     </Form>
                     <OGCard image={selectedImageUrl ? selectedImageUrl : "/img/fallback.jpg"} mssg="Hai, udah lihat event ini?" title={inputData.judul} desc={inputData.desc} scope="/event/" />

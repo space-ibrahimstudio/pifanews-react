@@ -9,7 +9,7 @@ const A = ({ type = "int", slug = "/", link = "https://pifa.co.id" }) => {
     return null;
   }
 
-  return <a id={compid} href={type === "int" ? slug : link} onAuxClick={(e) => e.button === 1 && window.open(type === "int" ? slug : link, "_blank`")} style={compcss} />;
+  return <a id={compid} href={type === "int" ? slug : link} style={compcss} />;
 };
 
 export default A;

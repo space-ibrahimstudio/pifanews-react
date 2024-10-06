@@ -9,9 +9,20 @@ const ToolButton = ({ id, isActive, children, onClick }) => {
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: compid });
+          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}
@@ -27,9 +38,20 @@ const ToolGroup = ({ id, children }) => {
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: compid });
+          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}
@@ -156,9 +178,20 @@ export const EditorFooter = ({ id, children }) => {
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: compid });
+          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
+          return React.cloneElement(child, { id: combinedId });
         }
         return child;
       })}
@@ -299,9 +332,20 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
+            return (
+              <Fragment>
+                {React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
+                    return React.cloneElement(fragmentChild, { id: combinedId, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
+                  }
+                  return fragmentChild;
+                })}
+              </Fragment>
+            );
           }
-          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
+          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
+          return React.cloneElement(child, { id: combinedId, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
         }
         return child;
       })}

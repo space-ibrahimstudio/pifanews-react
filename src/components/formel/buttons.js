@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useContent, useEvent } from "@ibrahimstudio/react";
 import { toPathname } from "../../libs/plugins/helpers";
-import { Close } from "../content/icons";
+import useIcons from "../content/icons";
 import tabcss from "./styles/tab-button.module.css";
 import tbgcss from "./styles/tab-button-gen.module.css";
 import srccss from "./styles/source-button.module.css";
@@ -14,9 +14,9 @@ export const SwitchButton = ({ id, type = "reg", buttons = [] }) => {
 
   return (
     <nav id={compid} className={swtcss.tabSwitch}>
-      <section className={swtcss.tabScroll}>
+      <section id={`${compid}-scroll`} className={swtcss.tabScroll}>
         {buttons.map((button, index) => (
-          <button key={index} type="button" className={`${swtcss.tabButton} ${button.active ? swtcss.active : ""}`} onClick={button.onClick}>
+          <button id={`${compid}-button-${button.label}`} key={index} type="button" className={`${swtcss.tabButton} ${button.active ? swtcss.active : ""}`} onClick={button.onClick}>
             {type === "reg" && <b className={swtcss.buttonText}>{button.label}</b>}
             {type === "ico" && button.icon}
           </button>
@@ -27,11 +27,14 @@ export const SwitchButton = ({ id, type = "reg", buttons = [] }) => {
 };
 
 export const TagsButton = ({ id, text, type = "reg", onClick }) => {
+  const { Close } = useIcons();
   const compid = `${id}-tags`;
 
   return (
     <button id={compid} className={tagcss.tagsButton} onClick={type === "reg" ? onClick : () => {}}>
-      <b className={tagcss.tagsButtonText}>{text}</b>
+      <b id={`${compid}-text`} className={tagcss.tagsButtonText}>
+        {text}
+      </b>
       {type === "select" && <Close size="var(--pixel-20)" onClick={onClick} />}
     </button>
   );
@@ -44,8 +47,10 @@ export const SourceButton = ({ id, to }) => {
 
   return (
     <button id={compid} className={srccss.groupCta} onClick={handleClick}>
-      <b className={srccss.groupCtaText}>Selengkapnya</b>
-      <img className={srccss.groupCtaIcon} alt={compid} src="/svg/arrow-right.svg" />
+      <b id={`${compid}-text`} className={srccss.groupCtaText}>
+        Selengkapnya
+      </b>
+      <img id={`${compid}-icon`} className={srccss.groupCtaIcon} alt="View More" src="/svg/arrow-right.svg" />
     </button>
   );
 };
@@ -72,7 +77,9 @@ export const TabButtonGen = ({ id, text, type = "route", path, targetId, startCo
   return (
     <button id={compid} className={`${tbgcss.tabButtonGen} ${activeTab === path ? tbgcss.active : ""}`} onClick={handleClick}>
       {startContent}
-      <b className={tbgcss.tabButtonText}>{text}</b>
+      <b id={`${compid}-text`} className={tbgcss.tabButtonText}>
+        {text}
+      </b>
       {endContent}
     </button>
   );

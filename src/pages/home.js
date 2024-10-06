@@ -168,23 +168,23 @@ const HomePage = () => {
     <Fragment>
       <SEO title="Beranda" route="/" />
       <Page pageid={id}>
-        <Container alignItems="center" gap="var(--pixel-10)">
+        <Container id="static-ads" alignItems="center" gap="var(--pixel-10)">
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>
-        <Container alignItems="center" padding={width <= 910 ? (width > 700 ? "0 var(--pixel-30)" : "0 var(--pixel-20)") : "0 var(--pixel-70)"}>
+        <Container id="trending-tag" alignItems="center" padding={width <= 910 ? (width > 700 ? "0 var(--pixel-30)" : "0 var(--pixel-20)") : "0 var(--pixel-70)"}>
           <Section isWrap justifyContent="center" padding="var(--pixel-10) 0" gap="var(--pixel-10)">
             {trendTagData.map((tag, index) => (
               <TagsButton key={index} text={tag.nama_kategori_tag} onClick={() => navigate(`/berita/tag/${tag.slug}`)} />
             ))}
           </Section>
         </Container>
-        <Container isWrap justifyContent="center" gap="var(--pixel-10)">
+        <Container id="trending-post" isWrap justifyContent="center" gap="var(--pixel-10)">
           <News3Group posts={trendingPostData.slice(0, 3)} />
           <Section flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3)} setLimit={setLimit} loading={loading} />
           </Section>
         </Container>
-        <Container alignItems="center" gap="var(--pixel-10)">
+        <Container id="infographic-post" alignItems="center" gap="var(--pixel-10)">
           <SectionHead noSource>
             <H1>
               {`Berita `}
@@ -193,10 +193,10 @@ const HomePage = () => {
           </SectionHead>
           <Slider content={graphicPosts} renderContent={renderInfographic} />
         </Container>
-        <Container alignItems="center" gap="var(--pixel-10)">
+        <Container id="static-ads" alignItems="center" gap="var(--pixel-10)">
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>
-        <Container alignItems="center" gap="var(--pixel-10)">
+        <Container id="latest-post" alignItems="center" gap="var(--pixel-10)">
           <SectionHead to="/berita/insight/terbaru">
             <H1>
               {`Berita `}
@@ -209,7 +209,7 @@ const HomePage = () => {
             ))}
           </Section>
         </Container>
-        <Container alignItems="center" gap="var(--pixel-10)">
+        <Container id="local-category" alignItems="center" gap="var(--pixel-10)">
           <SectionHead noSource>
             <H1>
               {`Berita `}
@@ -218,10 +218,10 @@ const HomePage = () => {
           </SectionHead>
           <Slider content={catLocalData} renderContent={renderLocalCat} />
         </Container>
-        <Container alignItems="center" gap="var(--pixel-10)">
+        <Container id="static-ads" alignItems="center" gap="var(--pixel-10)">
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>
-        <Container alignItems="center" gap="var(--pixel-10)">
+        <Container id="popular-post" alignItems="center" gap="var(--pixel-10)">
           <SectionHead to="/berita/insight/populer">
             <H1>
               {`Berita `}
@@ -234,17 +234,17 @@ const HomePage = () => {
             ))}
           </Section>
         </Container>
-        <Container alignItems="center" justifyContent="center" gap="var(--pixel-10)">
+        <Container id="google-adsense" alignItems="center" justifyContent="center" gap="var(--pixel-10)">
           <AdSense />
         </Container>
         {combinedSections.map((section, index) => (
           <Fragment key={index}>
             {section.type === "ad" ? (
-              <Container alignItems="center" gap="var(--pixel-10)">
+              <Container id="static-ads" alignItems="center" gap="var(--pixel-10)">
                 <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
               </Container>
             ) : (
-              <Container alignItems="center" gap="var(--pixel-10)">
+              <Container id={`${section.data.slug}-post`} alignItems="center" gap="var(--pixel-10)">
                 <SectionHead to={`/berita/kategori/${section.data.slug}`}>
                   <H1>
                     {`Berita `}

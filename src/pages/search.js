@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useContent, useWindow } from "@ibrahimstudio/react";
-import { useDocument } from "../libs/plugins/helpers";
+import { useWindow } from "@ibrahimstudio/react";
+import { useDocument, toPathname } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
@@ -19,7 +19,6 @@ const imgdomain = process.env.REACT_APP_API_URL;
 const SearchPage = () => {
   const navigate = useNavigate();
   const { query } = useParams();
-  const { toPathname } = useContent();
   const { width } = useWindow();
   const { short } = useDocument();
   const { apiRead, apiGet } = useApi();
