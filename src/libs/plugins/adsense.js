@@ -26,8 +26,7 @@ const AdSense = () => {
     }
   }, [isProd, isCrawl]);
 
-  // return <ins className="adsbygoogle" style={{ display: "block" }} data-ad-client={capub} data-ad-slot="5581971140" data-ad-format="auto" data-full-width-responsive="true"></ins>;
-  return null;
+  return <ins className="adsbygoogle" style={{ display: "block" }} data-ad-client={capub} data-ad-slot="5581971140" data-ad-format="auto" data-full-width-responsive="true"></ins>;
 };
 
 export default AdSense;

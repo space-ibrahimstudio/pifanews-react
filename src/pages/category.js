@@ -254,7 +254,7 @@ const CategoryPage = () => {
           </FeedsGroup>
           <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
-            <AdSense />
+            {/* <AdSense /> */}
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">

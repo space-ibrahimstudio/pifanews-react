@@ -151,7 +151,7 @@ const PostPage = () => {
             <Section cwidth="100%" maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
               <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 930} title="Rekomendasi" to="/berita/insight/rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />
               <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="COBLOS NO 1" src={width <= 930 ? "/img/ad/wide-5.png" : "/img/ad/narrow-1.png"} />
-              <AdSense />
+              {/* <AdSense /> */}
             </Section>
           </Section>
         </Container>
