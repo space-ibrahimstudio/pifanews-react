@@ -74,9 +74,7 @@
     "asyncScriptTags": true,
     "puppeteerArgs": [
       "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu"
+      "--disable-setuid-sandbox"
     ],
     "crawl": true,
     "include": [
@@ -103,13 +101,6 @@
       "collapseWhitespace": true,
       "removeComments": true,
       "removeEmptyAttributes": true
-    },
-    "puppeteer": {
-      "cache": false
-    },
-    "viewport": {
-      "width": 1024,
-      "height": 768
     }
   }
 }
