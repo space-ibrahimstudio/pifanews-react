@@ -75,7 +75,7 @@ export const SectionGroup = ({ id, catId, scope, slug }) => {
   }, [location]);
 
   return (
-    <Section isWrap justifyContent="center" gap="var(--pixel-10)">
+    <Section id={compid} isWrap justifyContent="center" gap="var(--pixel-10)">
       <Section flex="1" direction="row" justifyContent="center" minWidth="var(--pixel-300)">
         {latestPostData.length > 0 && (
           <NewsDisplayCard id={compid} title={latestPostData[0].judul_berita} short={latestPostData[0].isi_berita} tag={latestPostData[0].nama_kategori_berita} image={`${imgdomain}/images/img_berita/${latestPostData[0].img_berita}`} loc={latestPostData[0].penulis_berita} date={latestPostData[0].tanggal_berita} slug={`/berita/${latestPostData[0].slug}`} height={width < 464 ? "var(--pixel-270)" : "var(--pixel-450)"} flex="1" onClick={() => navigate(`/berita/${latestPostData[0].slug}`)} />

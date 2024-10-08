@@ -36,8 +36,8 @@ const HomePage = () => {
   const [latestPostData, setLatestPostData] = useState([]);
   const [popularPostData, setPopularPostData] = useState([]);
 
-  const renderInfographic = (item) => <InfographicCard title={item.title} image={item.image} count={item.count} status={item.status} />;
-  const renderLocalCat = (item) => <CatCard catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.nama_kategori_daerah.toLowerCase().replace(" ", "")}.pifa.co.id`, "_blank")} />;
+  const renderInfographic = (item) => <InfographicCard id={item.id} title={item.title} image={item.image} count={item.count} status={item.status} />;
+  const renderLocalCat = (item) => <CatCard id={item.id} catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.nama_kategori_daerah.toLowerCase().replace(" ", "")}.pifa.co.id`, "_blank")} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   const fetchCatNewsData = async () => {

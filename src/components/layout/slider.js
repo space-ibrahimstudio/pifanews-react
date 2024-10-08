@@ -102,9 +102,9 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
 
   return (
     <section id={compid} className={styles.sectionBody}>
-      <section className={styles.sectionSlider} ref={ref}>
+      <section id={`${compid}-wrap`} className={styles.sectionSlider} ref={ref}>
         {mockedContent.map((item, index) => (
-          <section key={index} ref={(el) => (contentRef.current[index] = el)} className={styles.contentWrapper} style={{ ...contentStyle }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+          <section id={`${compid}-content`} key={index} ref={(el) => (contentRef.current[index] = el)} className={styles.contentWrapper} style={{ ...contentStyle }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             {renderContent(item)}
           </section>
         ))}
