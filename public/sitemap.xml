@@ -43188,4 +43188,16 @@
     <lastmod>2024-10-08</lastmod>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://pifa.co.id/berita/webhook-test-new</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-10-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pifa.co.id/berita/test-webhook</loc>
+    <changefreq>weekly</changefreq>
+    <lastmod>2024-10-08</lastmod>
+    <priority>0.8</priority>
+  </url>
 </urlset>
