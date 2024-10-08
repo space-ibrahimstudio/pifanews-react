@@ -27,65 +27,24 @@ const sendtoLog = ({ name, delta, id }) => {
   console.log(`[DEV] ${name}:`, { id, delta });
 };
 
-const rootElement = document.getElementById("root");
-if (rootElement.hasChildNodes()) {
-  ReactDOM.hydrateRoot(
-    rootElement,
-    <React.StrictMode>
-      <HelmetProvider>
-        <IbrahimStudioProvider>
-          <BrowserRouter>
-            <LoadingProvider>
-              <ApiProvider>
-                <AuthProvider>
-                  <App />
-                </AuthProvider>
-              </ApiProvider>
-            </LoadingProvider>
-          </BrowserRouter>
-        </IbrahimStudioProvider>
-      </HelmetProvider>
-    </React.StrictMode>
-  );
-} else {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <IbrahimStudioProvider>
-          <BrowserRouter>
-            <LoadingProvider>
-              <ApiProvider>
-                <AuthProvider>
-                  <App />
-                </AuthProvider>
-              </ApiProvider>
-            </LoadingProvider>
-          </BrowserRouter>
-        </IbrahimStudioProvider>
-      </HelmetProvider>
-    </React.StrictMode>
-  );
-}
-
-// const root = ReactDOM.createRoot(document.getElementById("root"));
-// root.render(
-//   <React.StrictMode>
-//     <HelmetProvider>
-//       <IbrahimStudioProvider>
-//         <BrowserRouter>
-//           <LoadingProvider>
-//             <ApiProvider>
-//               <AuthProvider>
-//                 <App />
-//               </AuthProvider>
-//             </ApiProvider>
-//           </LoadingProvider>
-//         </BrowserRouter>
-//       </IbrahimStudioProvider>
-//     </HelmetProvider>
-//   </React.StrictMode>
-// );
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <HelmetProvider>
+      <IbrahimStudioProvider>
+        <BrowserRouter>
+          <LoadingProvider>
+            <ApiProvider>
+              <AuthProvider>
+                <App />
+              </AuthProvider>
+            </ApiProvider>
+          </LoadingProvider>
+        </BrowserRouter>
+      </IbrahimStudioProvider>
+    </HelmetProvider>
+  </React.StrictMode>
+);
 
 if (process.env.NODE_ENV === "production") {
   reportWebVitals(sendtoGA);
