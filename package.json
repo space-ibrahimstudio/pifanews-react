@@ -92,8 +92,7 @@
     ],
     "minifyHtml": {
       "collapseWhitespace": true,
-      "removeComments": true,
-      "removeEmptyAttributes": true
+      "removeComments": true
     }
   }
 }
