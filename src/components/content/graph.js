@@ -9,7 +9,7 @@ const useGraph = () => {
     const compid = `${id}-h1`;
     return (
       <h1 id={compid} style={getStyles(flex, size, align, color, type, weight, opacity, style, decoration)}>
-        {React.Children.map(children, (child) => {
+        {/* {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
               return (
@@ -26,6 +26,15 @@ const useGraph = () => {
             }
             const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
             return React.cloneElement(child, { id: combinedId });
+          }
+          return child;
+        })} */}
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
           }
           return child;
         })}
@@ -46,7 +55,7 @@ const useGraph = () => {
     const compid = `${id}-paragraph`;
     return (
       <p id={compid} style={getStyles(flex, size, align, color, type, weight, opacity, style, decoration)}>
-        {React.Children.map(children, (child) => {
+        {/* {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
               return (
@@ -63,6 +72,15 @@ const useGraph = () => {
             }
             const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
             return React.cloneElement(child, { id: combinedId });
+          }
+          return child;
+        })} */}
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
           }
           return child;
         })}

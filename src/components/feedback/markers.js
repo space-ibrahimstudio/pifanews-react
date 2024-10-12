@@ -24,7 +24,7 @@ const SectionHead = ({ id, noSource = false, to, children }) => {
   return (
     <section id={compid} className={heacss.sectionHead}>
       <header id={`${compid}-wrap`} className={heacss.sectionTitlewrap}>
-        {React.Children.map(children, (child) => {
+        {/* {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
               return (
@@ -41,6 +41,15 @@ const SectionHead = ({ id, noSource = false, to, children }) => {
             }
             const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
             return React.cloneElement(child, { id: combinedId });
+          }
+          return child;
+        })} */}
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
           }
           return child;
         })}

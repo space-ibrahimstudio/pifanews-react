@@ -232,7 +232,7 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
         {!noFilter && <Input id={`${compid}-switch-filter`} variant="select" noEmptyValue isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />}
       </header>
       <div ref={ref} className={feecss.feedsBody}>
-        {React.Children.map(children, (child) => {
+        {/* {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
               return (
@@ -249,6 +249,15 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
             }
             const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
             return React.cloneElement(child, { id: combinedId });
+          }
+          return child;
+        })} */}
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
           }
           return child;
         })}

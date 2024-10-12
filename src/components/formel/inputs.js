@@ -9,7 +9,7 @@ const Fieldset = ({ id, gap = "var(--pixel-10)", children }) => {
   return (
     <section id={compid} style={{ ...basestyles, ...wrapstyles }}>
       <div style={{ ...basestyles, ...bodystyles }}>
-        {React.Children.map(children, (child) => {
+        {/* {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
               return (
@@ -26,6 +26,15 @@ const Fieldset = ({ id, gap = "var(--pixel-10)", children }) => {
             }
             const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
             return React.cloneElement(child, { id: combinedId });
+          }
+          return child;
+        })} */}
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid });
           }
           return child;
         })}

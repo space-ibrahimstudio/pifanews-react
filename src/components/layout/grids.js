@@ -6,7 +6,7 @@ const Grid = ({ id, gridTemplateRows = "unset", gridTemplateColumns = "unset", f
 
   return (
     <section id={sectionid} style={sectionstyles}>
-      {React.Children.map(children, (child) => {
+      {/* {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
             return (
@@ -23,6 +23,15 @@ const Grid = ({ id, gridTemplateRows = "unset", gridTemplateColumns = "unset", f
           }
           const combinedId = child.props.id ? `${sectionid}-${child.props.id}` : sectionid;
           return React.cloneElement(child, { id: combinedId });
+        }
+        return child;
+      })} */}
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: sectionid }) : fragmentChild))}</Fragment>;
+          }
+          return React.cloneElement(child, { id: sectionid });
         }
         return child;
       })}

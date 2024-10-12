@@ -49,7 +49,7 @@ const PopOver = ({ onSubmit, onClose, children }) => {
     <main id={compid} className={styles.formScroll}>
       <section id={`${compid}-wrap`} className={`${styles.formScreen} ${isClosing ? styles.close : ""}`}>
         <form id={`${compid}-wrap-form`} ref={ref} className={`${styles.form} ${isClosing ? styles.close : ""}`} style={{ maxWidth: "var(--pixel-550)" }} onSubmit={onSubmit}>
-          {React.Children.map(children, (child) => {
+          {/* {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
               if (child.type === Fragment) {
                 return (
@@ -66,6 +66,15 @@ const PopOver = ({ onSubmit, onClose, children }) => {
               }
               const combinedId = child.props.id ? `${compid}-wrap-form-${child.props.id}` : `${compid}-wrap-form`;
               return React.cloneElement(child, { id: combinedId });
+            }
+            return child;
+          })} */}
+          {React.Children.map(children, (child) => {
+            if (React.isValidElement(child)) {
+              if (child.type === Fragment) {
+                return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+              }
+              return React.cloneElement(child, { id: compid });
             }
             return child;
           })}
