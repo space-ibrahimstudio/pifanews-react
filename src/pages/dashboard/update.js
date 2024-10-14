@@ -432,7 +432,7 @@ const DashboardUpdatePage = () => {
       case "berita":
         switch (uslug) {
           case "isi-berita":
-            const tools = [["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul"]];
+            const tools = [["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul", "image"]];
             const handleUpdate = async (content) => {
               const formData = new FormData();
               const base64Content = btoa(unescape(encodeURIComponent(content)));

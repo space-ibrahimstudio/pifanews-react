@@ -12,6 +12,7 @@ import Page, { Container, Section } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
 import Article from "../components/content/article";
 import Img, { AdBanner, PostImage } from "../components/media/image";
+import { TagsButton } from "../components/formel/buttons";
 import NewsCard from "../components/layout/cards";
 import SectionHead from "../components/feedback/markers";
 import { NewsSummaryGroup } from "../components/layout/groups";
@@ -29,6 +30,7 @@ const PostPage = () => {
   const { H1, Span, P } = useGraph();
   const [pageInfo, setPageInfo] = useState({ title: "", cat: "", desc: "", path: "", cat_path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
+  const [postTags, setPostTags] = useState([]);
   const [trendLimit, setTrendLimit] = useState(10);
   const [trendLoading, setTrendLoading] = useState(false);
   const [trendingPostData, setTrendingPostData] = useState([]);
@@ -42,23 +44,25 @@ const PostPage = () => {
     const formData = new FormData();
     formData.append("slug", slug);
     try {
-      const postdetail = await apiRead(formData, "main", "detailnew");
-      if (postdetail && postdetail.data && postdetail.data.length > 0) {
-        const selecteddata = postdetail.data[0];
-        setPostDetailData(selecteddata);
+      const postdetail = await apiRead(formData, "main", "detailnew2");
+      if (postdetail && postdetail.data) {
+        const selecteddata = postdetail.data;
+        setPostDetailData(selecteddata.berita);
+        setPostTags(selecteddata.tag);
         const catnews = await apiGet("main", "categorynew");
         if (catnews && catnews.data && catnews.data.length > 0) {
-          const selectedcat = catnews.data.find((cat) => cat.id === selecteddata.nama_kategori_berita_id);
+          const selectedcat = catnews.data.find((cat) => cat.id === selecteddata.berita.nama_kategori_berita_id);
           if (selectedcat) {
-            setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}`, cat: selectedcat.nama_kategori_berita, cat_path: `/berita/kategori/${selectedcat.slug}` });
+            setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: selectedcat.nama_kategori_berita, cat_path: `/berita/kategori/${selectedcat.slug}` });
           } else {
-            setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}`, cat: "N/A", cat_path: "/" });
+            setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: "N/A", cat_path: "/" });
           }
         } else {
-          setPageInfo({ title: selecteddata.judul_berita, desc: selecteddata.isi_berita, path: `/berita/${selecteddata.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.img_berita}`, cat: "N/A", cat_path: "/" });
+          setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: "N/A", cat_path: "/" });
         }
       } else {
         setPostDetailData(null);
+        setPostTags([]);
         setPageInfo({ title: "", desc: "", path: "", thumbnail: "", cat: "", cat_path: "" });
       }
     } catch (error) {
@@ -147,6 +151,11 @@ const PostPage = () => {
                 </P>
               </Section>
               <Article paths={paths} title={postDetailData.judul_berita} loc={postDetailData.penulis_berita} date={postDetailData.tanggal_berita} content={postDetailData.isi_berita} />
+              <Section isWrap padding="var(--pixel-10) var(--pixel-20) 0 var(--pixel-20)" gap="var(--pixel-10)">
+                {postTags.map((item, index) => (
+                  <TagsButton key={index} text={item.nama_kategori_tag} onClick={() => navigate(`/berita/tag/${item.slug}`)} />
+                ))}
+              </Section>
             </Section>
             <Section cwidth="100%" maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
               <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 930} title="Rekomendasi" to="/berita/insight/rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />

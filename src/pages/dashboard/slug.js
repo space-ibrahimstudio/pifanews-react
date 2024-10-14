@@ -308,7 +308,7 @@ const DashboardSlugPage = () => {
       case "berita":
         switch (slug) {
           case "isi-berita":
-            const tools = [["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul"]];
+            const tools = [["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul", "image"]];
             modeSwitcher = [
               { icon: <VList size="var(--pixel-20)" />, label: "Daftar Berita", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
               { icon: <VPlus size="var(--pixel-20)" />, label: "Tambah Berita", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },

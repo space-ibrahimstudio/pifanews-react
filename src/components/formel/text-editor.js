@@ -1,6 +1,10 @@
 import React, { Fragment, useRef, useState, useEffect } from "react";
+import axios from "axios";
 import { useDevmode } from "@ibrahimstudio/react";
+import useAuth from "../../libs/guards/auth";
 import styles from "./styles/text-editor.module.css";
+
+const apiURL = process.env.REACT_APP_API_URL;
 
 const ToolButton = ({ id, isActive, children, onClick }) => {
   const compid = `${id}-editor-tool-button`;
@@ -177,6 +181,22 @@ const Tool = ({ id, name, size = "var(--pixel-25)", color }) => {
             />
           </svg>
         );
+      case "image":
+        return (
+          <svg width="100%" height="100%" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_1153_1617)">
+              <path
+                d="M21.7999 14.7V18H25.0999V20.2H21.7999V23.5H19.5999V20.2H16.2999V18H19.5999V14.7H21.7999ZM21.8087 1.5C22.4115 1.5 22.8999 1.9895 22.8999 2.5923V12.5H20.6999V3.7H3.0999V19.0989L14.0999 8.1L17.3999 11.4V14.5119L14.0999 11.2119L6.2096 19.1H14.0999V21.3H1.9911C1.7016 21.2997 1.42405 21.1845 1.21944 20.9797C1.01483 20.7749 0.899902 20.4972 0.899902 20.2077V2.5923C0.901915 2.30342 1.01749 2.02692 1.22167 1.82254C1.42584 1.61816 1.70222 1.5023 1.9911 1.5H21.8087ZM7.4999 5.9C8.08338 5.9 8.64296 6.13179 9.05554 6.54437C9.46812 6.95695 9.6999 7.51652 9.6999 8.1C9.6999 8.68348 9.46812 9.24305 9.05554 9.65563C8.64296 10.0682 8.08338 10.3 7.4999 10.3C6.91643 10.3 6.35685 10.0682 5.94427 9.65563C5.53169 9.24305 5.2999 8.68348 5.2999 8.1C5.2999 7.51652 5.53169 6.95695 5.94427 6.54437C6.35685 6.13179 6.91643 5.9 7.4999 5.9Z"
+                fill={fill}
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_1153_1617">
+                <rect width="100%" height="100%" fill="white" transform="translate(0.5)" />
+              </clipPath>
+            </defs>
+          </svg>
+        );
       default:
         return null;
     }
@@ -235,7 +255,7 @@ export const EditorContent = ({ id, editorRef, handleInput, handlePaste }) => {
   );
 };
 
-export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeFormats }) => {
+export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeFormats, insertImage }) => {
   const compid = `${id}-editor-toolbar`;
   const toolbarstyles = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" };
   const actionMap = {
@@ -247,6 +267,7 @@ export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeForm
     strikethrough: () => formatText("strikeThrough"),
     ol: () => formatText("insertOrderedList"),
     ul: () => formatText("insertUnorderedList"),
+    image: () => insertImage(),
   };
 
   const activeTool = (name) => activeFormats[name] || false;
@@ -280,6 +301,7 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
   const compid = `${id}-text-editor`;
   const editorRef = useRef(null);
   const { log } = useDevmode();
+  const { secret } = useAuth();
   const editorstyles = { flex: "1", minWidth: minW, maxWidth: maxW, borderRadius: "var(--pixel-20)", backgroundColor: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "var(--pixel-20)", gap: "var(--pixel-15)" };
   const [activeFormats, setActiveFormats] = useState({ h1: false, h2: false, paragraph: false, bold: false, italic: false, underline: false, strikethrough: false, ol: false, ul: false });
 
@@ -299,6 +321,45 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
         formatText("formatBlock", heading);
       }
     }
+  };
+
+  const uploadFile = async (file, type) => {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify({ secret, type }));
+    formData.append("fileimg", file);
+    try {
+      const url = `${apiURL}/office/uploadfile`;
+      const res = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
+      const imagelink = res.data.data[0].link;
+      log("success:", res.data);
+      return imagelink;
+    } catch (error) {
+      console.error(error);
+      alert("File upload failed");
+      return null;
+    }
+  };
+
+  const insertImage = async () => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        try {
+          const fileUrl = await uploadFile(file, "img");
+          if (fileUrl) {
+            const imgHtml = `<img src="${fileUrl}" />`;
+            document.execCommand("insertHTML", false, imgHtml);
+          }
+        } catch (error) {
+          console.error(error);
+          alert("File upload failed");
+        }
+      }
+    };
+    fileInput.click();
   };
 
   const updateActiveFormats = () => {
@@ -381,7 +442,7 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
           if (child.type === Fragment) {
             return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
           }
-          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
+          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, handleInput, handlePaste });
         }
         return child;
       })}
