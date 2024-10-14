@@ -332,7 +332,7 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
       const res = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
       const imagelink = res.data.data[0].link;
       log("success:", res.data);
-      return imagelink;
+      return `${apiURL}/images/${imagelink}`;
     } catch (error) {
       console.error(error);
       alert("File upload failed");
