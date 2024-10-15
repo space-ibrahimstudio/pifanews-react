@@ -54,6 +54,18 @@
   height: auto;
 }
 
+.contentArea a {
+  font-size: inherit;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.contentArea iframe {
+  border: 0;
+  width: 100%;
+  height: var(--pixel-270);
+}
+
 .contentArea ul,
 .contentArea ol {
   padding-left: var(--pixel-30);

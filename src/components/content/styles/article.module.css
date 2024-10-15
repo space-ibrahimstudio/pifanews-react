@@ -42,21 +42,33 @@
   margin-bottom: 0.5em;
 }
 
+.articleBoard a {
+  font-size: inherit;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
 .articleBoard h1,
 .articleBoard h2,
 .articleBoard p,
 .articleBoard ul,
 .articleBoard ol,
+.articleBoard a,
 .articleBoard strong {
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
 .articleBoard img,
-.articleBoard video,
-.articleBoard iframe {
+.articleBoard video {
   max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
+}
+
+.articleBoard iframe {
+  border: 0;
+  width: 100%;
+  height: var(--pixel-270);
 }

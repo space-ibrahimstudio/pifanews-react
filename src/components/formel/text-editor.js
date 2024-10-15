@@ -197,6 +197,40 @@ const Tool = ({ id, name, size = "var(--pixel-25)", color }) => {
             </defs>
           </svg>
         );
+      case "video":
+        return (
+          <svg width="100%" height="100%" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clipPath="url(#clip0_1153_1622)">
+              <path
+                d="M17.5455 3.40912C17.8468 3.40912 18.1359 3.52884 18.349 3.74195C18.5621 3.95506 18.6818 4.2441 18.6818 4.54548V9.31821L24.6057 5.17048C24.6909 5.11077 24.7908 5.07559 24.8946 5.06878C24.9984 5.06197 25.1021 5.08378 25.1943 5.13184C25.2866 5.1799 25.3639 5.25237 25.4178 5.34134C25.4717 5.43031 25.5001 5.53237 25.5 5.63639V19.3637C25.5001 19.4677 25.4717 19.5697 25.4178 19.6587C25.3639 19.7477 25.2866 19.8202 25.1943 19.8682C25.1021 19.9163 24.9984 19.9381 24.8946 19.9313C24.7908 19.9245 24.6909 19.8893 24.6057 19.8296L18.6818 15.6818V20.4546C18.6818 20.756 18.5621 21.045 18.349 21.2581C18.1359 21.4712 17.8468 21.5909 17.5455 21.5909H1.63636C1.33498 21.5909 1.04594 21.4712 0.832833 21.2581C0.619724 21.045 0.5 20.756 0.5 20.4546V4.54548C0.5 4.2441 0.619724 3.95506 0.832833 3.74195C1.04594 3.52884 1.33498 3.40912 1.63636 3.40912H17.5455ZM16.4091 5.68185H2.77273V19.3182H16.4091V5.68185ZM8.45455 7.95457H10.7273V11.3637H14.1364V13.6364H10.7261L10.7273 17.0455H8.45455L8.45341 13.6364H5.04545V11.3637H8.45455V7.95457ZM23.2273 8.91025L18.6818 12.0921V12.908L23.2273 16.0898V8.91025Z"
+                fill={fill}
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_1153_1622">
+                <rect width="100%" height="100%" fill="white" transform="translate(0.5)" />
+              </clipPath>
+            </defs>
+          </svg>
+        );
+      case "file":
+        return (
+          <svg width="100%" height="100%" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M22.9001 8.1V22.3923C22.9011 22.5368 22.8737 22.68 22.8193 22.8138C22.765 22.9477 22.6848 23.0695 22.5834 23.1724C22.4819 23.2752 22.3612 23.3571 22.2282 23.4133C22.0951 23.4695 21.9523 23.499 21.8078 23.5H4.1924C3.90289 23.5 3.62523 23.3851 3.42041 23.1805C3.2156 22.9759 3.10039 22.6983 3.1001 22.4088V2.5912C3.1001 2.0005 3.594 1.5 4.2023 1.5H16.2968L22.9001 8.1ZM20.7001 9.2H15.2001V3.7H5.3001V21.3H20.7001V9.2ZM8.6001 7H11.9001V9.2H8.6001V7ZM8.6001 11.4H17.4001V13.6H8.6001V11.4ZM8.6001 15.8H17.4001V18H8.6001V15.8Z"
+              fill={fill}
+            />
+          </svg>
+        );
+      case "link":
+        return (
+          <svg width="100%" height="100%" viewBox="0 0 26 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M14.1863 8.14627L15.7699 9.72995C17.2388 11.1995 18.064 13.1923 18.064 15.27C18.064 17.3478 17.2388 19.3406 15.7699 20.8101L15.3737 21.2052C14.6462 21.9328 13.7825 22.5099 12.8319 22.9036C11.8814 23.2973 10.8625 23.5 9.83365 23.5C8.80476 23.5 7.78595 23.2973 6.83538 22.9036C5.88481 22.5099 5.0211 21.9328 4.29356 21.2052C3.56602 20.4777 2.98891 19.614 2.59517 18.6634C2.20143 17.7128 1.99878 16.694 1.99878 15.6651C1.99878 14.6362 2.20143 13.6174 2.59517 12.6668C2.98891 11.7163 3.56603 10.8526 4.29356 10.125L5.87724 11.7087C5.35387 12.2275 4.93812 12.8446 4.65387 13.5245C4.36961 14.2044 4.22246 14.9338 4.22084 15.6708C4.21923 16.4077 4.36319 17.1377 4.64446 17.8189C4.92573 18.5 5.33878 19.1189 5.85988 19.64C6.38098 20.1611 6.99987 20.5742 7.68103 20.8554C8.36219 21.1367 9.09219 21.2807 9.82914 21.2791C10.5661 21.2774 11.2954 21.1303 11.9754 20.846C12.6553 20.5618 13.2724 20.146 13.7912 19.6227L14.1874 19.2265C15.2365 18.177 15.8258 16.7539 15.8258 15.27C15.8258 13.7862 15.2365 12.363 14.1874 11.3136L12.6037 9.72995L14.1874 8.14739L14.1863 8.14627ZM21.7051 14.8738L20.1226 13.2913C20.9109 12.5101 21.4492 11.5121 21.6688 10.4242C21.8885 9.33632 21.7796 8.20767 21.356 7.18181C20.9325 6.15596 20.2134 5.27924 19.2903 4.66317C18.3671 4.04709 17.2816 3.71949 16.1717 3.72203C15.4348 3.72366 14.7054 3.87082 14.0255 4.15508C13.3456 4.43933 12.7285 4.85509 12.2097 5.37846L11.8124 5.77354C10.7633 6.82296 10.174 8.24608 10.174 9.72995C10.174 11.2138 10.7633 12.6369 11.8124 13.6864L13.3961 15.27L11.8124 16.8526L10.2299 15.27C9.50227 14.5425 8.92512 13.6788 8.53135 12.7283C8.13758 11.7777 7.93491 10.7589 7.93491 9.72995C7.93491 8.70105 8.13758 7.68222 8.53135 6.73165C8.92512 5.78107 9.50227 4.91737 10.2299 4.18986L10.6261 3.79478C12.0954 2.32546 14.0882 1.5 16.1661 1.5C18.2441 1.5 20.2369 2.32546 21.7062 3.79478C23.1756 5.2641 24.001 7.25693 24.001 9.33487C24.001 11.4128 23.1756 13.4056 21.7062 14.875L21.7051 14.8738Z"
+              fill={fill}
+            />
+          </svg>
+        );
       default:
         return null;
     }
@@ -255,7 +289,7 @@ export const EditorContent = ({ id, editorRef, handleInput, handlePaste }) => {
   );
 };
 
-export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeFormats, insertImage }) => {
+export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink }) => {
   const compid = `${id}-editor-toolbar`;
   const toolbarstyles = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" };
   const actionMap = {
@@ -268,6 +302,8 @@ export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeForm
     ol: () => formatText("insertOrderedList"),
     ul: () => formatText("insertUnorderedList"),
     image: () => insertImage(),
+    video: () => insertVideo(),
+    link: () => insertLink(),
   };
 
   const activeTool = (name) => activeFormats[name] || false;
@@ -362,6 +398,23 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
     fileInput.click();
   };
 
+  const insertVideo = async () => {
+    const url = prompt("Enter the Video URL");
+    if (url) {
+      const videoHtml = `<iframe loading="lazy" allowfullscreen="true" src=${url}></iframe>`;
+      document.execCommand("insertHTML", false, videoHtml);
+    }
+  };
+
+  const insertLink = () => {
+    const url = prompt("Enter the URL");
+    if (url) {
+      const label = prompt("Enter URL label or let it blank");
+      const linkHtml = `<a href=${url} target="_blank">${label ? label : url}</a>`;
+      document.execCommand("insertHTML", false, linkHtml);
+    }
+  };
+
   const updateActiveFormats = () => {
     setActiveFormats({
       h1: document.queryCommandValue("formatBlock") === "H1",
@@ -440,9 +493,9 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
+            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
           }
-          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, handleInput, handlePaste });
+          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste });
         }
         return child;
       })}
