@@ -388,7 +388,7 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
           try {
             const fileUrl = await uploadFile(file, "img");
             if (fileUrl) {
-              const imgHtml = `<img src=${fileUrl} alt=${caption} loading="lazy" /><i style="position: relative; margin: 0px; align-self: stretch; text-align: left; color: inherit; font-size: var(--font-tiny); font-weight: 500; opacity: 0.5; line-height: 135%;">${caption}</i>`;
+              const imgHtml = `<img src=${fileUrl} alt="${caption}" loading="lazy" /><i style="position: relative; margin: 0px; align-self: stretch; text-align: left; color: inherit; font-size: var(--font-tiny); font-weight: 500; opacity: 0.5; line-height: 135%;">${caption}</i>`;
               document.execCommand("insertHTML", false, imgHtml);
             }
           } catch (error) {
