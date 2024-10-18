@@ -535,11 +535,11 @@ const DashboardSlugPage = () => {
                         short={item.desc}
                         image={`${imgdomain}/images/img_berita/${item.img}`}
                         onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)}
-                        draggable
-                        onDragStart={() => handleDragStart(index)}
-                        onDragOver={(e) => handleDragOver(e, index)}
-                        onDrop={handleDrop}
-                        style={{ cursor: "move", opacity: draggingIndex === index ? 0.5 : 1, transition: "all 0.2s ease", border: draggingIndex === index ? "1px dashed var(--color-primary)" : "1px solid transparent" }}
+                        draggable={selectedCatType === "berita"}
+                        onDragStart={selectedCatType === "berita" ? () => handleDragStart(index) : () => {}}
+                        onDragOver={selectedCatType === "berita" ? (e) => handleDragOver(e, index) : () => {}}
+                        onDrop={selectedCatType === "berita" ? handleDrop : () => {}}
+                        style={{ cursor: selectedCatType === "berita" ? "move" : "default", opacity: draggingIndex === index ? 0.5 : 1, transition: "all 0.2s ease", border: draggingIndex === index ? "1px dashed var(--color-primary)" : "1px solid transparent" }}
                       />
                     ))}
                   </Grid>
