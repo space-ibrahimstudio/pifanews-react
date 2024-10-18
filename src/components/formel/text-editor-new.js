@@ -2,6 +2,11 @@ import React, { Fragment, useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { useDevmode } from "@ibrahimstudio/react";
 import useAuth from "../../libs/guards/auth";
+import useGraph from "../content/graph";
+import { Button } from "@ibrahimstudio/button";
+import { Input } from "@ibrahimstudio/input";
+import PopOver from "../layout/popover";
+import Fieldset from "./inputs";
 import styles from "./styles/text-editor.module.css";
 
 const apiURL = process.env.REACT_APP_API_URL;
@@ -10,26 +15,6 @@ const ToolButton = ({ id, isActive, children, onClick }) => {
   const compid = `${id}-editor-tool-button`;
   return (
     <button id={compid} className={`${styles.toolButton} ${isActive ? styles.active : ""}`} onClick={onClick}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
-          }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId });
-        }
-        return child;
-      })} */}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
@@ -48,26 +33,6 @@ const ToolGroup = ({ id, children }) => {
   const groupstyles = { display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: "var(--pixel-10)", gap: "var(--pixel-5)" };
   return (
     <section id={compid} style={groupstyles}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
-          }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId });
-        }
-        return child;
-      })} */}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
@@ -247,26 +212,6 @@ export const EditorFooter = ({ id, children }) => {
   const footerstyles = { alignSelf: "stretch", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: "var(--pixel-10)" };
   return (
     <footer id={compid} style={footerstyles}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
-          }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId });
-        }
-        return child;
-      })} */}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
@@ -289,31 +234,27 @@ export const EditorContent = ({ id, editorRef, handleInput, handlePaste }) => {
   );
 };
 
-export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink }) => {
+export const EditorToolbar = ({ id, tools, formatText, activeFormats, openMediaForm }) => {
   const compid = `${id}-editor-toolbar`;
   const toolbarstyles = { alignSelf: "stretch", overflow: "hidden", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" };
   const actionMap = {
-    h1: () => toggleHeading("H1"),
-    h2: () => toggleHeading("H2"),
+    h1: () => formatText("H1"),
+    h2: () => formatText("H2"),
     bold: () => formatText("bold"),
     italic: () => formatText("italic"),
     underline: () => formatText("underline"),
     strikethrough: () => formatText("strikeThrough"),
     ol: () => formatText("insertOrderedList"),
     ul: () => formatText("insertUnorderedList"),
-    image: () => insertImage(),
-    video: () => insertVideo(),
-    link: () => insertLink(),
+    image: () => openMediaForm("image"),
+    video: () => openMediaForm("video"),
+    link: () => openMediaForm("link"),
   };
 
-  const activeTool = (name) => activeFormats[name] || false;
   const handleToolClick = (e, name) => {
     e.preventDefault();
-    e.stopPropagation();
     const action = actionMap[name];
-    if (action) {
-      action();
-    }
+    if (action) action();
   };
 
   return (
@@ -322,7 +263,7 @@ export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeForm
         <ToolGroup key={index}>
           {group.map((tool, idx) => {
             return (
-              <ToolButton key={idx} onClick={(e) => handleToolClick(e, tool)} isActive={activeTool(tool)}>
+              <ToolButton key={idx} onClick={(e) => handleToolClick(e, tool)} isActive={activeFormats[tool]}>
                 <Tool name={tool} />
               </ToolButton>
             );
@@ -338,117 +279,128 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
   const editorRef = useRef(null);
   const { log } = useDevmode();
   const { secret } = useAuth();
+  const { H1 } = useGraph();
   const editorstyles = { flex: "1", minWidth: minW, maxWidth: maxW, borderRadius: "var(--pixel-20)", backgroundColor: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: "var(--pixel-20)", gap: "var(--pixel-15)" };
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const [uploadMode, setUploadMode] = useState(null);
+  const [mediaData, setMediaData] = useState({ src: "", alt: "", caption: "", script: "" });
+  const [errors, setErrors] = useState({ src: "", alt: "", caption: "", script: "" });
   const [activeFormats, setActiveFormats] = useState({ h1: false, h2: false, paragraph: false, bold: false, italic: false, underline: false, strikethrough: false, ol: false, ul: false });
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
 
-  const formatText = (command, value = null) => {
-    document.execCommand(command, false, value);
-    updateActiveFormats();
+  const insertHTMLAtCaret = (html) => {
+    const range = window.getSelection().getRangeAt(0);
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const nodes = Array.from(tempDiv.childNodes);
+
+    nodes.forEach((node) => range.insertNode(node));
+    range.collapse(false);
   };
 
-  const toggleHeading = (heading) => {
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      const selectedElement = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentElement : range.commonAncestorContainer;
-      if (selectedElement.tagName === heading) {
-        formatText("formatBlock", "P");
-      } else {
-        formatText("formatBlock", heading);
-      }
+  const formatText = (command) => {
+    document.execCommand(command);
+    setTimeout(updateActiveFormats, 0);
+  };
+
+  const insertMedia = (e) => {
+    e.preventDefault();
+    let mediaHtml;
+    switch (uploadMode) {
+      case "image":
+        mediaHtml = `<img src=${selectedImageUrl} alt=${mediaData.alt} loading="lazy" /><i style="position: relative; margin: 0px; align-self: stretch; text-align: left; color: inherit; font-size: var(--font-tiny); font-weight: 500; opacity: 0.5; line-height: 135%;">${mediaData.caption}</i>`;
+        break;
+      case "video":
+        mediaHtml = ``;
+        break;
+      case "link":
+        mediaHtml = `<a href=${mediaData.src} target="_blank">${mediaData.alt}</a>`;
+        break;
+      default:
+        break;
     }
+    insertHTMLAtCaret(mediaHtml);
+    closeMediaForm();
   };
 
-  const uploadFile = async (file, type) => {
-    const formData = new FormData();
-    formData.append("data", JSON.stringify({ secret, type }));
-    formData.append("fileimg", file);
-    try {
-      const url = `${apiURL}/office/uploadfile`;
-      const res = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
-      const imagelink = res.data.data[0].link;
-      log("success:", res.data);
-      return `${apiURL}/images/${imagelink}`;
-    } catch (error) {
-      console.error(error);
-      alert("File upload failed");
-      return null;
-    }
-  };
+  // const insertVideo = async () => {
+  //   const url = prompt("Enter the Video URL");
+  //   if (url) {
+  //     const videoHtml = `<iframe loading="lazy" allowfullscreen="true" src=${url}></iframe>`;
+  //     document.execCommand("insertHTML", false, videoHtml);
+  //   }
+  // };
 
-  const insertImage = async () => {
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
-    fileInput.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const caption = prompt("Enter the image caption");
-        if (caption) {
-          try {
-            const fileUrl = await uploadFile(file, "img");
-            if (fileUrl) {
-              const imgHtml = `<img src=${fileUrl} alt=${caption} loading="lazy" /><i style="position: relative; margin: 0px; align-self: stretch; text-align: left; color: inherit; font-size: var(--font-tiny); font-weight: 500; opacity: 0.5; line-height: 135%;">${caption}</i>`;
-              document.execCommand("insertHTML", false, imgHtml);
-            }
-          } catch (error) {
-            console.error(error);
-            alert("File upload failed");
-          }
-        }
-      }
-    };
-    fileInput.click();
-  };
-
-  const insertVideo = async () => {
-    const url = prompt("Enter the Video URL");
-    if (url) {
-      const videoHtml = `<iframe loading="lazy" allowfullscreen="true" src=${url}></iframe>`;
-      document.execCommand("insertHTML", false, videoHtml);
-    }
-  };
-
-  const insertLink = () => {
-    const url = prompt("Enter the URL");
-    if (url) {
-      const label = prompt("Enter URL label or let it blank");
-      const linkHtml = `<a href=${url} target="_blank">${label ? label : url}</a>`;
-      document.execCommand("insertHTML", false, linkHtml);
-    }
-  };
+  // const insertLink = () => {
+  //   const url = prompt("Enter the URL");
+  //   if (url) {
+  //     const label = prompt("Enter URL label or let it blank");
+  //     const linkHtml = `<a href=${url} target="_blank">${label ? label : url}</a>`;
+  //     document.execCommand("insertHTML", false, linkHtml);
+  //   }
+  // };
 
   const updateActiveFormats = () => {
+    const selection = window.getSelection();
+    const isActive = (tag) => selection.anchorNode && selection.anchorNode.parentElement.tagName === tag;
     setActiveFormats({
-      h1: document.queryCommandValue("formatBlock") === "H1",
-      h2: document.queryCommandValue("formatBlock") === "H2",
-      bold: document.queryCommandState("bold"),
-      italic: document.queryCommandState("italic"),
-      underline: document.queryCommandState("underline"),
-      strikethrough: document.queryCommandState("strikeThrough"),
+      h1: isActive("H1"),
+      h2: isActive("H2"),
+      bold: isActive("B"),
+      italic: isActive("I"),
+      underline: isActive("U"),
+      strikethrough: isActive("STRIKE"),
       ol: document.queryCommandState("insertOrderedList"),
       ul: document.queryCommandState("insertUnorderedList"),
     });
   };
 
-  const handleInput = () => {
-    log(editorRef.current.innerHTML);
-    updateActiveFormats();
+  const openMediaForm = (mode) => {
+    setUploadMode(mode);
+    setUploadOpen(true);
   };
+
+  const closeMediaForm = () => {
+    setUploadMode(null);
+    setMediaData({ src: "", alt: "", caption: "", script: "" });
+    setUploadOpen(false);
+  };
+
+  const handleInput = () => log(editorRef.current.innerHTML);
 
   const handlePaste = (e) => {
     e.preventDefault();
     const pasteData = e.clipboardData.getData("text/html");
-    if (pasteData) {
-      document.execCommand("insertHTML", false, pasteData);
-    } else {
-      const text = e.clipboardData.getData("text/plain");
-      document.execCommand("insertText", false, text);
-    }
+    insertHTMLAtCaret(pasteData);
   };
 
-  const handleSelectionChange = () => {
-    updateActiveFormats();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setMediaData((prevState) => ({ ...prevState, [name]: value }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+  };
+
+  const handleAddImage = async (file) => {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify({ secret, type: "img" }));
+    formData.append("fileimg", file);
+    try {
+      const url = `${apiURL}/office/uploadfile`;
+      const res = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
+      const data = res.data;
+      if (!data.error) {
+        const filename = data.data[0].link;
+        log("success:", data);
+        setSelectedImageUrl(`${apiURL}/images/${filename}`);
+      } else {
+        alert(data.message);
+        log("failed:", data);
+        setSelectedImageUrl(null);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("File upload failed");
+    }
   };
 
   const handleSubmit = (e) => {
@@ -465,44 +417,59 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
   }, [initialContent]);
 
   useEffect(() => {
-    document.addEventListener("selectionchange", handleSelectionChange);
+    document.addEventListener("selectionchange", updateActiveFormats);
     return () => {
-      document.removeEventListener("selectionchange", handleSelectionChange);
+      document.removeEventListener("selectionchange", updateActiveFormats);
     };
   }, []);
 
   return (
-    <form id={compid} onSubmit={handleSubmit} style={editorstyles}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
+    <Fragment>
+      <form id={compid} onSubmit={handleSubmit} style={editorstyles}>
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            if (child.type === Fragment) {
+              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, activeFormats, openMediaForm, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
+            }
+            return React.cloneElement(child, { id: compid, editorRef, formatText, activeFormats, openMediaForm, handleInput, handlePaste });
           }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
-        }
-        return child;
-      })} */}
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
-          }
-          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste });
-        }
-        return child;
-      })}
-    </form>
+          return child;
+        })}
+      </form>
+      {uploadOpen && (
+        <PopOver onSubmit={insertMedia} onClose={closeMediaForm}>
+          <H1 color="var(--color-primary)" align="center">
+            {uploadMode === "video" ? "Insert Video" : uploadMode === "link" ? "Insert Link" : "Insert Image"}
+          </H1>
+          {uploadMode === "image" && (
+            <Fragment>
+              <Input id="attach-image" variant="upload" labelText="Gambar" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleAddImage} maxSize={5 * 1024 * 1024} isRequired />
+              <Fieldset>
+                <Input id="attach-alt" type="text" labelText="Alt Text" placeholder="Masukkan alternatif teks" name="alt" value={mediaData.alt} onChange={handleInputChange} errorContent={errors.alt} isRequired />
+                <Input id="attach-caption" type="text" labelText="Caption" placeholder="Masukkan caption" name="caption" value={mediaData.caption} onChange={handleInputChange} errorContent={errors.caption} isRequired />
+              </Fieldset>
+            </Fragment>
+          )}
+          {uploadMode === "video" && (
+            <Fieldset>
+              <Input id="attach-src" type="text" labelText="Source Link" placeholder="Masukkan embed link" name="src" value={mediaData.src} onChange={handleInputChange} errorContent={errors.src} isRequired />
+              <Input id="attach-script" variant="textarea" rows={8} labelText="Script iFrame" placeholder="Masukkan script" name="script" value={mediaData.script} onChange={handleInputChange} errorContent={errors.script} isRequired />
+              <Input id="attach-caption" type="text" labelText="Caption" placeholder="Masukkan caption" name="caption" value={mediaData.caption} onChange={handleInputChange} errorContent={errors.caption} isRequired />
+            </Fieldset>
+          )}
+          {uploadMode === "link" && (
+            <Fieldset>
+              <Input id="attach-link" type="text" labelText="External Link" placeholder="Masukkan link" name="src" value={mediaData.src} onChange={handleInputChange} errorContent={errors.src} isRequired />
+              <Input id="attach-label" type="text" labelText="Placeholder" placeholder="Masukkan placeholder" name="alt" value={mediaData.alt} onChange={handleInputChange} errorContent={errors.alt} isRequired />
+            </Fieldset>
+          )}
+          <EditorFooter>
+            <Button id="abort-attach" type="button" variant="line" color="var(--color-primary)" buttonText="Batal" onClick={closeMediaForm} />
+            <Button id="submit-attach" formId="popover-form-wrap-form" type="submit" buttonText="Simpan" />
+          </EditorFooter>
+        </PopOver>
+      )}
+    </Fragment>
   );
 };
 

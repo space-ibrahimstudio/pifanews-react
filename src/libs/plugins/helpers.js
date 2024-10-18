@@ -83,6 +83,7 @@ export const useInputSchema = () => {
     event_date: "",
     event_guide: "",
     event_coords: "",
+    tag_suggest: "",
   };
   const errorSch = {
     name: "",
@@ -111,6 +112,7 @@ export const useInputSchema = () => {
     event_date: "",
     event_guide: "",
     event_coords: "",
+    tag_suggest: "",
   };
 
   return { inputSch, errorSch };

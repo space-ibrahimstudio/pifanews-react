@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useDevmode, useWindow } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
@@ -23,6 +23,7 @@ const imgdomain = process.env.REACT_APP_API_URL;
 const DashboardSlugPage = () => {
   const { scope, slug } = useParams();
   const navigate = useNavigate();
+  const draggedItemIndex = useRef();
   const { log } = useDevmode();
   const { width } = useWindow();
   const { userData } = useAuth();
@@ -46,6 +47,7 @@ const DashboardSlugPage = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [selectedCatType, setSelectedCatType] = useState("berita");
   const [pageTitle, setPageTitle] = useState("");
+  const [draggingIndex, setDraggingIndex] = useState(null);
 
   const [inputData, setInputData] = useState({ ...inputSch });
   const [errors, setErrors] = useState({ ...errorSch });
@@ -365,6 +367,18 @@ const DashboardSlugPage = () => {
                 setErrors(validationErrors);
                 return;
               }
+              if (selectedImage === null) {
+                alert("Image is required.");
+                return;
+              }
+              if (content === "") {
+                alert("Content is required.");
+                return;
+              }
+              if (selectedTags.length <= 0) {
+                setErrors({ ...errors, tag_suggest: "Tag is required, choose at least 1 tag." });
+                return;
+              }
               const confirmmsg = "Apakah anda yakin untuk menambahkan data baru?";
               const successmsg = "Selamat! Data baru berhasil ditambahkan.";
               const errormsg = "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
@@ -374,7 +388,7 @@ const DashboardSlugPage = () => {
               }
               setIsSubmitting(true);
               try {
-                const base64Content = btoa(unescape(encodeURIComponent(content)));
+                const base64Content = btoa(unescape(encodeURIComponent(`<div>${content}</div>`)));
                 const submittedData = { secret: userData.token_activation, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: base64Content, thumbnail: inputData.thumbnail, tag: selectedTags };
                 const formData = new FormData();
                 formData.append("data", JSON.stringify(submittedData));
@@ -440,7 +454,7 @@ const DashboardSlugPage = () => {
                           ))}
                         </Fieldset>
                       )}
-                      <Input id="post-tag" type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tagQuery" value={tagQuery} onChange={handleTagSearch} />
+                      <Input id="post-tag" type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tag_suggest" value={tagQuery} onChange={handleTagSearch} errorContent={errors.tag_suggest} />
                       {tagSuggests.length > 0 && (
                         <Fieldset>
                           {tagSuggests.map((item, index) => (
@@ -473,6 +487,33 @@ const DashboardSlugPage = () => {
               { label: "Tambah Kategori", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
             ];
 
+            const handleDragStart = (index) => {
+              draggedItemIndex.current = index;
+              setDraggingIndex(index);
+            };
+
+            const handleDragOver = (e, hoverIndex) => {
+              e.preventDefault();
+              if (hoverIndex === draggedItemIndex.current) return;
+              const updatedCategories = [...categoryData];
+              const [movedItem] = updatedCategories.splice(draggedItemIndex.current, 1);
+              updatedCategories.splice(hoverIndex, 0, movedItem);
+              draggedItemIndex.current = hoverIndex;
+              setCategoryData(updatedCategories);
+            };
+
+            const handleDrop = async () => {
+              setDraggingIndex(null);
+              try {
+                const formData = new FormData();
+                formData.append("data", JSON.stringify({ secret: userData.token_activation, indexing: categoryData.map((item, index) => ({ id: item.id, posisi: index + 1 })) }));
+                await apiCrud(formData, "office", "indexing");
+                console.log("Order updated successfully");
+              } catch (error) {
+                console.error("Error updating order:", error);
+              }
+            };
+
             return (
               <Fragment>
                 <Header isasChild alignItems="center" gap="var(--pixel-15)">
@@ -488,7 +529,18 @@ const DashboardSlugPage = () => {
                 {selectedMode === "view" && (
                   <Grid gridTemplateRows="repeat(2, auto)" gridTemplateColumns="repeat(auto-fill, minmax(var(--pixel-350), 1fr))" gap="var(--pixel-10)">
                     {categoryData.map((item, index) => (
-                      <CatAdmCard key={index} title={selectedCatType === "berita" ? item.nama_kategori_berita : item.nama_kategori_daerah} short={item.desc} image={`${imgdomain}/images/img_berita/${item.img}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)} />
+                      <CatAdmCard
+                        key={index}
+                        title={selectedCatType === "berita" ? item.nama_kategori_berita : item.nama_kategori_daerah}
+                        short={item.desc}
+                        image={`${imgdomain}/images/img_berita/${item.img}`}
+                        onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)}
+                        draggable
+                        onDragStart={() => handleDragStart(index)}
+                        onDragOver={(e) => handleDragOver(e, index)}
+                        onDrop={handleDrop}
+                        style={{ cursor: "move", opacity: draggingIndex === index ? 0.5 : 1, transition: "all 0.2s ease", border: draggingIndex === index ? "1px dashed var(--color-primary)" : "1px solid transparent" }}
+                      />
                     ))}
                   </Grid>
                 )}

@@ -434,22 +434,39 @@ const DashboardUpdatePage = () => {
           case "isi-berita":
             const tools = [["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul", "image"]];
             const handleUpdate = async (content) => {
-              const formData = new FormData();
-              const base64Content = btoa(unescape(encodeURIComponent(content)));
-              const submittedData = { secret: userData.token_activation, idedit: selectedID, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: base64Content, thumbnail: inputData.thumbnail, tag: selectedTags };
-              formData.append("data", JSON.stringify(submittedData));
-              formData.append("fileimg", selectedImage);
-              const confirm = window.confirm("Apakah anda yakin untuk mempublish berita baru?");
+              const requiredFields = ["post_date", "judul", "penulis", "catberita", "catdaerah", "thumbnail"];
+              const validationErrors = inputValidator(inputData, requiredFields);
+              if (Object.keys(validationErrors).length > 0) {
+                setErrors(validationErrors);
+                return;
+              }
+              if (content === "") {
+                alert("Content is required.");
+                return;
+              }
+              if (selectedTags.length <= 0) {
+                setErrors({ ...errors, tag_suggest: "Tag is required, choose at least 1 tag." });
+                return;
+              }
+              const confirmmsg = "Apakah anda yakin untuk menyimpan perubahan?";
+              const successmsg = "Selamat! Perubahan data berhasil disimpan.";
+              const errormsg = "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
+              const confirm = window.confirm(confirmmsg);
               if (!confirm) {
                 return;
               }
               setIsSubmitting(true);
               try {
+                const base64Content = btoa(unescape(encodeURIComponent(`<div>${content}</div>`)));
+                const submittedData = { secret: userData.token_activation, idedit: selectedID, tgl: localeDate, judul: inputData.judul, penulis: inputData.penulis, catberita: inputData.catberita, catdaerah: inputData.catdaerah, content: base64Content, thumbnail: inputData.thumbnail, tag: selectedTags };
+                const formData = new FormData();
+                formData.append("data", JSON.stringify(submittedData));
+                formData.append("fileimg", selectedImage);
                 await apiCrud(formData, "office", "editnews");
-                alert("Selamat, postingan berita baru berhasil dipublish!");
+                alert(successmsg);
                 navigate(`/berita/${params}`);
               } catch (error) {
-                console.error("error:", error);
+                console.error(errormsg, error);
               } finally {
                 setIsSubmitting(false);
               }

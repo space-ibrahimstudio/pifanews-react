@@ -103,7 +103,6 @@ const Navbar = ({ id, parentType = "public" }) => {
                   </Fragment>
                 ) : (
                   <Fragment>
-                    <TabButtonGen id={`${compid}-infographic`} text="Infografis" type="scroll" targetId="pifa-home-infographic-post-container" />
                     {publicMenus.map((menu, index) => (
                       <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
                     ))}

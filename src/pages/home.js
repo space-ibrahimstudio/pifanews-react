@@ -184,15 +184,6 @@ const HomePage = () => {
             <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3)} setLimit={setLimit} loading={loading} />
           </Section>
         </Container>
-        <Container id="infographic-post" alignItems="center" gap="var(--pixel-10)">
-          <SectionHead noSource>
-            <H1>
-              {`Berita `}
-              <Span color="var(--color-primary)">Infografis</Span>
-            </H1>
-          </SectionHead>
-          <Slider content={graphicPosts} renderContent={renderInfographic} />
-        </Container>
         <Container id="static-ads" alignItems="center" gap="var(--pixel-10)">
           <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>

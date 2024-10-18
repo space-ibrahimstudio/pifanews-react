@@ -124,14 +124,14 @@ export const OGCard = ({ id, image, title = "", mssg, scope = "/", desc = "" }) 
   );
 };
 
-export const CatAdmCard = ({ id, title, short, image, tag, onEdit }) => {
+export const CatAdmCard = ({ id, title, short, image, tag, onEdit, style, draggable = false, onDragStart, onDragOver, onDrop }) => {
   const { Edit } = useIcons();
   const compid = (title && `${id}-category-admin-card-${toPathname(title)}`) || `${id}-category-admin-card`;
   const cardimg = image === "" ? "/img/fallback.jpg" : image;
   const cardshrt = short === "" ? "no description." : short;
 
   return (
-    <section id={compid} className={cadcss.catAdmCard}>
+    <section id={compid} className={cadcss.catAdmCard} style={style} draggable={draggable} onDragStart={onDragStart} onDragOver={onDragOver} onDrop={onDrop}>
       <section className={cadcss.cardImage}>
         {tag && <NewsTag id={compid} name={tag} />}
         <ImageCard alt={title} src={cardimg} />
