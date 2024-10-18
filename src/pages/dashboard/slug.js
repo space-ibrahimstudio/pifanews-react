@@ -403,6 +403,20 @@ const DashboardSlugPage = () => {
               }
             };
 
+            // const generateBlogPost = async () => {
+            //   setIsGenerating(true);
+            //   try {
+            //     const response = await axios.post("http://localhost:5000/api/generate", { title: inputData.judul }, { headers: { "Content-Type": "application/json" } });
+            //     console.log("Gemini response:", response);
+            //     setInitialContent(response.data.content);
+            //   } catch (error) {
+            //     console.error("Error generating blog post:", error);
+            //     setInitialContent("Failed to generate content.");
+            //   } finally {
+            //     setIsGenerating(false);
+            //   }
+            // };
+
             return (
               <Fragment>
                 <Header isasChild alignItems="center" gap="var(--pixel-15)">

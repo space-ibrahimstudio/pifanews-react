@@ -60,7 +60,7 @@ export const EventDetailCard = ({ id, title, day, date, onEdit, onDelete }) => {
   );
 };
 
-export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpdate, onEdit, inputData, setInputData, onChange, onClose, onSave, onDelete, isDisabled = false }) => {
+export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpdate, onEdit, inputData, onChange, onClose, onSave, onDelete, isDisabled = false }) => {
   const { newDate } = useFormat();
   const { Close, Trash, Edit } = useIcons();
   const [editOpen, setEditOpen] = useState(openState);
@@ -96,8 +96,8 @@ export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpd
           Created at: {newDate(timeCreate)} | Updated at: {newDate(timeUpdate)}
         </span>
       </header>
-      <Button id={`${compid}-action-edit`} size="sm" color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={openEdit} isDisabled={isDisabled} />
-      <Button id={`${compid}-action-delete`} size="sm" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} isDisabled={isDisabled} />
+      <Button id={`${compid}-action-edit`} color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={openEdit} isDisabled={isDisabled} />
+      <Button id={`${compid}-action-delete`} subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} isDisabled={isDisabled} />
     </section>
   );
 };
