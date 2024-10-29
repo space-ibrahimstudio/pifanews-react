@@ -83,14 +83,14 @@ jobs:
             SUB=$(echo $SUBDOMAIN | jq -r '.subdomain')
             NAME=$(echo $SUBDOMAIN | jq -r '.nama_kategori_daerah')
             ID=$(echo $SUBDOMAIN | jq -r '.id')
-            
+
             echo "Deploying for: $NAME (ID: $ID)"
 
             FTP_USER_VAR="FTP_USERNAME_${SUB^^}"
             FTP_PASS_VAR="FTP_PASSWORD_${SUB^^}"
 
-            FTP_USER="${!FTP_USER_VAR}"
-            FTP_PASS="${!FTP_PASS_VAR}"
+            FTP_USER=$(eval echo "\${{ secrets.${FTP_USER_VAR} }}")
+            FTP_PASS=$(eval echo "\${{ secrets.${FTP_PASS_VAR} }}")
             FTP_HOST=$(eval echo "\${{ secrets.FTP_HOST }}")
 
             if [[ -z "$FTP_USER" || -z "$FTP_PASS" || -z "$FTP_HOST" ]]; then
