@@ -71,6 +71,12 @@ jobs:
           FTP_PASSWORD_PONTIANAK: ${{ secrets.FTP_PASSWORD_PONTIANAK }}
         run: |
           set -e
+
+          if ! jq empty subdomains.json; then
+            echo "Invalid JSON in subdomains.json"
+            exit 1
+          fi
+
           SUBDOMAINS=$(jq -c '.data[]' subdomains.json)
 
           for SUBDOMAIN in $SUBDOMAINS; do
