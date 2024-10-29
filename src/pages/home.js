@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
+import areaConfig from "../config";
 import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
@@ -9,13 +10,14 @@ import { getAdDatas } from "../libs/sources/datas";
 import useGraph from "../components/content/graph";
 import SectionHead from "../components/feedback/markers";
 import { TagsButton } from "../components/formel/buttons";
-import NewsCard, { CatCard } from "../components/layout/cards";
+import NewsCard from "../components/layout/cards";
 import Page, { Container, Section } from "../components/layout/frames";
 import { NewsSummaryGroup, News3Group, SectionGroup } from "../components/layout/groups";
 import Slider from "../components/layout/slider";
 import { AdBanner } from "../components/media/image";
 
 const imgdomain = process.env.REACT_APP_API_URL;
+const { subID } = areaConfig();
 
 const HomePage = () => {
   const { width } = useWindow();
@@ -30,27 +32,16 @@ const HomePage = () => {
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [ads, setAds] = useState([]);
   const [catNewsData, setCatNewsData] = useState([]);
-  const [catLocalData, setCatLocalData] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
   const [latestPostData, setLatestPostData] = useState([]);
   const [popularPostData, setPopularPostData] = useState([]);
 
-  const renderLocalCat = (item) => <CatCard id={item.id} catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.nama_kategori_daerah.toLowerCase().replace(" ", "")}.pifa.co.id`, "_blank")} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   const fetchCatNewsData = async () => {
     try {
       const response = await apiGet("main", "categorynew");
       setCatNewsData(response && response.data && response.data.length > 0 ? response.data : []);
-    } catch (error) {
-      console.error("error:", error);
-    }
-  };
-
-  const fetchCatLocalData = async () => {
-    try {
-      const response = await apiGet("main", "categoryarea");
-      setCatLocalData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
       console.error("error:", error);
     }
@@ -68,11 +59,12 @@ const HomePage = () => {
   const fetchTrendingPostData = async (newLimit) => {
     if (loading) return;
     const formData = new FormData();
+    formData.append("idcat", subID);
     formData.append("limit", newLimit);
     formData.append("hal", "0");
     setLoading(true);
     try {
-      const trendingdata = await apiRead(formData, "main", "trendingnew");
+      const trendingdata = await apiRead(formData, "main", "subtrendingnew");
       setTrendingPostData(trendingdata && trendingdata.data && trendingdata.data.length > 0 ? trendingdata.data : []);
     } catch (error) {
       console.error("error:", error);
@@ -83,10 +75,11 @@ const HomePage = () => {
 
   const fetchLatestPosts = async () => {
     const formData = new FormData();
+    formData.append("idcat", subID);
     formData.append("limit", "3");
     formData.append("hal", "0");
     try {
-      const postsdata = await apiRead(formData, "main", "latestnew");
+      const postsdata = await apiRead(formData, "main", "sublatestnew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
@@ -95,10 +88,11 @@ const HomePage = () => {
 
   const fetchPopularPosts = async () => {
     const formData = new FormData();
+    formData.append("idcat", subID);
     formData.append("limit", "3");
     formData.append("hal", "0");
     try {
-      const postsdata = await apiRead(formData, "main", "popularnew");
+      const postsdata = await apiRead(formData, "main", "subrandomnew");
       setPopularPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
@@ -125,7 +119,6 @@ const HomePage = () => {
   useEffect(() => {
     fetchCatNewsData();
     fetchLatestPosts();
-    fetchCatLocalData();
     fetchTrendTagData();
     fetchPopularPosts();
   }, [location]);
@@ -185,18 +178,6 @@ const HomePage = () => {
               <NewsCard key={index} title={post.judul_berita} short={post.isi_berita} tag={post.nama_kategori_berita} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/berita/${post.slug}`} onClick={() => navigate(`/berita/${post.slug}`)} />
             ))}
           </Section>
-        </Container>
-        <Container id="local-category" alignItems="center" gap="var(--pixel-10)">
-          <SectionHead noSource>
-            <H1>
-              {`Berita `}
-              <Span color="var(--color-primary)">Kabar Daerah</Span>
-            </H1>
-          </SectionHead>
-          <Slider content={catLocalData} renderContent={renderLocalCat} />
-        </Container>
-        <Container id="static-ads" alignItems="center" gap="var(--pixel-10)">
-          <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
         </Container>
         <Container id="popular-post" alignItems="center" gap="var(--pixel-10)">
           <SectionHead to="/berita/insight/populer">

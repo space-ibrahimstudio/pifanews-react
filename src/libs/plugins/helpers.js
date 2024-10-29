@@ -1,4 +1,7 @@
 import he from "he";
+import areaConfig from "../../config";
+
+const { subDomain, subName } = areaConfig();
 
 export const getCurrentDate = () => {
   const today = new Date();
@@ -118,14 +121,6 @@ export const useInputSchema = () => {
   return { inputSch, errorSch };
 };
 
-export const useDocument = () => {
-  const company = "Pifa Net";
-  const short = "pifa";
-  const domain = process.env.REACT_APP_DOMAIN_MAIN;
-
-  return { company, short, domain };
-};
-
 export const formatToISO8601 = (dateTimeStr) => {
   const date = new Date(dateTimeStr);
   const isoString = date.toISOString();
@@ -146,6 +141,14 @@ export const toPathname = (text) => {
   pathname = pathname.replace(/\s+/g, "-");
 
   return pathname;
+};
+
+export const useDocument = () => {
+  const company = `Pifa Net ${subName}`;
+  const short = `pifa-${subDomain}`;
+  const domain = `https://${subDomain}.pifa.co.id`;
+
+  return { company, short, domain };
 };
 
 export const getNestedValue = (obj, path) => {

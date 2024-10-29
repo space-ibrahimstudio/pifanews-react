@@ -80,7 +80,6 @@
     "crawl": true,
     "include": [
       "/",
-      "/login",
       "/informasi",
       "/informasi/syarat-ketentuan",
       "/informasi/tentang-pifa",

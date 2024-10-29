@@ -1,15 +1,15 @@
-name: PIFA v0.1.0 (push || cron)
+name: PIFA AREA v0.1.0 (push || cron)
 
 on:
   push:
     branches:
-      - main
+      - area
     workflow_run:
       if: github.actor != 'github-actions[bot]'
 
 jobs:
   web-deploy:
-    name: Deploy on Main
+    name: Deploy on Area
     runs-on: ubuntu-latest
 
     strategy:
@@ -28,67 +28,60 @@ jobs:
       - name: 3. Export environment variables
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_MAIN=${{ secrets.REACT_APP_DOMAIN_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
 
-      - name: 4. Installing required packages
+      - name: 4. Fetch Subdomains from API
+        run: |
+          curl -s https://api.pifa.co.id/main/categoryarea > subdomains.json
+
+      - name: 5. Installing required packages
         run: npm install
 
-      - name: 5. Generate latest sitemap
-        run: node update-slugs.js
-        env:
-          REACT_APP_DOMAIN_MAIN: ${{ secrets.REACT_APP_DOMAIN_MAIN }}
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-
-      - name: 6. Kill any process using port 45678
+      - name: 6. Parse Subdomains Data, then Deploy
         run: |
-          sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
+          set -e
+          SUBDOMAINS=$(jq -c '.data[]' subdomains.json)
 
-      - name: 7. Builds the app for production
-        run: CI= npm run spagen
-        # run: CI= npm run stagen
+          for SUBDOMAIN in $SUBDOMAINS; do
+            SUB=$(echo $SUBDOMAIN | jq -r '.subdomain')
+            NAME=$(echo $SUBDOMAIN | jq -r '.nama_kategori_daerah')
+            ID=$(echo $SUBDOMAIN | jq -r '.id')
+            
+            echo "Deploying for: $NAME (ID: $ID)"
 
-      - name: 8. List output files
-        run: find build/ -print
+            FTP_USER=$(eval echo "\${{ secrets.FTP_USERNAME_${SUB^^} }}")
+            FTP_PASS=$(eval echo "\${{ secrets.FTP_PASSWORD_${SUB^^} }}")
+            FTP_HOST=$(eval echo "\${{ secrets.FTP_HOST }}")
 
-      - name: 9. Sync files (excluding berita folder)
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME_MAIN }}
-          password: ${{ secrets.FTP_PASSWORD_MAIN }}
-          local-dir: build/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/berita/**
+            if [[ -z "$FTP_USER" || -z "$FTP_PASS" || -z "$FTP_HOST" ]]; then
+              echo "Missing FTP credentials for $NAME. Skipping..."
+              continue
+            fi
 
-      # - name: 10. Sync "berita" folder
-      #   uses: SamKirkland/FTP-Deploy-Action@4.3.3
-      #   with:
-      #     server: ${{ secrets.FTP_HOST }}
-      #     username: ${{ secrets.FTP_USERNAME_MAIN }}
-      #     password: ${{ secrets.FTP_PASSWORD_MAIN }}
-      #     local-dir: build/berita/
-      #     server-dir: berita/
+            echo "REACT_APP_DOMAIN_AREA=$SUB" >> $GITHUB_ENV
+            echo "REACT_APP_DOMAIN_AREA_NAME=$NAME" >> $GITHUB_ENV
+            echo "REACT_APP_DOMAIN_AREA_ID=$ID" >> $GITHUB_ENV
 
-      # - name: 11. Remove FTP sync state file
-      #   run: |
-      #     echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
-      #     echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
+            env REACT_APP_DOMAIN_AREA=$SUB \
+                REACT_APP_DOMAIN_AREA_ID=$ID \
+                REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} \
+                node update-slugs.js
 
-      #     echo "delete 404.html" >> ftp_commands_async.txt
-      #     echo "delete 200.html" >> ftp_commands_async.txt
-      #     echo "cd /berita" >> ftp_commands_async.txt
-      #     echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
-      #     echo "bye" >> ftp_commands_async.txt
+            sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
 
-      #     ftp -inv < ftp_commands_async.txt
+            CI= npm run spagen
 
-      - name: 12. Commit and push updated sitemap.xml
+            lftp -e "
+              open $FTP_HOST;
+              user $FTP_USER $FTP_PASS;
+              mirror -R build/ /;
+              bye
+            "
+          done
+
+      - name: 7. Commit and push updated sitemap.xml
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -98,5 +91,5 @@ jobs:
           else
             git add public/sitemap.xml
             git commit -m "Update sitemap.xml from GitHub Actions"
-            git push origin main
+            git push origin area
           fi

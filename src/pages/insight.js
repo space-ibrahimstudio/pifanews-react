@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
+import areaConfig from "../config";
 import { useDocument } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
@@ -15,6 +16,7 @@ import Slider from "../components/layout/slider";
 import Img, { AdBanner } from "../components/media/image";
 
 const imgdomain = process.env.REACT_APP_API_URL;
+const { subID } = areaConfig();
 
 const InsightPage = () => {
   const navigate = useNavigate();
@@ -48,12 +50,13 @@ const InsightPage = () => {
     if (loading) return;
     setLoading(true);
     const formData = new FormData();
+    formData.append("idcat", subID);
     formData.append("limit", newLimit);
     formData.append("hal", "0");
     try {
       switch (islug) {
         case "terbaru":
-          response = await apiRead(formData, "main", "latestnew");
+          response = await apiRead(formData, "main", "sublatestnew");
           if (response && response.data && response.data.length > 0) {
             data = response.data;
             setPageData(data);
@@ -64,7 +67,7 @@ const InsightPage = () => {
           }
           break;
         case "populer":
-          response = await apiRead(formData, "main", "popularnew");
+          response = await apiRead(formData, "main", "subrandomnew");
           if (response && response.data && response.data.length > 0) {
             data = response.data;
             setPageData(data);
@@ -75,7 +78,7 @@ const InsightPage = () => {
           }
           break;
         case "trending":
-          response = await apiRead(formData, "main", "trendingnew");
+          response = await apiRead(formData, "main", "subtrendingnew");
           if (response && response.data && response.data.length > 0) {
             data = response.data;
             setPageData(data);
@@ -86,7 +89,7 @@ const InsightPage = () => {
           }
           break;
         case "rekomendasi":
-          response = await apiRead(formData, "main", "relatednew");
+          response = await apiRead(formData, "main", "subrandomnew");
           if (response && response.data && response.data.length > 0) {
             data = response.data;
             setPageData(data);

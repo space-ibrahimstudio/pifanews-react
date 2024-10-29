@@ -8,7 +8,8 @@ if (!process.env.CI) {
   require("dotenv").config({ path: ".env.development" });
 }
 
-const domainURL = process.env.REACT_APP_DOMAIN_MAIN;
+const sub = process.env.REACT_APP_DOMAIN_AREA;
+const subID = process.env.REACT_APP_DOMAIN_AREA_ID;
 const apiURL = process.env.REACT_APP_API_URL;
 
 async function fetchCatSlug() {
@@ -31,8 +32,9 @@ async function fetchPostSlug() {
   const formData = new FormData();
   formData.append("limit", "10");
   formData.append("hal", "0");
+  formData.append("idcat", subID);
   try {
-    const url = `${apiURL}/main/latestnew`;
+    const url = `${apiURL}/main/sublatestnew`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
     if (!slugdata.error) {
@@ -68,7 +70,6 @@ async function fetchPostSlug() {
 async function updatePackageJson(catslugs, postslugs) {
   const updatedInclude = [
     "/",
-    "/login",
     "/informasi",
     "/informasi/syarat-ketentuan",
     "/informasi/tentang-pifa",
@@ -95,7 +96,7 @@ async function updatePackageJson(catslugs, postslugs) {
 }
 
 async function generateSitemap(catslugs, postslugs) {
-  const domain = domainURL;
+  const domain = `https://${sub}.pifa.co.id`;
   if (!domain) {
     console.error("DOMAIN environment variable is not set");
     process.exit(1);
@@ -118,7 +119,6 @@ async function generateSitemap(catslugs, postslugs) {
 
   const staticUrls = [
     { loc: "/", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/login", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/informasi/syarat-ketentuan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/informasi/tentang-pifa", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/informasi/kebijakan-privasi", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },

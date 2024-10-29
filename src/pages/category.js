@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
+import areaConfig from "../config";
 import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
@@ -17,6 +18,7 @@ import { NewsSummaryGroup, FeedsGroup } from "../components/layout/groups";
 import { TagsButton } from "../components/formel/buttons";
 
 const imgdomain = process.env.REACT_APP_API_URL;
+const { subID } = areaConfig();
 
 const CategoryPage = () => {
   const navigate = useNavigate();
@@ -74,11 +76,12 @@ const CategoryPage = () => {
     if (trendLoading) return;
     setTrendLoading(true);
     const formData = new FormData();
-    formData.append("idcat", idcat);
+    formData.append("idberita", idcat);
+    formData.append("idcat", subID);
     formData.append("limit", newLimit);
     formData.append("hal", "0");
     try {
-      const postsdata = await apiRead(formData, "main", "cattrendingnew");
+      const postsdata = await apiRead(formData, "main", "subtrendingnew");
       setTrendingPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
@@ -90,11 +93,12 @@ const CategoryPage = () => {
   const fetchLatestPosts = async (idcat) => {
     setLoading(true);
     const formData = new FormData();
-    formData.append("idcat", idcat);
+    formData.append("idberita", idcat);
+    formData.append("idcat", subID);
     formData.append("limit", "3");
     formData.append("hal", "0");
     try {
-      const postsdata = await apiRead(formData, "main", "categorynew");
+      const postsdata = await apiRead(formData, "main", "sublatestnew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
@@ -107,22 +111,23 @@ const CategoryPage = () => {
     if (feedsLoading) return;
     setFeedsLoading(true);
     const formData = new FormData();
-    formData.append("idcat", idcat);
+    formData.append("idberita", idcat);
+    formData.append("idcat", subID);
     formData.append("limit", newLimit);
     formData.append("hal", "0");
     let data;
     try {
       switch (postsFilter) {
         case "latest":
-          data = await apiRead(formData, "main", "categorynew");
+          data = await apiRead(formData, "main", "sublatestnew");
           setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         case "hot":
-          data = await apiRead(formData, "main", "cattrendingnew");
+          data = await apiRead(formData, "main", "subtrendingnew");
           setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         case "popular":
-          data = await apiRead(formData, "main", "popularcatnew");
+          data = await apiRead(formData, "main", "subrandomnew");
           setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         default:

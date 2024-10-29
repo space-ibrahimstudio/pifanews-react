@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContent, useWindow, useFormat } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
+import areaConfig from "../../config";
 import useApi from "../../libs/plugins/apis";
 import { toPathname } from "../../libs/plugins/helpers";
 import { LoadingContent } from "../feedback/loader";
@@ -12,6 +13,7 @@ import newcss from "./styles/news-group.module.css";
 import sumcss from "./styles/news-summary-group.module.css";
 import feecss from "./styles/feeds-group.module.css";
 
+const { subID } = areaConfig();
 const imgdomain = process.env.REACT_APP_API_URL;
 
 export const SectionGroup = ({ id, catId, scope, slug }) => {
@@ -31,11 +33,12 @@ export const SectionGroup = ({ id, catId, scope, slug }) => {
     if (latestLoading) return;
     setLatestLoading(true);
     const formData = new FormData();
-    formData.append("idcat", catId);
     formData.append("limit", newLimit);
     formData.append("hal", "0");
+    formData.append("idcat", subID);
+    formData.append("idberita", catId);
     try {
-      const postsdata = await apiRead(formData, "main", "categorynew");
+      const postsdata = await apiRead(formData, "main", "sublatestnew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
@@ -48,11 +51,12 @@ export const SectionGroup = ({ id, catId, scope, slug }) => {
     if (trendingLoading) return;
     setTrendingLoading(true);
     const formData = new FormData();
-    formData.append("idcat", catId);
+    formData.append("idcat", subID);
     formData.append("limit", newLimit);
     formData.append("hal", "0");
+    formData.append("idberita", catId);
     try {
-      const postsdata = await apiRead(formData, "main", "cattrendingnew");
+      const postsdata = await apiRead(formData, "main", "subtrendingnew");
       setTrendingPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error:", error);
