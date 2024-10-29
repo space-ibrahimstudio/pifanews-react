@@ -40,6 +40,35 @@ jobs:
         run: npm install
 
       - name: 6. Parse Subdomains Data, then Deploy
+        env:
+          FTP_USERNAME_SINTANG: ${{ secrets.FTP_USERNAME_SINTANG }}
+          FTP_PASSWORD_SINTANG: ${{ secrets.FTP_PASSWORD_SINTANG }}
+          FTP_USERNAME_SINGKAWANG: ${{ secrets.FTP_USERNAME_SINGKAWANG }}
+          FTP_PASSWORD_SINGKAWANG: ${{ secrets.FTP_PASSWORD_SINGKAWANG }}
+          FTP_USERNAME_SEKADAU: ${{ secrets.FTP_USERNAME_SEKADAU }}
+          FTP_PASSWORD_SEKADAU: ${{ secrets.FTP_PASSWORD_SEKADAU }}
+          FTP_USERNAME_SANGGAU: ${{ secrets.FTP_USERNAME_SANGGAU }}
+          FTP_PASSWORD_SANGGAU: ${{ secrets.FTP_PASSWORD_SANGGAU }}
+          FTP_USERNAME_SAMBAS: ${{ secrets.FTP_USERNAME_SAMBAS }}
+          FTP_PASSWORD_SAMBAS: ${{ secrets.FTP_PASSWORD_SAMBAS }}
+          FTP_USERNAME_MEMPAWAH: ${{ secrets.FTP_USERNAME_MEMPAWAH }}
+          FTP_PASSWORD_MEMPAWAH: ${{ secrets.FTP_PASSWORD_MEMPAWAH }}
+          FTP_USERNAME_MELAWI: ${{ secrets.FTP_USERNAME_MELAWI }}
+          FTP_PASSWORD_MELAWI: ${{ secrets.FTP_PASSWORD_MELAWI }}
+          FTP_USERNAME_LANDAK: ${{ secrets.FTP_USERNAME_LANDAK }}
+          FTP_PASSWORD_LANDAK: ${{ secrets.FTP_PASSWORD_LANDAK }}
+          FTP_USERNAME_KUBURAYA: ${{ secrets.FTP_USERNAME_KUBURAYA }}
+          FTP_PASSWORD_KUBURAYA: ${{ secrets.FTP_PASSWORD_KUBURAYA }}
+          FTP_USERNAME_KETAPANG: ${{ secrets.FTP_USERNAME_KETAPANG }}
+          FTP_PASSWORD_KETAPANG: ${{ secrets.FTP_PASSWORD_KETAPANG }}
+          FTP_USERNAME_KAYONGUTARA: ${{ secrets.FTP_USERNAME_KAYONGUTARA }}
+          FTP_PASSWORD_KAYONGUTARA: ${{ secrets.FTP_PASSWORD_KAYONGUTARA }}
+          FTP_USERNAME_KAPUASHULU: ${{ secrets.FTP_USERNAME_KAPUASHULU }}
+          FTP_PASSWORD_KAPUASHULU: ${{ secrets.FTP_PASSWORD_KAPUASHULU }}
+          FTP_USERNAME_BENGKAYANG: ${{ secrets.FTP_USERNAME_BENGKAYANG }}
+          FTP_PASSWORD_BENGKAYANG: ${{ secrets.FTP_PASSWORD_BENGKAYANG }}
+          FTP_USERNAME_PONTIANAK: ${{ secrets.FTP_USERNAME_PONTIANAK }}
+          FTP_PASSWORD_PONTIANAK: ${{ secrets.FTP_PASSWORD_PONTIANAK }}
         run: |
           set -e
           SUBDOMAINS=$(jq -c '.data[]' subdomains.json)
@@ -51,8 +80,11 @@ jobs:
             
             echo "Deploying for: $NAME (ID: $ID)"
 
-            FTP_USER=$(eval echo "\${{ secrets.FTP_USERNAME_${SUB^^} }}")
-            FTP_PASS=$(eval echo "\${{ secrets.FTP_PASSWORD_${SUB^^} }}")
+            FTP_USER_VAR="FTP_USERNAME_${SUB^^}"
+            FTP_PASS_VAR="FTP_PASSWORD_${SUB^^}"
+
+            FTP_USER="${!FTP_USER_VAR}"
+            FTP_PASS="${!FTP_PASS_VAR}"
             FTP_HOST=$(eval echo "\${{ secrets.FTP_HOST }}")
 
             if [[ -z "$FTP_USER" || -z "$FTP_PASS" || -z "$FTP_HOST" ]]; then
