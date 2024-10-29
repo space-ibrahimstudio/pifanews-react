@@ -5,11 +5,11 @@ import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
-import { getInfographicPosts, getAdDatas } from "../libs/sources/datas";
+import { getAdDatas } from "../libs/sources/datas";
 import useGraph from "../components/content/graph";
 import SectionHead from "../components/feedback/markers";
 import { TagsButton } from "../components/formel/buttons";
-import NewsCard, { InfographicCard, CatCard } from "../components/layout/cards";
+import NewsCard, { CatCard } from "../components/layout/cards";
 import Page, { Container, Section } from "../components/layout/frames";
 import { NewsSummaryGroup, News3Group, SectionGroup } from "../components/layout/groups";
 import Slider from "../components/layout/slider";
@@ -28,7 +28,6 @@ const HomePage = () => {
   const [limit, setLimit] = useState(13);
   const [loading, setLoading] = useState(false);
   const [trendingPostData, setTrendingPostData] = useState([]);
-  const [graphicPosts, setGraphicPosts] = useState([]);
   const [ads, setAds] = useState([]);
   const [catNewsData, setCatNewsData] = useState([]);
   const [catLocalData, setCatLocalData] = useState([]);
@@ -36,7 +35,6 @@ const HomePage = () => {
   const [latestPostData, setLatestPostData] = useState([]);
   const [popularPostData, setPopularPostData] = useState([]);
 
-  const renderInfographic = (item) => <InfographicCard id={item.id} title={item.title} image={item.image} count={item.count} status={item.status} />;
   const renderLocalCat = (item) => <CatCard id={item.id} catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.nama_kategori_daerah.toLowerCase().replace(" ", "")}.pifa.co.id`, "_blank")} />;
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
@@ -143,18 +141,6 @@ const HomePage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const post = await getInfographicPosts();
-        setGraphicPosts(post);
-      } catch (error) {
-        console.error("error getting infographic posts:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
         const post = await getAdDatas();
         setAds(post);
       } catch (error) {
@@ -181,7 +167,7 @@ const HomePage = () => {
         <Container id="trending-post" isWrap justifyContent="center" gap="var(--pixel-10)">
           <News3Group posts={trendingPostData.slice(0, 3)} />
           <Section flex="1" direction="column" alignItems="center" justifyContent="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
-            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3)} setLimit={setLimit} loading={loading} />
+            <NewsSummaryGroup id={id} isPortrait={width < 464 ? true : false} variant="primary" title="Trending" posts={trendingPostData.slice(3)} setLimit={setLimit} loading={loading} to="/berita/insight/trending" />
           </Section>
         </Container>
         <Container id="static-ads" alignItems="center" gap="var(--pixel-10)">

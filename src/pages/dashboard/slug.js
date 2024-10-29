@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useDevmode, useWindow } from "@ibrahimstudio/react";
 import { Input } from "@ibrahimstudio/input";
@@ -40,6 +41,7 @@ const DashboardSlugPage = () => {
   const [isDataShown, setIsDataShown] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [selectedID, setSelectedID] = useState("");
   const [selectedMode, setSelectedMode] = useState("view");
   const [selectedView, setSelectedView] = useState("grid");
@@ -427,6 +429,8 @@ const DashboardSlugPage = () => {
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
+                    {/* {selectedMode === "add" && <Button id="back-button" buttonText="Test AI" onClick={generateBlogPost} />} */}
+                    {/* {selectedMode === "view" && <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />} */}
                     <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                     {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
                   </Section>

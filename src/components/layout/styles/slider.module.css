@@ -23,6 +23,7 @@
 }
 
 .sectionBody {
+  position: relative;
   align-self: stretch;
   overflow: hidden;
 }
