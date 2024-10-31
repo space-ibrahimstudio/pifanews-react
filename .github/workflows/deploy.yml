@@ -8,13 +8,29 @@ on:
       if: github.actor != 'github-actions[bot]'
 
 jobs:
-  web-deploy:
-    name: Deploy on Area
+  fetch-subdomains:
+    name: Fetch Subdomain Data
+    runs-on: ubuntu-latest
+    outputs:
+      subdomains: ${{ steps.get_subdomains.outputs.matrix }}
+
+    steps:
+      - name: Get Subdomains from API
+        id: get_subdomains
+        run: |
+          curl -s https://api.pifa.co.id/main/categoryarea -o subdomains.json
+          SUBDOMAIN_MATRIX=$(jq -c '.data[] | {id: .id, name: .nama_kategori_daerah, sub: .subdomain}' subdomains.json)
+          echo "::set-output name=matrix::${SUBDOMAIN_MATRIX}"
+
+  deploy:
+    name: Deploy to Subdomains
+    needs: fetch-subdomains
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [20.12.1]
+        subdomain: ${{ fromJson(needs.fetch-subdomains.outputs.subdomains) }}
 
     steps:
       - name: 1. Get latest code
@@ -25,153 +41,53 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: 3. Export environment variables
+      - name: Export environment variables for ${{ matrix.subdomain.name }}
         run: |
+          echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}" >> $GITHUB_ENV
+
+          echo "FTP_USERNAME=${{ secrets['FTP_USERNAME_' + matrix.subdomain.sub | toUpper] }}" >> $GITHUB_ENV
+          echo "FTP_PASSWORD=${{ secrets['FTP_PASSWORD_' + matrix.subdomain.sub | toUpper] }}" >> $GITHUB_ENV
+
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
 
-      - name: 4. Fetch Subdomains from API
-        run: |
-          curl -s https://api.pifa.co.id/main/categoryarea -o subdomains.json
-          if [[ ! -s subdomains.json ]]; then
-            echo "subdomains.json is empty. Skipping deployment."
-            exit 0
-          fi
-
-      - name: 5. Validate JSON
-        run: |
-          if ! jq empty subdomains.json; then
-            echo "Invalid JSON in subdomains.json. Skipping deployment."
-            exit 0
-          fi
-
-      - name: Log Subdomains JSON Contents
-        run: |
-          echo "Contents of subdomains.json:"
-          cat subdomains.json
-
-      - name: 5. Installing required packages
+      - name: 4. Installing required packages
         run: npm install
 
-      - name: 6. Parse Subdomains Data, then Deploy
+      - name: 5. Generate latest sitemap
+        run: node update-slugs.js
         env:
-          FTP_USERNAME_SINTANG: ${{ secrets.FTP_USERNAME_SINTANG }}
-          FTP_PASSWORD_SINTANG: ${{ secrets.FTP_PASSWORD_SINTANG }}
-          FTP_USERNAME_SINGKAWANG: ${{ secrets.FTP_USERNAME_SINGKAWANG }}
-          FTP_PASSWORD_SINGKAWANG: ${{ secrets.FTP_PASSWORD_SINGKAWANG }}
-          FTP_USERNAME_SEKADAU: ${{ secrets.FTP_USERNAME_SEKADAU }}
-          FTP_PASSWORD_SEKADAU: ${{ secrets.FTP_PASSWORD_SEKADAU }}
-          FTP_USERNAME_SANGGAU: ${{ secrets.FTP_USERNAME_SANGGAU }}
-          FTP_PASSWORD_SANGGAU: ${{ secrets.FTP_PASSWORD_SANGGAU }}
-          FTP_USERNAME_SAMBAS: ${{ secrets.FTP_USERNAME_SAMBAS }}
-          FTP_PASSWORD_SAMBAS: ${{ secrets.FTP_PASSWORD_SAMBAS }}
-          FTP_USERNAME_MEMPAWAH: ${{ secrets.FTP_USERNAME_MEMPAWAH }}
-          FTP_PASSWORD_MEMPAWAH: ${{ secrets.FTP_PASSWORD_MEMPAWAH }}
-          FTP_USERNAME_MELAWI: ${{ secrets.FTP_USERNAME_MELAWI }}
-          FTP_PASSWORD_MELAWI: ${{ secrets.FTP_PASSWORD_MELAWI }}
-          FTP_USERNAME_LANDAK: ${{ secrets.FTP_USERNAME_LANDAK }}
-          FTP_PASSWORD_LANDAK: ${{ secrets.FTP_PASSWORD_LANDAK }}
-          FTP_USERNAME_KUBURAYA: ${{ secrets.FTP_USERNAME_KUBURAYA }}
-          FTP_PASSWORD_KUBURAYA: ${{ secrets.FTP_PASSWORD_KUBURAYA }}
-          FTP_USERNAME_KETAPANG: ${{ secrets.FTP_USERNAME_KETAPANG }}
-          FTP_PASSWORD_KETAPANG: ${{ secrets.FTP_PASSWORD_KETAPANG }}
-          FTP_USERNAME_KAYONGUTARA: ${{ secrets.FTP_USERNAME_KAYONGUTARA }}
-          FTP_PASSWORD_KAYONGUTARA: ${{ secrets.FTP_PASSWORD_KAYONGUTARA }}
-          FTP_USERNAME_KAPUASHULU: ${{ secrets.FTP_USERNAME_KAPUASHULU }}
-          FTP_PASSWORD_KAPUASHULU: ${{ secrets.FTP_PASSWORD_KAPUASHULU }}
-          FTP_USERNAME_BENGKAYANG: ${{ secrets.FTP_USERNAME_BENGKAYANG }}
-          FTP_PASSWORD_BENGKAYANG: ${{ secrets.FTP_PASSWORD_BENGKAYANG }}
-          FTP_USERNAME_PONTIANAK: ${{ secrets.FTP_USERNAME_PONTIANAK }}
-          FTP_PASSWORD_PONTIANAK: ${{ secrets.FTP_PASSWORD_PONTIANAK }}
+          REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
+      - name: 6. Kill any process using port 45678
         run: |
-          set -e
-          SUBDOMAINS=$(jq -c '.data[]' subdomains.json)
+          sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
 
-          for SUBDOMAIN in $SUBDOMAINS; do
-            SUB=$(echo $SUBDOMAIN | jq -r '.subdomain')
-            NAME=$(echo $SUBDOMAIN | jq -r '.nama_kategori_daerah')
-            ID=$(echo $SUBDOMAIN | jq -r '.id')
+      - name: 7. Builds the app for production
+        run: CI= npm run spagen
 
-            echo "Deploying for: $NAME (ID: $ID)"
+      - name: 8. List output files
+        run: find build/ -print
 
-            if [[ "$SUB" == "sintang" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_SINTANG }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_SINTANG }}"
-            elif [[ "$SUB" == "singkawang" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_SINGKAWANG }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_SINGKAWANG }}"
-            elif [[ "$SUB" == "sekadau" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_SEKADAU }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_SEKADAU }}"
-            elif [[ "$SUB" == "sanggau" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_SANGGAU }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_SANGGAU }}"
-            elif [[ "$SUB" == "sambas" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_SAMBAS }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_SAMBAS }}"
-            elif [[ "$SUB" == "mempawah" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_MEMPAWAH }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_MEMPAWAH }}"
-            elif [[ "$SUB" == "melawi" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_MELAWI }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_MELAWI }}"
-            elif [[ "$SUB" == "landak" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_LANDAK }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_LANDAK }}"
-            elif [[ "$SUB" == "kuburaya" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_KUBURAYA }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_KUBURAYA }}"
-            elif [[ "$SUB" == "ketapang" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_KETAPANG }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_KETAPANG }}"
-            elif [[ "$SUB" == "kayongutara" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_KAYONGUTARA }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_KAYONGUTARA }}"
-            elif [[ "$SUB" == "kapuashulu" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_KAPUASHULU }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_KAPUASHULU }}"
-            elif [[ "$SUB" == "bengkayang" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_BENGKAYANG }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_BENGKAYANG }}"
-            elif [[ "$SUB" == "pontianak" ]]; then
-              FTP_USER="${{ secrets.FTP_USERNAME_PONTIANAK }}"
-              FTP_PASS="${{ secrets.FTP_PASSWORD_PONTIANAK }}"
-            else
-              echo "Skipping $NAME: No FTP credentials available."
-              continue
-            fi
+      - name: 9. Sync files (excluding berita folder)
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ env.FTP_USERNAME }}
+          password: ${{ env.FTP_PASSWORD }}
+          local-dir: build/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/berita/**
 
-            FTP_HOST=$(eval echo "\${{ secrets.FTP_HOST }}")
-
-            if [[ -z "$FTP_USER" || -z "$FTP_PASS" || -z "$FTP_HOST" ]]; then
-              echo "Missing FTP credentials for $NAME. Skipping..."
-              continue
-            fi
-
-            echo "REACT_APP_DOMAIN_AREA=$SUB" >> $GITHUB_ENV
-            echo "REACT_APP_DOMAIN_AREA_NAME=$NAME" >> $GITHUB_ENV
-            echo "REACT_APP_DOMAIN_AREA_ID=$ID" >> $GITHUB_ENV
-
-            env REACT_APP_DOMAIN_AREA=$SUB \
-                REACT_APP_DOMAIN_AREA_ID=$ID \
-                REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} \
-                node update-slugs.js
-
-            sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
-
-            CI= npm run spagen
-
-            lftp -e "
-              open $FTP_HOST;
-              user $FTP_USER $FTP_PASS;
-              mirror -R build/ /;
-              bye
-            "
-          done
-
-      - name: 7. Commit and push updated sitemap.xml
+      - name: 12. Commit and push updated sitemap.xml
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
