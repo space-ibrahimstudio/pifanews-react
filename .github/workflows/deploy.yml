@@ -43,8 +43,8 @@ jobs:
 
       - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
         env:
-          PROVIDED_FTP_USERNAME: ${{ 'FTP_USERNAME_' + matrix.subdomain.sub | toUpper }}
-          PROVIDED_FTP_PASSWORD: ${{ 'FTP_PASSWORD_' + matrix.subdomain.sub | toUpper }}
+          PROVIDED_FTP_USERNAME: FTP_USERNAME_${matrix.subdomain.sub^^}
+          PROVIDED_FTP_PASSWORD: FTP_PASSWORD_${matrix.subdomain.sub^^}
         run: |
           echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
