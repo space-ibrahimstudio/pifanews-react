@@ -47,6 +47,11 @@ jobs:
             exit 0
           fi
 
+      - name: Log Subdomains JSON Contents
+        run: |
+          echo "Contents of subdomains.json:"
+          cat subdomains.json
+
       - name: 5. Installing required packages
         run: npm install
 
