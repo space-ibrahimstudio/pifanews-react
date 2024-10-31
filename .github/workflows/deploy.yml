@@ -48,8 +48,6 @@ jobs:
 
       - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
         run: |
-          SUBDOMAIN_UPPER=$(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
-
           REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}
           REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}
           REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}
@@ -59,12 +57,11 @@ jobs:
           echo "REACT_APP_DOMAIN_AREA_ID=${REACT_APP_DOMAIN_AREA_ID}" >> $GITHUB_ENV
           echo "Domain: ${REACT_APP_DOMAIN_AREA}, Name: ${REACT_APP_DOMAIN_AREA_NAME}, ID: ${REACT_APP_DOMAIN_AREA_ID}"
 
-          FORMATTED_FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', SUBDOMAIN_UPPER)] }}
-          FORMATTED_FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', SUBDOMAIN_UPPER)] }}
+          FORMATTED_FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}
+          FORMATTED_FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}
 
           if [[ -z "$FORMATTED_FTP_USERNAME" || -z "$FORMATTED_FTP_PASSWORD" ]]; then
             echo "Skipping deployment for ${{ matrix.subdomain.name }} due to missing FTP credentials."
-            echo "Skipping deployment." >> $GITHUB_ENV
             exit 0
           fi
 
@@ -76,6 +73,8 @@ jobs:
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
+        env:
+          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
 
       - name: 2.4. Installing required packages
         run: npm install
