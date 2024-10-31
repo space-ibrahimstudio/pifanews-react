@@ -42,15 +42,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
+        env:
+          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
         run: |
-          SUBDOMAIN_UPPER=$(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
-
           echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}" >> $GITHUB_ENV
 
-          echo "FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
-          echo "FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
+          echo "FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
+          echo "FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
 
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
