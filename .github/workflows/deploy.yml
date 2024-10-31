@@ -73,9 +73,9 @@ jobs:
 
       - name: 2.6. Save sitemap file to temp directory
         run: |
-          mkdir -p $GITHUB_WORKSPACE/temp_sitemaps
+          mkdir -p temp_sitemaps
           if [ -f public/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
-            cp public/${{ matrix.subdomain.sub }}_sitemap.xml $GITHUB_WORKSPACE/temp_sitemaps/${{ matrix.subdomain.sub }}_sitemap.xml
+            cp public/${{ matrix.subdomain.sub }}_sitemap.xml temp_sitemaps/${{ matrix.subdomain.sub }}_sitemap.xml
           else
             echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
           fi
@@ -84,7 +84,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sitemap-files
-          path: $GITHUB_WORKSPACE/temp_sitemaps/*
+          path: temp_sitemaps/*
 
       - name: 2.8. Builds the app for production
         run: CI= npm run spagen
@@ -121,8 +121,6 @@ jobs:
     steps:
       - name: 3.1. Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Download Sitemap Files
         uses: actions/download-artifact@v4
