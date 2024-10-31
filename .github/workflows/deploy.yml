@@ -23,7 +23,7 @@ jobs:
       - name: 1.2. Save Subdomains Matrix
         id: prepare_subdomains
         run: |
-          SUBDOMAIN_MATRIX=$(jq -c '.data | map({id: .id, name: .nama_kategori_daerah, sub: .subdomain})' subdomains.json)
+          SUBDOMAIN_MATRIX=$(jq -c '.data | map({id: .id, name: .nama_kategori_daerah, sub: .subdomain, call: (.subdomain | ascii_upcase)})' subdomains.json)
           echo "subdomains_matrix=$SUBDOMAIN_MATRIX" >> $GITHUB_ENV
           echo "::set-output name=subdomains_matrix::$SUBDOMAIN_MATRIX"
 
@@ -47,29 +47,27 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
-        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: |
           echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}" >> $GITHUB_ENV
 
-          echo "FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
-          echo "FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
-          echo "Username: ${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}, Password: ${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}"
+          echo "FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', matrix.subdomain.call)] }}" >> $GITHUB_ENV
+          echo "FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', matrix.subdomain.call)] }}" >> $GITHUB_ENV
+          echo "Username: ${{ secrets[format('FTP_USERNAME_{0}', matrix.subdomain.call)] }}, Password: ${{ secrets[format('FTP_PASSWORD_{0}', matrix.subdomain.call)] }}"
 
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
-        env:
-          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
 
       - name: 2.4. Installing required packages
-        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: npm install
 
       - name: 2.5. Generate latest sitemap
-        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: node update-slugs.js
         env:
           REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
@@ -77,31 +75,29 @@ jobs:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: 2.7. Builds the app for production
-        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: CI= npm run spagen
 
       - name: 2.8. List output files
-        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: find build/ -print
 
       - name: 2.9. Sync files (excluding berita folder)
-        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}
-          password: ${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}
+          username: ${{ secrets[format('FTP_USERNAME_{0}', matrix.subdomain.call)] }}
+          password: ${{ secrets[format('FTP_PASSWORD_{0}', matrix.subdomain.call)] }}
           local-dir: build/
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             **/berita/**
-        env:
-          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
 
       - name: 2.10. Commit and push updated sitemap.xml
-        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
