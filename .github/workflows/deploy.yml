@@ -91,11 +91,53 @@ jobs:
 
             echo "Deploying for: $NAME (ID: $ID)"
 
-            FTP_USER_VAR="FTP_USERNAME_${SUB^^}"
-            FTP_PASS_VAR="FTP_PASSWORD_${SUB^^}"
+            if [[ "$SUB" == "sintang" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_SINTANG }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_SINTANG }}"
+            elif [[ "$SUB" == "singkawang" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_SINGKAWANG }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_SINGKAWANG }}"
+            elif [[ "$SUB" == "sekadau" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_SEKADAU }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_SEKADAU }}"
+            elif [[ "$SUB" == "sanggau" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_SANGGAU }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_SANGGAU }}"
+            elif [[ "$SUB" == "sambas" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_SAMBAS }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_SAMBAS }}"
+            elif [[ "$SUB" == "mempawah" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_MEMPAWAH }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_MEMPAWAH }}"
+            elif [[ "$SUB" == "melawi" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_MELAWI }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_MELAWI }}"
+            elif [[ "$SUB" == "landak" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_LANDAK }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_LANDAK }}"
+            elif [[ "$SUB" == "kuburaya" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_KUBURAYA }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_KUBURAYA }}"
+            elif [[ "$SUB" == "ketapang" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_KETAPANG }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_KETAPANG }}"
+            elif [[ "$SUB" == "kayongutara" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_KAYONGUTARA }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_KAYONGUTARA }}"
+            elif [[ "$SUB" == "kapuashulu" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_KAPUASHULU }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_KAPUASHULU }}"
+            elif [[ "$SUB" == "bengkayang" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_BENGKAYANG }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_BENGKAYANG }}"
+            elif [[ "$SUB" == "pontianak" ]]; then
+              FTP_USER="${{ secrets.FTP_USERNAME_PONTIANAK }}"
+              FTP_PASS="${{ secrets.FTP_PASSWORD_PONTIANAK }}"
+            else
+              echo "Skipping $NAME: No FTP credentials available."
+              continue
+            fi
 
-            FTP_USER=$(eval echo "\${{ secrets.${FTP_USER_VAR} }}")
-            FTP_PASS=$(eval echo "\${{ secrets.${FTP_PASS_VAR} }}")
             FTP_HOST=$(eval echo "\${{ secrets.FTP_HOST }}")
 
             if [[ -z "$FTP_USER" || -z "$FTP_PASS" || -z "$FTP_HOST" ]]; then
