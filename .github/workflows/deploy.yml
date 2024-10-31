@@ -23,7 +23,7 @@ jobs:
       - name: 1.2. Save Subdomains Matrix
         id: prepare_subdomains
         run: |
-          SUBDOMAIN_MATRIX=$(jq -c '.data | map({id: .id, name: .nama_kategori_daerah, sub: .subdomain, call: (.subdomain | ascii_upcase)})' subdomains.json)
+          SUBDOMAIN_MATRIX=$(jq -c '.data | map(select(.subdomain != "internasional" and .subdomain != "kalbar" and .subdomain != "indonesia") | {id: .id, name: .nama_kategori_daerah, sub: .subdomain, call: (.subdomain | ascii_upcase)})' subdomains.json)
           echo "subdomains_matrix=$SUBDOMAIN_MATRIX" >> $GITHUB_ENV
           echo "::set-output name=subdomains_matrix::$SUBDOMAIN_MATRIX"
 
@@ -31,6 +31,10 @@ jobs:
     name: 2. Deploy to Subdomains
     needs: fetch-subdomains
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: deploy-subdomains
+      cancel-in-progress: false
 
     strategy:
       matrix:
@@ -47,7 +51,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: |
           echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
@@ -63,11 +66,9 @@ jobs:
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
 
       - name: 2.4. Installing required packages
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: npm install
 
       - name: 2.5. Generate latest sitemap
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: node update-slugs.js
         env:
           REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
@@ -75,15 +76,12 @@ jobs:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: 2.7. Builds the app for production
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: CI= npm run spagen
 
       - name: 2.8. List output files
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: find build/ -print
 
       - name: 2.9. Rename sitemap file for deployment
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: |
           if [ -f build/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
             mv build/${{ matrix.subdomain.sub }}_sitemap.xml build/sitemap.xml
@@ -92,7 +90,6 @@ jobs:
           fi
 
       - name: 2.10. Sync files (excluding berita folder)
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -106,18 +103,9 @@ jobs:
             **/berita/**
 
       - name: 2.11. Commit and push updated ${{ matrix.subdomain.sub }}_sitemap.xml
-        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git stash push --include-untracked -m "Temp stash before pull"
-
-          git fetch origin area
-          git checkout area
-          git pull origin area --rebase
-
-          git stash pop || echo "Nothing to pop from stash"
 
           if git diff --quiet public/${{ matrix.subdomain.sub }}_sitemap.xml; then
             echo "No changes detected in ${{ matrix.subdomain.sub }}_sitemap.xml. Skipping commit."
