@@ -27,9 +27,6 @@ jobs:
           echo "subdomains_matrix=$SUBDOMAIN_MATRIX" >> $GITHUB_ENV
           echo "::set-output name=subdomains_matrix::$SUBDOMAIN_MATRIX"
 
-      - name: 1.3. Debug Output
-        run: echo "Subdomains Matrix $SUBDOMAIN_MATRIX"
-
   deploy:
     name: 2. Deploy to Subdomains
     needs: fetch-subdomains
@@ -117,15 +114,14 @@ jobs:
 
       - name: 3.3. Commit and Push Updated Sitemap Files
         run: |
-          for subdomain in ${{ fromJson(needs.fetch-subdomains.outputs.subdomains) }}; do
-            sitemap_file="public/${{ subdomain.sub }}_sitemap.xml"
-            if [ -f "$sitemap_file" ]; then
-              git add "$sitemap_file"
-              git commit -m "Update ${{ subdomain.sub }}_sitemap.xml from GitHub Actions" || echo "No changes to commit"
-              git fetch origin area
-              git pull origin area --rebase || echo "Rebase failed, not pulling"
-              git push origin area || echo "Push failed"
-            else
-              echo "No sitemap file found for ${{ subdomain.sub }}."
-            fi
-          done
+          sitemap_files=$(find public/ -name '*_sitemap.xml')
+          if [ -z "$sitemap_files" ]; then
+            echo "No sitemap files found to commit."
+          else
+            echo "Found sitemap files: $sitemap_files"
+            git add $sitemap_files
+            git commit -m "Update sitemap files from GitHub Actions" || echo "No changes to commit"
+            git fetch origin area
+            git pull origin area --rebase || echo "Rebase failed, not pulling"
+            git push origin area || echo "Push failed"
+          fi
