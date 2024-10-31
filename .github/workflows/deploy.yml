@@ -25,6 +25,7 @@ jobs:
         run: |
           SUBDOMAIN_MATRIX=$(jq -c '.data | map({id: .id, name: .nama_kategori_daerah, sub: .subdomain})' subdomains.json)
           echo "subdomains_matrix=$SUBDOMAIN_MATRIX" >> $GITHUB_ENV
+          echo "::set-output name=subdomains_matrix::$SUBDOMAIN_MATRIX"
 
   deploy:
     name: 2. Deploy to Subdomains
