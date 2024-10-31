@@ -13,9 +13,11 @@ const subID = process.env.REACT_APP_DOMAIN_AREA_ID;
 const apiURL = process.env.REACT_APP_API_URL;
 
 async function fetchCatSlug() {
+  const formData = new FormData();
+  formData.append("idcat", subID);
   try {
-    const url = `${apiURL}/main/categorynew`;
-    const response = await axios.get(url);
+    const url = `${apiURL}/main/subcategorynew`;
+    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
     if (!slugdata.error) {
       return slugdata.data;
@@ -30,9 +32,9 @@ async function fetchCatSlug() {
 
 async function fetchPostSlug() {
   const formData = new FormData();
+  formData.append("idcat", subID);
   formData.append("limit", "10");
   formData.append("hal", "0");
-  formData.append("idcat", subID);
   try {
     const url = `${apiURL}/main/sublatestnew`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
@@ -47,25 +49,6 @@ async function fetchPostSlug() {
     process.exit(1);
   }
 }
-
-// async function fetchPostSlug() {
-//   const formData = new FormData();
-//   try {
-//     formData.append("limit", "1000");
-//     formData.append("hal", "7000");
-//     const url = `${apiURL}/authapi/viewnews`;
-//     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
-//     const slugdata = response.data;
-//     if (!slugdata.error) {
-//       return slugdata.data;
-//     } else {
-//       return [];
-//     }
-//   } catch (error) {
-//     console.error("Error fetching post slugs:", error);
-//     process.exit(1);
-//   }
-// }
 
 async function updatePackageJson(catslugs, postslugs) {
   const updatedInclude = [
@@ -86,7 +69,7 @@ async function updatePackageJson(catslugs, postslugs) {
     "/berita/insight/populer",
     "/berita/insight/trending",
     "/berita/insight/rekomendasi",
-    ...catslugs.map((item) => `/berita/kategori/${item.slug}`),
+    ...catslugs.map((item) => `/berita/kategori/${item[0].slug}`),
     ...postslugs.map((item) => `/berita/${item.slug}`),
   ];
   packageJson.reactSnap.include = updatedInclude;
@@ -131,7 +114,7 @@ async function generateSitemap(catslugs, postslugs) {
     { loc: "/berita/insight/trending", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/berita/insight/rekomendasi", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
   ];
-  const dynamicUrls = [...catslugs.map((item) => ({ loc: `/berita/kategori/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 })), ...postslugs.map((item) => ({ loc: `/berita/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 }))];
+  const dynamicUrls = [...catslugs.map((item) => ({ loc: `/berita/kategori/${item[0].slug}`, lastmod: item[0].updated_at ? moment(item[0].updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 })), ...postslugs.map((item) => ({ loc: `/berita/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 }))];
   let existingUrls = [];
 
   if (fs.existsSync(sitemapPath)) {

@@ -48,8 +48,6 @@ jobs:
 
       - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
         if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
-        env:
-          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
         run: |
           echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
@@ -63,24 +61,31 @@ jobs:
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
+        env:
+          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
 
       - name: 2.4. Installing required packages
+        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
         run: npm install
 
       - name: 2.5. Generate latest sitemap
+        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
         run: node update-slugs.js
         env:
           REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
+          REACT_APP_DOMAIN_AREA_ID: ${{ matrix.subdomain.id }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: 2.7. Builds the app for production
+        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
         run: CI= npm run spagen
 
       - name: 2.8. List output files
+        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
         run: find build/ -print
 
       - name: 2.9. Sync files (excluding berita folder)
-        if: env.FTP_USERNAME != '' && env.FTP_PASSWORD != ''
+        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -94,6 +99,7 @@ jobs:
             **/berita/**
 
       - name: 2.10. Commit and push updated sitemap.xml
+        if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
