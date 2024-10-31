@@ -50,12 +50,26 @@ jobs:
         env:
           SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
         run: |
-          echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}" >> $GITHUB_ENV
+          REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}
+          REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}
+          REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}
 
-          echo "FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
-          echo "FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA=${REACT_APP_DOMAIN_AREA}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_NAME=${REACT_APP_DOMAIN_AREA_NAME}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_ID=${REACT_APP_DOMAIN_AREA_ID}" >> $GITHUB_ENV
+          echo "Domain: ${REACT_APP_DOMAIN_AREA}, Name: ${REACT_APP_DOMAIN_AREA_NAME}, ID: ${REACT_APP_DOMAIN_AREA_ID}"
+
+          FORMATTED_FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}
+          FORMATTED_FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}
+
+          if [[ -z "$FORMATTED_FTP_USERNAME" || -z "$FORMATTED_FTP_PASSWORD" ]]; then
+            echo "Skipping deployment for ${{ matrix.subdomain.name }} due to missing FTP credentials."
+            exit 0
+          fi
+
+          echo "FTP_USERNAME=${FORMATTED_FTP_USERNAME}" >> $GITHUB_ENV
+          echo "FTP_PASSWORD=${FORMATTED_FTP_PASSWORD}" >> $GITHUB_ENV
+          echo "Username: ${FORMATTED_FTP_USERNAME}, Password: ${FORMATTED_FTP_PASSWORD:0:3}***${FORMATTED_FTP_PASSWORD: -3}"
 
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
@@ -71,10 +85,6 @@ jobs:
           REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
-      - name: 2.6. Kill any process using port 45678
-        run: |
-          sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
-
       - name: 2.7. Builds the app for production
         run: CI= npm run spagen
 
@@ -82,6 +92,7 @@ jobs:
         run: find build/ -print
 
       - name: 2.9. Sync files (excluding berita folder)
+        if: env.FTP_USERNAME != '' && env.FTP_PASSWORD != ''
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
