@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: 2.1. Get latest code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 2.2. Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@master
@@ -81,7 +81,7 @@ jobs:
           fi
 
       - name: 2.7. Upload Sitemap Files
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: sitemap-files
           path: $GITHUB_WORKSPACE/temp_sitemaps/*
@@ -120,12 +120,12 @@ jobs:
 
     steps:
       - name: 3.1. Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Download Sitemap Files
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: sitemap-files
 
