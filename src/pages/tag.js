@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
+import areaConfig from "../config";
 import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
@@ -15,6 +16,7 @@ import { FeedsGroup } from "../components/layout/groups";
 import { NewsFeedCard } from "../components/layout/cards";
 
 const imgdomain = process.env.REACT_APP_API_URL;
+const { subID } = areaConfig();
 
 const TagPage = () => {
   const navigate = useNavigate();
@@ -45,10 +47,11 @@ const TagPage = () => {
     if (loading) return;
     setLoading(true);
     const formData = new FormData();
-    formData.append("tag", slug);
+    formData.append("idcat", subID);
     formData.append("limit", newLimit);
+    formData.append("tag", slug);
     try {
-      const tagdata = await apiRead(formData, "main", "tagnew");
+      const tagdata = await apiRead(formData, "main", "subtagnew");
       if (tagdata && tagdata.data && tagdata.data.length > 0) {
         const firstidxdata = tagdata.data[0];
         setTagPostData(tagdata.data);

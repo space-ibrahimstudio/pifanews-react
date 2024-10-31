@@ -1,17 +1,20 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useWindow, useContent } from "@ibrahimstudio/react";
+import { useWindow } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
 import { ISHome, ISSearch } from "@ibrahimstudio/icons";
+import areaConfig from "../../config";
 import useApi from "../../libs/plugins/apis";
 import useIcons from "../content/icons";
 import TabButton, { TabButtonGen } from "../formel/buttons";
 import styles from "./styles/navbar.module.css";
 
+const { subID } = areaConfig();
+
 const Navbar = ({ id, parentType = "public" }) => {
   const navigate = useNavigate();
-  const { apiGet } = useApi();
+  const { apiGet, apiRead } = useApi();
   const { width } = useWindow();
   const { Close } = useIcons();
   const compid = `${id}-top-navigation`;
@@ -27,8 +30,10 @@ const Navbar = ({ id, parentType = "public" }) => {
   };
 
   const getPublicMenus = async () => {
+    const formData = new FormData();
+    formData.append("idcat", subID);
     try {
-      const publicmenus = await apiGet("main", "categorynew");
+      const publicmenus = await apiRead(formData, "main", "subcategorynew");
       setPublicMenus(publicmenus && publicmenus.data && publicmenus.data.length > 0 ? publicmenus.data : []);
     } catch (error) {
       console.log("error:", error);
@@ -73,7 +78,7 @@ const Navbar = ({ id, parentType = "public" }) => {
             <div className={`${styles.navMenuHscroll} ${parentType === "private" ? "" : styles.pub}`}>
               <div className={styles.navMenuItems}>
                 {publicMenus.map((menu, index) => (
-                  <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
+                  <TabButton key={index} id={`${compid}-${menu[0].slug}`} path={`/berita/kategori/${menu[0].slug}`} text={menu[0].nama_kategori_berita} />
                 ))}
               </div>
             </div>

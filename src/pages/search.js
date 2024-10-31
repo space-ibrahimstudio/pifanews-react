@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument, toPathname } from "../libs/plugins/helpers";
+import areaConfig from "../config";
 import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
@@ -15,6 +16,7 @@ import { FeedsGroup } from "../components/layout/groups";
 import { NewsFeedCard } from "../components/layout/cards";
 
 const imgdomain = process.env.REACT_APP_API_URL;
+const { subID } = areaConfig();
 
 const SearchPage = () => {
   const navigate = useNavigate();
@@ -35,10 +37,11 @@ const SearchPage = () => {
     if (loading) return;
     setLoading(true);
     const formData = new FormData();
+    formData.append("idcat", subID);
     formData.append("search", query);
     formData.append("limit", newLimit);
     try {
-      const searchdata = await apiRead(formData, "main", "searchnew");
+      const searchdata = await apiRead(formData, "main", "subsearchnew");
       if (searchdata && searchdata.data && searchdata.data.length > 0) {
         setSearchedData(searchdata.data);
       } else {

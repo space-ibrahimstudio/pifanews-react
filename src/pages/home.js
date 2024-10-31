@@ -39,8 +39,10 @@ const HomePage = () => {
   const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
 
   const fetchCatNewsData = async () => {
+    const formData = new FormData();
+    formData.append("idcat", subID);
     try {
-      const response = await apiGet("main", "categorynew");
+      const response = await apiRead(formData, "main", "subcategorynew");
       setCatNewsData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
       console.error("error:", error);
@@ -202,14 +204,14 @@ const HomePage = () => {
                 <Slider content={ads} renderContent={renderAds} contentStyle={{ minWidth: "100%" }} />
               </Container>
             ) : (
-              <Container id={`${section.data.slug}-post`} alignItems="center" gap="var(--pixel-10)">
-                <SectionHead to={`/berita/kategori/${section.data.slug}`}>
+              <Container id={`${section.data[0].slug}-post`} alignItems="center" gap="var(--pixel-10)">
+                <SectionHead to={`/berita/kategori/${section.data[0].slug}`}>
                   <H1>
                     {`Berita `}
-                    <Span color="var(--color-primary)">{section.data.nama_kategori_berita}</Span>
+                    <Span color="var(--color-primary)">{section.data[0].nama_kategori_berita}</Span>
                   </H1>
                 </SectionHead>
-                <SectionGroup catId={section.data.id} scope={section.data.nama_kategori_berita} slug={section.data.slug} />
+                <SectionGroup catId={section.data[0].id} scope={section.data[0].nama_kategori_berita} slug={section.data[0].slug} />
               </Container>
             )}
           </Fragment>

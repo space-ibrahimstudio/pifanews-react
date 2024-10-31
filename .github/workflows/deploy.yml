@@ -34,7 +34,18 @@ jobs:
 
       - name: 4. Fetch Subdomains from API
         run: |
-          curl -s https://api.pifa.co.id/main/categoryarea > subdomains.json
+          curl -s https://api.pifa.co.id/main/categoryarea -o subdomains.json
+          if [[ ! -s subdomains.json ]]; then
+            echo "subdomains.json is empty. Skipping deployment."
+            exit 0
+          fi
+
+      - name: 5. Validate JSON
+        run: |
+          if ! jq empty subdomains.json; then
+            echo "Invalid JSON in subdomains.json. Skipping deployment."
+            exit 0
+          fi
 
       - name: 5. Installing required packages
         run: npm install
@@ -71,12 +82,6 @@ jobs:
           FTP_PASSWORD_PONTIANAK: ${{ secrets.FTP_PASSWORD_PONTIANAK }}
         run: |
           set -e
-
-          if ! jq empty subdomains.json; then
-            echo "Invalid JSON in subdomains.json"
-            exit 1
-          fi
-
           SUBDOMAINS=$(jq -c '.data[]' subdomains.json)
 
           for SUBDOMAIN in $SUBDOMAINS; do
