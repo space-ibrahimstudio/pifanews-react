@@ -9,13 +9,13 @@ on:
 
 jobs:
   fetch-subdomains:
-    name: Fetch Subdomain Data
+    name: 1. Fetch Subdomain Data
     runs-on: ubuntu-latest
     outputs:
       subdomains: ${{ steps.get_subdomains.outputs.matrix }}
 
     steps:
-      - name: Get Subdomains from API
+      - name: 1.1. Get Subdomains from API
         id: get_subdomains
         run: |
           curl -s https://api.pifa.co.id/main/categoryarea -o subdomains.json
@@ -23,7 +23,7 @@ jobs:
           echo "::set-output name=matrix::${SUBDOMAIN_MATRIX}"
 
   deploy:
-    name: Deploy to Subdomains
+    name: 2. Deploy to Subdomains
     needs: fetch-subdomains
     runs-on: ubuntu-latest
 
@@ -33,48 +33,51 @@ jobs:
         subdomain: ${{ fromJson(needs.fetch-subdomains.outputs.subdomains) }}
 
     steps:
-      - name: 1. Get latest code
+      - name: 2.1. Get latest code
         uses: actions/checkout@v2
 
-      - name: 2. Use Node.js ${{ matrix.node-version }}
+      - name: 2.2. Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Export environment variables for ${{ matrix.subdomain.name }}
+      - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
+        env:
+          PROVIDED_FTP_USERNAME: ${{ 'FTP_USERNAME_' + matrix.subdomain.sub | toUpper }}
+          PROVIDED_FTP_PASSWORD: ${{ 'FTP_PASSWORD_' + matrix.subdomain.sub | toUpper }}
         run: |
           echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
           echo "REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}" >> $GITHUB_ENV
 
-          echo "FTP_USERNAME=${{ secrets['FTP_USERNAME_' + matrix.subdomain.sub | toUpper] }}" >> $GITHUB_ENV
-          echo "FTP_PASSWORD=${{ secrets['FTP_PASSWORD_' + matrix.subdomain.sub | toUpper] }}" >> $GITHUB_ENV
+          echo "FTP_USERNAME=${{ secrets[env.PROVIDED_FTP_USERNAME] }}" >> $GITHUB_ENV
+          echo "FTP_PASSWORD=${{ secrets[env.PROVIDED_FTP_PASSWORD] }}" >> $GITHUB_ENV
 
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
           echo "REACT_APP_GTAG_MAIN=${{ secrets.REACT_APP_GTAG_MAIN }}" >> $GITHUB_ENV
           echo "REACT_APP_CA_PUB_MAIN=${{ secrets.REACT_APP_CA_PUB_MAIN }}" >> $GITHUB_ENV
 
-      - name: 4. Installing required packages
+      - name: 2.4. Installing required packages
         run: npm install
 
-      - name: 5. Generate latest sitemap
+      - name: 2.5. Generate latest sitemap
         run: node update-slugs.js
         env:
           REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
-      - name: 6. Kill any process using port 45678
+      - name: 2.6. Kill any process using port 45678
         run: |
           sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
 
-      - name: 7. Builds the app for production
+      - name: 2.7. Builds the app for production
         run: CI= npm run spagen
 
-      - name: 8. List output files
+      - name: 2.8. List output files
         run: find build/ -print
 
-      - name: 9. Sync files (excluding berita folder)
+      - name: 2.9. Sync files (excluding berita folder)
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -87,7 +90,7 @@ jobs:
             **/node_modules/**
             **/berita/**
 
-      - name: 12. Commit and push updated sitemap.xml
+      - name: 2.10. Commit and push updated sitemap.xml
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
