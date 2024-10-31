@@ -51,21 +51,13 @@ jobs:
         env:
           SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
         run: |
-          REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}
-          REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}
-          REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}
+          echo "REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}" >> $GITHUB_ENV
 
-          echo "REACT_APP_DOMAIN_AREA=${REACT_APP_DOMAIN_AREA}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_AREA_NAME=${REACT_APP_DOMAIN_AREA_NAME}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_AREA_ID=${REACT_APP_DOMAIN_AREA_ID}" >> $GITHUB_ENV
-          echo "Domain: ${REACT_APP_DOMAIN_AREA}, Name: ${REACT_APP_DOMAIN_AREA_NAME}, ID: ${REACT_APP_DOMAIN_AREA_ID}"
-
-          FORMATTED_FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}
-          FORMATTED_FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}
-
-          echo "FTP_USERNAME=${FORMATTED_FTP_USERNAME}" >> $GITHUB_ENV
-          echo "FTP_PASSWORD=${FORMATTED_FTP_PASSWORD}" >> $GITHUB_ENV
-          echo "Username: ${FORMATTED_FTP_USERNAME}, Password: ${FORMATTED_FTP_PASSWORD}"
+          echo "FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
+          echo "FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}" >> $GITHUB_ENV
+          echo "Username: ${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}, Password: ${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}"
 
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
