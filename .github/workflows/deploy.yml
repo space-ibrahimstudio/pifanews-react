@@ -102,19 +102,33 @@ jobs:
             **/node_modules/**
             **/berita/**
 
-      - name: 2.11. Commit and push updated ${{ matrix.subdomain.sub }}_sitemap.xml
+  commit-push-sitemaps:
+    name: 3. Commit and Push Updated Sitemaps
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 3.1. Checkout code
+        uses: actions/checkout@v2
+
+      - name: 3.2. Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          if git diff --quiet public/${{ matrix.subdomain.sub }}_sitemap.xml; then
-            echo "No changes detected in ${{ matrix.subdomain.sub }}_sitemap.xml. Skipping commit."
-          else
-            git add public/${{ matrix.subdomain.sub }}_sitemap.xml
-            git commit -m "Update ${{ matrix.subdomain.sub }}_sitemap.xml from GitHub Actions"
+      - name: 3.3. Commit and Push Updated Sitemap Files
+        run: |
+          # Loop through each subdomain to add the updated sitemap
+          for subdomain in $(jq -r '.data[] | select(.subdomain != "internasional" and .subdomain != "kalbar" and .subdomain != "indonesia") | .subdomain' subdomains.json); do
+            sitemap_file="public/${subdomain}_sitemap.xml"
+            if [ -f "$sitemap_file" ]; then
+              git add "$sitemap_file"
+            fi
+          done
 
-            git fetch origin area
-            git pull origin area --rebase
+          git commit -m "Update sitemap files from GitHub Actions" || echo "No changes to commit"
 
-            git push origin area
-          fi
+          git fetch origin area
+          git pull origin area --rebase || echo "Rebase failed, not pulling"
+
+          git push origin area || echo "Push failed"
