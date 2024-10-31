@@ -71,6 +71,15 @@ jobs:
           REACT_APP_DOMAIN_AREA_ID: ${{ matrix.subdomain.id }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
+      - name: 2.6. Save sitemap file to temp directory
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/temp_sitemaps
+          if [ -f public/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
+            cp public/${{ matrix.subdomain.sub }}_sitemap.xml $GITHUB_WORKSPACE/temp_sitemaps/${{ matrix.subdomain.sub }}_sitemap.xml
+          else
+            echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
+          fi
+
       - name: 2.7. Builds the app for production
         run: CI= npm run spagen
 
@@ -104,22 +113,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 3.1. Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: 3.1. Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-      - name: 3.2. Commit and Push Updated Sitemap Files
+      - name: 3.2. Find and commit updated sitemap files
         run: |
-          sitemap_files=$(find public/ -name '*_sitemap.xml')
-          if [ -z "$sitemap_files" ]; then
+          temp_sitemap_files=$(find $GITHUB_WORKSPACE/temp_sitemaps -name '*_sitemap.xml')
+          if [ -z "$temp_sitemap_files" ]; then
             echo "No sitemap files found to commit."
-          else
-            if git diff --quiet $sitemap_files; then
-              echo "No changes detected in $sitemap_files. Skipping commit."
-            else
-              git add $sitemap_files
-              git commit -m "Update sitemap files: $sitemap_files from GitHub Actions"
-              git push origin main
-            fi
+            exit 0
           fi
+
+          for file in $temp_sitemap_files; do
+            original_file="public/$(basename $file)"
+            if ! cmp -s "$file" "$original_file"; then
+              git config --global user.name "github-actions[bot]"
+              git config --global user.email "github-actions[bot]@users.noreply.github.com"
+              git add "$original_file"
+              git commit -m "Update $(basename $original_file) from GitHub Actions"
+            else
+              echo "No changes detected in $(basename $original_file}. Skipping commit."
+            fi
+          done
+
+          git push origin area
