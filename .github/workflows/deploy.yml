@@ -62,11 +62,6 @@ jobs:
           FORMATTED_FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}
           FORMATTED_FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}
 
-          if [[ -z "$FORMATTED_FTP_USERNAME" || -z "$FORMATTED_FTP_PASSWORD" ]]; then
-            echo "Skipping deployment for ${{ matrix.subdomain.name }} due to missing FTP credentials."
-            exit 0
-          fi
-
           echo "FTP_USERNAME=${FORMATTED_FTP_USERNAME}" >> $GITHUB_ENV
           echo "FTP_PASSWORD=${FORMATTED_FTP_PASSWORD}" >> $GITHUB_ENV
           echo "Username: ${FORMATTED_FTP_USERNAME}, Password: ${FORMATTED_FTP_PASSWORD:0:3}***${FORMATTED_FTP_PASSWORD: -3}"
