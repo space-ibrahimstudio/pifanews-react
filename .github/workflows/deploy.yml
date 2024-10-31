@@ -19,8 +19,10 @@ jobs:
         id: get_subdomains
         run: |
           curl -s https://api.pifa.co.id/main/categoryarea -o subdomains.json
-          SUBDOMAIN_MATRIX=$(jq -c '.data[] | {id: .id, name: .nama_kategori_daerah, sub: .subdomain}' subdomains.json)
-          echo "::set-output name=matrix::${SUBDOMAIN_MATRIX}"
+          jq -c '.data[] | {id: .id, name: .nama_kategori_daerah, sub: .subdomain}' subdomains.json > subdomains_matrix.json
+
+      - name: 1.2. Save Subdomains Matrix
+        run: echo "matrix=$(cat subdomains_matrix.json)" >> $GITHUB_ENV
 
   deploy:
     name: 2. Deploy to Subdomains
