@@ -80,13 +80,19 @@ jobs:
             echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
           fi
 
-      - name: 2.7. Builds the app for production
+      - name: 2.7. Upload Sitemap Files
+        uses: actions/upload-artifact@v2
+        with:
+          name: sitemap-files
+          path: $GITHUB_WORKSPACE/temp_sitemaps/*
+
+      - name: 2.8. Builds the app for production
         run: CI= npm run spagen
 
-      - name: 2.8. List output files
+      - name: 2.9. List output files
         run: find build/ -print
 
-      - name: 2.9. Rename sitemap file for deployment
+      - name: 2.10. Rename sitemap file for deployment
         run: |
           if [ -f build/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
             mv build/${{ matrix.subdomain.sub }}_sitemap.xml build/sitemap.xml
@@ -94,7 +100,7 @@ jobs:
             echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
           fi
 
-      - name: 2.10. Sync files (excluding berita folder)
+      - name: 2.11. Sync files (excluding berita folder)
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
@@ -118,15 +124,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Download Sitemap Files
+        uses: actions/download-artifact@v2
+        with:
+          name: sitemap-files
+
       - name: 3.2. Find and commit updated sitemap files
         run: |
-          temp_sitemap_files=$(find $GITHUB_WORKSPACE/temp_sitemaps -name '*_sitemap.xml')
-          if [ -z "$temp_sitemap_files" ]; then
+          sitemap_files=$(find . -name '*_sitemap.xml')
+          if [ -z "$sitemap_files" ]; then
             echo "No sitemap files found to commit."
             exit 0
           fi
 
-          for file in $temp_sitemap_files; do
+          for file in $sitemap_files; do
             original_file="public/$(basename $file)"
             if ! cmp -s "$file" "$original_file"; then
               git config --global user.name "github-actions[bot]"
@@ -134,7 +145,7 @@ jobs:
               git add "$original_file"
               git commit -m "Update $(basename $original_file) from GitHub Actions"
             else
-              echo "No changes detected in $(basename $original_file}. Skipping commit."
+              echo "No changes detected in $(basename $original_file). Skipping commit."
             fi
           done
 
