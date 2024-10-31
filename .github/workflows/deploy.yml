@@ -47,9 +47,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: 2.3. Export environment variables for ${{ matrix.subdomain.name }}
-        env:
-          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
         run: |
+          SUBDOMAIN_UPPER=$(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
+
           REACT_APP_DOMAIN_AREA=${{ matrix.subdomain.sub }}
           REACT_APP_DOMAIN_AREA_NAME=${{ matrix.subdomain.name }}
           REACT_APP_DOMAIN_AREA_ID=${{ matrix.subdomain.id }}
@@ -59,8 +59,14 @@ jobs:
           echo "REACT_APP_DOMAIN_AREA_ID=${REACT_APP_DOMAIN_AREA_ID}" >> $GITHUB_ENV
           echo "Domain: ${REACT_APP_DOMAIN_AREA}, Name: ${REACT_APP_DOMAIN_AREA_NAME}, ID: ${REACT_APP_DOMAIN_AREA_ID}"
 
-          FORMATTED_FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}
-          FORMATTED_FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}
+          FORMATTED_FTP_USERNAME=${{ secrets[format('FTP_USERNAME_{0}', SUBDOMAIN_UPPER)] }}
+          FORMATTED_FTP_PASSWORD=${{ secrets[format('FTP_PASSWORD_{0}', SUBDOMAIN_UPPER)] }}
+
+          if [[ -z "$FORMATTED_FTP_USERNAME" || -z "$FORMATTED_FTP_PASSWORD" ]]; then
+            echo "Skipping deployment for ${{ matrix.subdomain.name }} due to missing FTP credentials."
+            echo "Skipping deployment." >> $GITHUB_ENV
+            exit 0
+          fi
 
           echo "FTP_USERNAME=${FORMATTED_FTP_USERNAME}" >> $GITHUB_ENV
           echo "FTP_PASSWORD=${FORMATTED_FTP_PASSWORD}" >> $GITHUB_ENV
