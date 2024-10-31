@@ -118,10 +118,11 @@ jobs:
           if [ -z "$sitemap_files" ]; then
             echo "No sitemap files found to commit."
           else
-            echo "Found sitemap files: $sitemap_files"
-            git add $sitemap_files
-            git commit -m "Update sitemap files from GitHub Actions" || echo "No changes to commit"
-            git fetch origin area
-            git pull origin area --rebase || echo "Rebase failed, not pulling"
-            git push origin area || echo "Push failed"
+            if git diff --quiet $sitemap_files; then
+              echo "No changes detected in $sitemap_files. Skipping commit."
+            else
+              git add $sitemap_files
+              git commit -m "Update sitemap files: $sitemap_files from GitHub Actions"
+              git push origin main
+            fi
           fi
