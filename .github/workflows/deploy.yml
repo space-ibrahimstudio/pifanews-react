@@ -89,14 +89,16 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOST }}
-          username: ${{ env.FTP_USERNAME }}
-          password: ${{ env.FTP_PASSWORD }}
+          username: ${{ secrets[format('FTP_USERNAME_{0}', env.SUBDOMAIN_UPPER)] }}
+          password: ${{ secrets[format('FTP_PASSWORD_{0}', env.SUBDOMAIN_UPPER)] }}
           local-dir: build/
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             **/berita/**
+        env:
+          SUBDOMAIN_UPPER: $(echo "${{ matrix.subdomain.sub }}" | tr '[:lower:]' '[:upper:]')
 
       - name: 2.10. Commit and push updated sitemap.xml
         if: ${{ matrix.subdomain.sub != 'internasional' && matrix.subdomain.sub != 'kalbar' && matrix.subdomain.sub != 'indonesia' }}
