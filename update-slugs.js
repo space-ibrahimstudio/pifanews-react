@@ -33,7 +33,7 @@ async function fetchCatSlug() {
 async function fetchPostSlug() {
   const formData = new FormData();
   formData.append("idcat", subID);
-  formData.append("limit", "10");
+  formData.append("limit", "1500");
   formData.append("hal", "0");
   try {
     const url = `${apiURL}/main/sublatestnew`;
@@ -85,7 +85,7 @@ async function generateSitemap(catslugs, postslugs) {
     process.exit(1);
   }
 
-  const sitemapPath = path.join(__dirname, "public", "sitemap.xml");
+  const sitemapPath = path.join(__dirname, "public", `${sub}_sitemap.xml`);
   const defaultLastmod = moment().format("YYYY-MM-DD");
 
   const createUrlNode = (loc, changefreq = "weekly", lastmod = null, priority = 0.8) => {
@@ -118,7 +118,7 @@ async function generateSitemap(catslugs, postslugs) {
   let existingUrls = [];
 
   if (fs.existsSync(sitemapPath)) {
-    console.log("existing sitemap.xml detected, merging data...");
+    console.log(`existing ${sub}_sitemap.xml detected, merging data...`);
     const existingSitemapData = fs.readFileSync(sitemapPath, "utf8");
     try {
       const parsedSitemap = await parseStringPromise(existingSitemapData);
@@ -130,10 +130,10 @@ async function generateSitemap(catslugs, postslugs) {
         priority: urlObj.priority ? parseFloat(urlObj.priority[0]) : 0.6,
       }));
     } catch (err) {
-      console.error("Error parsing existing sitemap.xml:", err);
+      console.error(`Error parsing existing ${sub}_sitemap.xml:`, err);
     }
   } else {
-    console.log("sitemap.xml does not exist, creating a new one...");
+    console.log(`${sub}_sitemap.xml does not exist, creating a new one...`);
   }
 
   const urlMap = new Map(existingUrls.map((url) => [url.loc, url]));
@@ -171,7 +171,7 @@ async function generateSitemap(catslugs, postslugs) {
   });
 
   fs.writeFileSync(sitemapPath, updatedSitemapXml);
-  console.log("sitemap.xml generated and updated successfully");
+  console.log(`${sub}_sitemap.xml generated and updated successfully`);
 }
 
 async function main() {

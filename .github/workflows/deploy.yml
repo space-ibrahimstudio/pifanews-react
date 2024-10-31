@@ -82,7 +82,16 @@ jobs:
         if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: find build/ -print
 
-      - name: 2.9. Sync files (excluding berita folder)
+      - name: 2.9. Rename sitemap file for deployment
+        if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
+        run: |
+          if [ -f build/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
+            mv build/${{ matrix.subdomain.sub }}_sitemap.xml build/sitemap.xml
+          else
+            echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
+          fi
+
+      - name: 2.10. Sync files (excluding berita folder)
         if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
@@ -96,16 +105,16 @@ jobs:
             **/node_modules/**
             **/berita/**
 
-      - name: 2.10. Commit and push updated sitemap.xml
+      - name: 2.11. Commit and push updated ${{ matrix.subdomain.sub }}_sitemap.xml
         if: ${{ matrix.subdomain.call != 'INTERNASIONAL' && matrix.subdomain.call != 'KALBAR' && matrix.subdomain.call != 'INDONESIA' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          if git diff --quiet public/sitemap.xml; then
-            echo "No changes detected in sitemap.xml. Skipping commit."
+          if git diff --quiet public/${{ matrix.subdomain.sub }}_sitemap.xml; then
+            echo "No changes detected in ${{ matrix.subdomain.sub }}_sitemap.xml. Skipping commit."
           else
-            git add public/sitemap.xml
-            git commit -m "Update sitemap.xml from GitHub Actions"
+            git add public/${{ matrix.subdomain.sub }}_sitemap.xml
+            git commit -m "Update ${{ matrix.subdomain.sub }}_sitemap.xml from GitHub Actions"
             git push origin area
           fi

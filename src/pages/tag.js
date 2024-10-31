@@ -26,7 +26,7 @@ const TagPage = () => {
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
   const [loading, setLoading] = useState(false);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(100);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
   const [tagPostData, setTagPostData] = useState([]);
   const [ads, setAds] = useState([]);
