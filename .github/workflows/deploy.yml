@@ -32,14 +32,14 @@ jobs:
     needs: fetch-subdomains
     runs-on: ubuntu-latest
 
-    concurrency:
-      group: deploy-subdomains
-      cancel-in-progress: false
-
     strategy:
       matrix:
         node-version: [20.12.1]
         subdomain: ${{ fromJson(needs.fetch-subdomains.outputs.subdomains) }}
+
+    concurrency:
+      group: deploy-subdomains-${{ matrix.subdomain.sub }}
+      cancel-in-progress: false
 
     steps:
       - name: 2.1. Get latest code
@@ -112,5 +112,9 @@ jobs:
           else
             git add public/${{ matrix.subdomain.sub }}_sitemap.xml
             git commit -m "Update ${{ matrix.subdomain.sub }}_sitemap.xml from GitHub Actions"
+
+            git fetch origin area
+            git pull origin area --rebase
+
             git push origin area
           fi
