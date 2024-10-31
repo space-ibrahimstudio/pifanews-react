@@ -107,6 +107,10 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        subdomain: ${{ fromJson(needs.fetch-subdomains.outputs.subdomains) }}
+
     steps:
       - name: 3.1. Checkout code
         uses: actions/checkout@v2
@@ -118,17 +122,13 @@ jobs:
 
       - name: 3.3. Commit and Push Updated Sitemap Files
         run: |
-          # Loop through each subdomain to add the updated sitemap
-          for subdomain in $(jq -r '.data[] | select(.subdomain != "internasional" and .subdomain != "kalbar" and .subdomain != "indonesia") | .subdomain' subdomains.json); do
-            sitemap_file="public/${subdomain}_sitemap.xml"
-            if [ -f "$sitemap_file" ]; then
-              git add "$sitemap_file"
-            fi
-          done
-
-          git commit -m "Update sitemap files from GitHub Actions" || echo "No changes to commit"
-
-          git fetch origin area
-          git pull origin area --rebase || echo "Rebase failed, not pulling"
-
-          git push origin area || echo "Push failed"
+          sitemap_file="public/${{ matrix.subdomain.sub }}_sitemap.xml"
+          if [ -f "$sitemap_file" ]; then
+            git add "$sitemap_file"
+            git commit -m "Update ${{ matrix.subdomain.sub }}_sitemap.xml from GitHub Actions" || echo "No changes to commit"
+            git fetch origin area
+            git pull origin area --rebase || echo "Rebase failed, not pulling"
+            git push origin area || echo "Push failed"
+          else
+            echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
+          fi
