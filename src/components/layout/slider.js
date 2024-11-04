@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toPathname } from "../../libs/plugins/helpers";
-import Img from "../media/image";
 import styles from "./styles/slider.module.css";
 
 const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50, slideInterval = 3000, contentStyle }) => {
@@ -22,9 +21,6 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
       setVisible(rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight));
     }
   };
-
-  const handlePrev = () => setCurrentIndex((prevIndex) => (prevIndex - 1 + totalContent) % totalContent);
-  const handleNext = () => setCurrentIndex((prevIndex) => (prevIndex + 1) % totalContent);
 
   const handleTouchStart = (event) => setStartX(event.touches[0].clientX);
   const handleTouchEnd = () => setStartX(null);
@@ -106,12 +102,6 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
 
   return (
     <section id={compid} className={styles.sectionBody}>
-      <div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", left: "0", display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--pixel-10)", height: "var(--pixel-40)", backgroundColor: "var(--color-secondary-30)", cursor: "pointer", zIndex: "1" }} onClick={handlePrev}>
-        <Img style={{ width: "var(--pixel-10)", height: "auto", transform: "scaleX(-1)" }} src="/svg/chevron.svg" />
-      </div>
-      <div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", right: "0", display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--pixel-10)", height: "var(--pixel-40)", backgroundColor: "var(--color-secondary-30)", cursor: "pointer", zIndex: "1" }} onClick={handleNext}>
-        <Img style={{ width: "var(--pixel-10)", height: "auto" }} src="/svg/chevron.svg" />
-      </div>
       <section id={`${compid}-wrap`} className={styles.sectionSlider} ref={ref}>
         {mockedContent.map((item, index) => (
           <section id={`${compid}-content`} key={index} ref={(el) => (contentRef.current[index] = el)} className={styles.contentWrapper} style={{ ...contentStyle }} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
