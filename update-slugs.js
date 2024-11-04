@@ -29,8 +29,8 @@ async function fetchCatSlug() {
 
 async function fetchPostSlug() {
   const formData = new FormData();
-  formData.append("limit", "10");
-  formData.append("hal", "10");
+  formData.append("limit", "20");
+  formData.append("hal", "0");
   try {
     const url = `${apiURL}/main/latestnew`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
