@@ -64,41 +64,11 @@ jobs:
       - name: 2.4. Installing required packages
         run: npm install
 
-      - name: 2.5. Generate latest sitemap
-        run: node update-slugs.js
-        env:
-          REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
-          REACT_APP_DOMAIN_AREA_ID: ${{ matrix.subdomain.id }}
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
-
-      - name: 2.6. Save sitemap file to temp directory
-        run: |
-          mkdir -p temp_sitemaps
-          if [ -f public/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
-            cp public/${{ matrix.subdomain.sub }}_sitemap.xml temp_sitemaps/${{ matrix.subdomain.sub }}_sitemap.xml
-          else
-            echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
-          fi
-
-      - name: 2.7. Upload Sitemap Files
-        uses: actions/upload-artifact@v4
-        with:
-          name: sitemap-files
-          path: temp_sitemaps/*
-
       - name: 2.8. Builds the app for production
         run: CI= npm run spagen
 
       - name: 2.9. List output files
         run: find build/ -print
-
-      - name: 2.10. Rename sitemap file for deployment
-        run: |
-          if [ -f build/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
-            mv build/${{ matrix.subdomain.sub }}_sitemap.xml build/sitemap.xml
-          else
-            echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
-          fi
 
       - name: 2.11. Sync files (excluding berita folder)
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
@@ -112,39 +82,53 @@ jobs:
             **/.git*/**
             **/node_modules/**
             **/berita/**
+            **/${{ matrix.subdomain.sub }}_sitemap.xml
 
   commit-push-sitemaps:
     name: 3. Commit and Push Updated Sitemaps
-    needs: deploy
+    needs: [fetch-subdomains, deploy]
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        subdomain: ${{ fromJson(needs.fetch-subdomains.outputs.subdomains) }}
+
     steps:
-      - name: 3.1. Checkout code
+      - name: 3.1. Get latest code
         uses: actions/checkout@v4
 
-      - name: Download Sitemap Files
-        uses: actions/download-artifact@v4
+      - name: 3.2. Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@master
         with:
-          name: sitemap-files
+          node-version: ${{ matrix.node-version }}
 
-      - name: 3.2. Find and commit updated sitemap files
+      - name: 3.3. Installing required packages
+        run: npm install
+
+      - name: 3.4. Generate latest sitemap
+        run: node update-slugs.js
+        env:
+          REACT_APP_DOMAIN_AREA: ${{ matrix.subdomain.sub }}
+          REACT_APP_DOMAIN_AREA_ID: ${{ matrix.subdomain.id }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+
+      - name: 3.5. Rename sitemap file for deployment
         run: |
-          sitemap_files=$(find . -name '*_sitemap.xml')
-          if [ -z "$sitemap_files" ]; then
-            echo "No sitemap files found to commit."
-            exit 0
+          if [ -f public/${{ matrix.subdomain.sub }}_sitemap.xml ]; then
+            mv public/${{ matrix.subdomain.sub }}_sitemap.xml public/sitemap.xml
+          else
+            echo "No sitemap file found for ${{ matrix.subdomain.sub }}."
           fi
 
-          for file in $sitemap_files; do
-            original_file="public/$(basename $file)"
-            if ! cmp -s "$file" "$original_file"; then
-              git config --global user.name "github-actions[bot]"
-              git config --global user.email "github-actions[bot]@users.noreply.github.com"
-              git add "$original_file"
-              git commit -m "Update $(basename $original_file) from GitHub Actions"
-            else
-              echo "No changes detected in $(basename $original_file). Skipping commit."
-            fi
-          done
-
-          git push origin area
+      - name: 3.6. Sync ${{ matrix.subdomain.sub }} Sitemap
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets[format('FTP_USERNAME_{0}', matrix.subdomain.call)] }}
+          password: ${{ secrets[format('FTP_PASSWORD_{0}', matrix.subdomain.call)] }}
+          local-dir: build/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/berita/**
