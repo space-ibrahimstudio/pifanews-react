@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useContent, useFormat } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
@@ -16,6 +16,7 @@ import gracss from "./styles/infographic-card.module.css";
 import cadcss from "./styles/cat-admin-card.module.css";
 import ogscss from "./styles/og-card.module.css";
 import tagcss from "./styles/tag-card.module.css";
+import bancss from "./styles/banner-card.module.css";
 
 export const ImageCard = ({ alt, src }) => {
   const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
@@ -39,6 +40,51 @@ export const ImageCard = ({ alt, src }) => {
       {!isLoaded && <div id={`${compid}-placeholder`} className={imgcss.skeleton} />}
       <img id={compid} alt={`Foto: ${alt} | Pifa Net`} src={imageSrc} style={{ ...crdcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
     </Fragment>
+  );
+};
+
+export const BannerCard = ({ type, src, isUploading, onUpload, onDelete, draggable = false, onDragStart, onDragOver, onDrop }) => {
+  const ref = useRef(null);
+  const { Trash } = useIcons();
+
+  const ISImgUpload = ({ size, color }) => {
+    const fill = color ? color : "currentColor";
+    const iconstyle = { width: size, height: size, overflow: "hidden", flexShrink: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", boxSizing: "border-box", color: "inherit" };
+
+    return (
+      <div style={iconstyle}>
+        <svg width="100%" height="100%" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.5 5H17.5V12H19.5V5C19.5 3.897 18.603 3 17.5 3H4.5C3.397 3 2.5 3.897 2.5 5V17C2.5 18.103 3.397 19 4.5 19H12.5V17H4.5V5Z" fill={fill} />
+          <path d="M8.5 11L5.5 15H16.5L12.5 9L9.5 13L8.5 11Z" fill={fill} />
+          <path d="M17.5 14H19.5V17H22.5V19H19.5V22H17.5V19H14.5V17H17.5V14Z" fill={fill} />
+        </svg>
+      </div>
+    );
+  };
+
+  const triggerFileUpload = () => {
+    if (ref.current) ref.current.click();
+  };
+
+  return (
+    <section className={`${bancss.bannerCard} ${type === "add" ? bancss.add : bancss.exist} ${isUploading ? bancss.loading : ""}`} onClick={type === "add" ? triggerFileUpload : () => {}} draggable={draggable} onDragStart={onDragStart} onDragOver={onDragOver} onDrop={onDrop}>
+      {type === "add" && (
+        <Fragment>
+          <ISImgUpload size="var(--pixel-65)" />
+          <input style={{ display: "none" }} ref={ref} type="file" accept="image/*" onChange={onUpload} />
+        </Fragment>
+      )}
+      {type === "exist" && (
+        <Fragment>
+          <section className={bancss.bannerImageWrap}>
+            <img className={bancss.bannerImage} src={src} loading="lazy" alt="" />
+          </section>
+          <section className={bancss.bannerAction}>
+            <Button size="sm" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} />
+          </section>
+        </Fragment>
+      )}
+    </section>
   );
 };
 

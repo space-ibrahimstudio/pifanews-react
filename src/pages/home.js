@@ -5,7 +5,6 @@ import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
-import { getAdDatas } from "../libs/sources/datas";
 import useGraph from "../components/content/graph";
 import SectionHead from "../components/feedback/markers";
 import { TagsButton } from "../components/formel/buttons";
@@ -36,7 +35,16 @@ const HomePage = () => {
   const [popularPostData, setPopularPostData] = useState([]);
 
   const renderLocalCat = (item) => <CatCard id={item.id} catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.nama_kategori_daerah.toLowerCase().replace(" ", "")}.pifa.co.id`, "_blank")} />;
-  const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+  const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
+
+  const fetchBannerData = async () => {
+    try {
+      const response = await apiGet("main", "bannerview");
+      setAds(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
 
   const fetchCatNewsData = async () => {
     try {
@@ -123,6 +131,7 @@ const HomePage = () => {
   }
 
   useEffect(() => {
+    fetchBannerData();
     fetchCatNewsData();
     fetchLatestPosts();
     fetchCatLocalData();
@@ -137,18 +146,6 @@ const HomePage = () => {
   useEffect(() => {
     setLimit(13);
   }, [location]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const post = await getAdDatas();
-        setAds(post);
-      } catch (error) {
-        console.error("error getting ads:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   return (
     <Fragment>

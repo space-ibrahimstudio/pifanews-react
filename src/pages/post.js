@@ -6,7 +6,6 @@ import useLoading from "../components/feedback/loader";
 import useApi from "../libs/plugins/apis";
 import AdSense from "../libs/plugins/adsense";
 import useGraph from "../components/content/graph";
-import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
@@ -106,24 +105,22 @@ const PostPage = () => {
     { label: pageInfo.title, url: pageInfo.path },
   ];
 
-  const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+  const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
+
+  const fetchBannerData = async () => {
+    try {
+      const response = await apiGet("main", "bannerview");
+      setAds(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
 
   useEffect(() => {
     setTrendLimit(10);
     fetchRelatedPosts();
+    fetchBannerData();
   }, [slug]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const post = await getAdDatas();
-        setAds(post);
-      } catch (error) {
-        console.error("error getting ads:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   useEffect(() => {
     fetchTrendingPosts(trendLimit);

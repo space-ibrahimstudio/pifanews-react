@@ -1,0 +1,60 @@
+.bannerAction {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--pixel-10);
+}
+
+.bannerImage {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border-radius: var(--pixel-10);
+}
+
+.bannerImageWrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.bannerCard.exist.loading {
+  opacity: 0.5;
+}
+
+.bannerCard.exist {
+  opacity: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: var(--color-secondlight);
+  border: 1px solid var(--color-secondlight);
+  padding: var(--pixel-10);
+}
+
+.bannerCard.add.loading {
+  display: none;
+}
+
+.bannerCard.add {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 1px dashed var(--color-primary);
+  padding: var(--pixel-20);
+  color: var(--color-primary);
+}
+
+.bannerCard {
+  width: 100%;
+  overflow: hidden;
+  gap: var(--pixel-10);
+  border-radius: var(--pixel-20);
+}

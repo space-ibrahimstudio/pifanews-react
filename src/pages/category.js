@@ -7,7 +7,6 @@ import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
 import useLoading from "../components/feedback/loader";
 import useGraph from "../components/content/graph";
-import { getAdDatas } from "../libs/sources/datas";
 import Page, { Container, Section } from "../components/layout/frames";
 import Img, { AdBanner } from "../components/media/image";
 import Slider from "../components/layout/slider";
@@ -136,7 +135,16 @@ const CategoryPage = () => {
     }
   };
 
-  const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+  const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
+
+  const fetchBannerData = async () => {
+    try {
+      const response = await apiGet("main", "bannerview");
+      setAds(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
 
   useEffect(() => {
     setTrendLimit(11);
@@ -147,21 +155,10 @@ const CategoryPage = () => {
   }, [category, postsFilter]);
 
   useEffect(() => {
+    fetchBannerData();
     fetchCatNewsData();
     fetchTrendTagData();
   }, [category]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const post = await getAdDatas();
-        setAds(post);
-      } catch (error) {
-        console.error("error getting ads:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   useEffect(() => {
     if (pageInfo.id) {

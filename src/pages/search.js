@@ -5,7 +5,6 @@ import { useDocument, toPathname } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
-import { getAdDatas } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
 import Page, { Section, Header, Container } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
@@ -60,23 +59,21 @@ const SearchPage = () => {
     }
   };
 
-  const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+  const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const post = await getAdDatas();
-        setAds(post);
-      } catch (error) {
-        console.error("error getting ads:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
+  const fetchBannerData = async () => {
+    try {
+      const response = await apiGet("main", "bannerview");
+      setAds(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
 
   useEffect(() => {
     setLimit(12);
     fetchTrendTagData();
+    fetchBannerData();
   }, [query]);
 
   useEffect(() => {

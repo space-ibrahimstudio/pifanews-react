@@ -5,13 +5,15 @@ import { useDocument } from "../libs/plugins/helpers";
 import AdSense from "../libs/plugins/adsense";
 import useLoading from "../components/feedback/loader";
 import useApi from "../libs/plugins/apis";
-import { getAdDatas, getStaticPosts } from "../libs/sources/datas";
+import { getStaticPosts } from "../libs/sources/datas";
 import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
 import Article from "../components/content/article";
 import Img, { AdBanner } from "../components/media/image";
 import { CompanyGroup } from "../components/layout/groups";
+
+const imgdomain = process.env.REACT_APP_API_URL;
 
 const CompanyPage = () => {
   const { cslug } = useParams();
@@ -124,9 +126,7 @@ const CompanyPage = () => {
 
   const fetchStaticData = async () => {
     try {
-      const adss = await getAdDatas();
       const post = await getStaticPosts();
-      setAds(adss);
       setStaticPostData(post);
     } catch (error) {
       console.error("error:", error);
@@ -138,11 +138,21 @@ const CompanyPage = () => {
     { label: pageInfo.title, url: pageInfo.path },
   ];
 
-  const renderAds = (item) => <AdBanner alt={item.label} src={item.image} />;
+  const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
+
+  const fetchBannerData = async () => {
+    try {
+      const response = await apiGet("main", "bannerview");
+      setAds(response && response.data && response.data.length > 0 ? response.data : []);
+    } catch (error) {
+      console.error("error:", error);
+    }
+  };
 
   useEffect(() => {
     fetchData();
     fetchStaticData();
+    fetchBannerData();
   }, [cslug]);
 
   if (pageData === null) {

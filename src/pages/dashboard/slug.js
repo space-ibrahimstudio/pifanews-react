@@ -17,7 +17,7 @@ import { TagsButton, SwitchButton } from "../../components/formel/buttons";
 import TextEditor, { EditorContent, EditorToolbar, EditorFooter } from "../../components/formel/text-editor";
 import Form from "../../components/formel/form";
 import useIcons from "../../components/content/icons";
-import NewsCard, { CatAdmCard, OGCard, TagCard } from "../../components/layout/cards";
+import NewsCard, { CatAdmCard, OGCard, TagCard, BannerCard } from "../../components/layout/cards";
 
 const imgdomain = process.env.REACT_APP_API_URL;
 
@@ -65,6 +65,7 @@ const DashboardSlugPage = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [tagsData, setTagsData] = useState([]);
   const [moduleData, setModuleData] = useState([]);
+  const [bannerData, setBannerData] = useState([]);
 
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -170,6 +171,18 @@ const DashboardSlugPage = () => {
               } else {
                 setTagsData([]);
                 setTotalPages(0);
+                setIsDataShown(false);
+              }
+              break;
+            case "banner":
+              setPageTitle("Daftar Banner");
+              formData.append("data", JSON.stringify({ secret: userData.token_activation }));
+              data = await apiRead(formData, "office", "viewbanner");
+              if (data && data.data && data.data.length > 0) {
+                setBannerData(data.data);
+                setIsDataShown(true);
+              } else {
+                setBannerData([]);
                 setIsDataShown(false);
               }
               break;
@@ -425,7 +438,7 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Isi Berita
                   </H1>
-                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
@@ -538,7 +551,7 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     {selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"}
                   </H1>
-                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <SwitchButton buttons={switchCatType} />
@@ -669,7 +682,7 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Tag Berita
                   </H1>
-                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
@@ -684,6 +697,106 @@ const DashboardSlugPage = () => {
                   ))}
                 </Section>
                 {isDataShown && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+              </Fragment>
+            );
+          case "banner":
+            const handleUpload = async (e) => {
+              const successmsg = "Selamat! Banner baru berhasil ditambahkan.";
+              const errormsg = "Terjadi kesalahan saat menambahkan banner. Mohon periksa koneksi internet anda dan coba lagi.";
+              const file = e.target.files?.[0];
+              if (file) {
+                setIsSubmitting(true);
+                try {
+                  const submittedData = { secret: userData.token_activation };
+                  const formData = new FormData();
+                  formData.append("data", JSON.stringify(submittedData));
+                  formData.append("fileimg", file);
+                  await apiCrud(formData, "office", "bannerfile");
+                  alert(successmsg);
+                  log("submitted data:", submittedData);
+                  await fetchData();
+                  await fetchAdditionalData();
+                } catch (error) {
+                  alert(errormsg);
+                  console.error(errormsg, error);
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }
+            };
+
+            const handleDelete = async (iddel) => {
+              const confirmmsg = "Apakah anda yakin untuk menghapus banner terpilih?";
+              const successmsg = "Selamat! Banner terpilih berhasil dihapus.";
+              const errormsg = "Terjadi kesalahan saat menghapus banner. Mohon periksa koneksi internet anda dan coba lagi.";
+              const confirm = window.confirm(confirmmsg);
+              if (!confirm) {
+                return;
+              }
+              setIsSubmitting(true);
+              try {
+                const submittedData = { secret: userData.token_activation, status: "1" };
+                const formData = new FormData();
+                formData.append("data", JSON.stringify(submittedData));
+                formData.append("idedit", iddel);
+                await apiCrud(formData, "office", "editbanner");
+                alert(successmsg);
+                log("submitted data:", submittedData);
+                await fetchData();
+                await fetchAdditionalData();
+              } catch (error) {
+                alert(errormsg);
+                console.error(errormsg, error);
+              } finally {
+                setIsSubmitting(false);
+              }
+            };
+
+            const handleBDragStart = (index) => {
+              setDraggingIndex(index);
+            };
+
+            const handleBDragOver = (e, hoverIndex) => {
+              e.preventDefault();
+              if (draggingIndex === hoverIndex) return;
+              const newItems = [...bannerData];
+              const [draggedItem] = newItems.splice(draggingIndex, 1);
+              newItems.splice(hoverIndex, 0, draggedItem);
+              setDraggingIndex(hoverIndex);
+              setBannerData(newItems);
+            };
+
+            const handleBDrop = async () => {
+              if (draggingIndex === null) return;
+              const draggedItem = bannerData[draggingIndex];
+              try {
+                const formData = new FormData();
+                formData.append("data", JSON.stringify({ secret: userData.token_activation, status: "0", index: (draggingIndex + 1).toString() }));
+                formData.append("idedit", draggedItem.idbanner);
+                await apiCrud(formData, "office", "editbanner");
+                console.log("Order updated successfully");
+                setDraggingIndex(null);
+              } catch (error) {
+                console.error("Error updating order:", error);
+              }
+            };
+
+            return (
+              <Fragment>
+                <Header isasChild alignItems="center" gap="var(--pixel-15)">
+                  <H1 size="lg" color="var(--color-primary)" align="center">
+                    Banner Berita
+                  </H1>
+                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
+                </Header>
+                <Section gap="var(--pixel-10)">
+                  {bannerData
+                    .filter((item) => item.bannerstatus === "0")
+                    .map((item, index) => (
+                      <BannerCard key={index} type="exist" src={`${imgdomain}/images/banner/${item.bannerimg}`} onDelete={() => handleDelete(item.idbanner)} isUploading={isSubmitting} draggable onDragStart={() => handleBDragStart(index)} onDragOver={(e) => handleBDragOver(e, index)} onDrop={handleBDrop} />
+                    ))}
+                  <BannerCard type="add" onUpload={handleUpload} isUploading={isSubmitting} />
+                </Section>
               </Fragment>
             );
           default:
@@ -708,7 +821,7 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Modul Event
                   </H1>
-                  <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P>
+                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
